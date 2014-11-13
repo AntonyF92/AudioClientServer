@@ -204,7 +204,8 @@ namespace MediaServer
 
         protected int port;
         TcpListener listener;
-        bool is_active = true;
+        bool is_active = false;
+        public bool IsActive { get { return is_active; } }
 
         protected readonly Logger log = LogManager.GetCurrentClassLogger();
 
@@ -216,14 +217,25 @@ namespace MediaServer
         public void Listen()
         {
             listener = new TcpListener(port);
+            is_active = true;
             listener.Start();
             while (is_active)
             {
-                TcpClient s = listener.AcceptTcpClient();
-                HttpProcessor processor = new HttpProcessor(s, this);
-                ThreadPool.QueueUserWorkItem(o => processor.process());
-                Thread.Sleep(1);
+                try
+                {
+                    TcpClient s = listener.AcceptTcpClient();
+                    HttpProcessor processor = new HttpProcessor(s, this);
+                    ThreadPool.QueueUserWorkItem(o => processor.process());
+                    Thread.Sleep(1);
+                }
+                catch { }
             }
+        }
+
+        public void StopListening()
+        {
+            is_active = false;
+            listener.Stop();
         }
 
         public abstract void handleGETRequest(HttpProcessor p);

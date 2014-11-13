@@ -50,6 +50,8 @@ namespace MediaServer
 
         private void StartServer_Click(object sender, EventArgs e)
         {
+            if (server.IsActive)
+                server.StopListening();
             ThreadPool.QueueUserWorkItem(o => server.Listen());
         }
 
