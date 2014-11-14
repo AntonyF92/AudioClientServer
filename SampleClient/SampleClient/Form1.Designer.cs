@@ -30,6 +30,7 @@
         {
             this.PlaylistBox = new System.Windows.Forms.ListBox();
             this.Connect = new System.Windows.Forms.Button();
+            this.Play = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // PlaylistBox
@@ -50,11 +51,22 @@
             this.Connect.UseVisualStyleBackColor = true;
             this.Connect.Click += new System.EventHandler(this.Connect_Click);
             // 
+            // Play
+            // 
+            this.Play.Location = new System.Drawing.Point(332, 97);
+            this.Play.Name = "Play";
+            this.Play.Size = new System.Drawing.Size(75, 23);
+            this.Play.TabIndex = 2;
+            this.Play.Text = "Play";
+            this.Play.UseVisualStyleBackColor = true;
+            this.Play.Click += new System.EventHandler(this.Play_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(503, 261);
+            this.Controls.Add(this.Play);
             this.Controls.Add(this.Connect);
             this.Controls.Add(this.PlaylistBox);
             this.Name = "Form1";
@@ -67,6 +79,7 @@
 
         private System.Windows.Forms.ListBox PlaylistBox;
         private System.Windows.Forms.Button Connect;
+        private System.Windows.Forms.Button Play;
     }
 }
 

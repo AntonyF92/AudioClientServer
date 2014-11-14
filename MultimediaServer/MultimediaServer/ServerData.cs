@@ -12,9 +12,19 @@ namespace MediaServer
     public class PlaylistCollection : Dictionary<string, Playlist>
     {
     }
+    public class FolderInfo
+    {
+        public string name;
+        public string path;
+        public override string ToString()
+        {
+            return path;
+        }
+    }
     public class ServerData
     {
         public PlaylistCollection Playlists = new PlaylistCollection();
+        public List<FolderInfo> SelectedFolders = new List<FolderInfo>();
 
         public static ServerData Instance { get; private set; }
         public static void Init()
