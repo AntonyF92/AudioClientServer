@@ -28,6 +28,8 @@ namespace SampleClient
             InitializeComponent();
         }
 
+        private WaveOut player = null;
+
         private void Connect_Click(object sender, EventArgs e)
         {
             try
@@ -55,17 +57,20 @@ namespace SampleClient
             PlaylistBox.Invoke(new Action(() =>
             PlaylistBox.Items.Clear()));
             PlaylistBox.Invoke(new Action(() =>
-            PlaylistBox.Items.AddRange(pl.FileList.ToArray())));
+            {
+                foreach (var item in pl.FileList)
+                {
+                    var plItem = PlaylistBox.Items.Add(item.name);
+                    plItem.Tag = item;
+                }
+            }));
         }
 
-        private Stream ms = new MemoryStream();
-        public void PlayMp3FromUrl(string url)
+        public void PlayMp3FromStream(Stream stream)
         {
+            Stream ms = new MemoryStream();
             new Thread(delegate(object o)
             {
-                var response = WebRequest.Create(url).GetResponse();
-                using (var stream = response.GetResponseStream())
-                {
                     byte[] buffer = new byte[65536]; // 64KB chunks
                     int read;
                     while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
@@ -75,7 +80,6 @@ namespace SampleClient
                         ms.Write(buffer, 0, read);
                         ms.Position = pos;
                     }
-                }
             }).Start();
 
             // Pre-buffering some data to allow NAudio to start playing
@@ -85,14 +89,16 @@ namespace SampleClient
             ms.Position = 0;
             using (WaveStream blockAlignedStream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(new Mp3FileReader(ms))))
             {
-                using (WaveOut waveOut = new WaveOut(WaveCallbackInfo.FunctionCallback()))
+                StopPlayer();
+                player = new WaveOut(WaveCallbackInfo.FunctionCallback());
                 {
-                    waveOut.Init(blockAlignedStream);
-                    waveOut.Play();
-                    while (waveOut.PlaybackState == PlaybackState.Playing)
+                    player.Init(blockAlignedStream);
+                    player.Play();
+                    while (player.PlaybackState == PlaybackState.Playing)
                     {
                         System.Threading.Thread.Sleep(100);
                     }
+                    ms.Flush();
                 }
             }
         }
@@ -100,7 +106,34 @@ namespace SampleClient
         private void Play_Click(object sender, EventArgs e)
         {
             ThreadPool.QueueUserWorkItem(o =>
-            PlayMp3FromUrl("http://10.15.10.55:8080/test/Daughtry - Drown In You.mp3"));
+            {
+                NetworkFileInfo fi = null;
+                PlaylistBox.Invoke(new Action(() =>
+                    fi = (NetworkFileInfo)PlaylistBox.SelectedItems[0].Tag));
+                TcpClient client = new TcpClient();
+                client.Connect("localhost", 10000);
+                var stream = client.GetStream();
+                byte[] data = Encoding.UTF8.GetBytes(fi.path);
+                stream.Write(data, 0, data.Length);
+                stream.Flush();
+                while (!client.GetStream().DataAvailable)
+                {
+                    Thread.Sleep(10);
+                }
+                PlayMp3FromStream(client.GetStream());
+                //client.Close();
+            });
+        }
+
+        private void Stop_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        void StopPlayer()
+        {
+            if (player != null && player.PlaybackState == PlaybackState.Playing)
+                player.Stop();
         }
     }
 }

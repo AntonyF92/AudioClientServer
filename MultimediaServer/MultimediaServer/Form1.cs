@@ -23,6 +23,7 @@ namespace MediaServer
         {
             GlobalDiagnosticsContext.Set("ApplicationName", "MediaServer");
             ServerData.Init();
+            FileServer.Init(10000);
             InitializeComponent();
         }
 
@@ -38,7 +39,7 @@ namespace MediaServer
                     NetworkFileInfo mp3 = new NetworkFileInfo()
                     {
                         name = Path.GetFileName(file),
-                        path = file
+                        path = Path.GetFullPath(file)
                     };
                     playlist.Add(mp3);
                     Playlist.Items.Add(mp3);
@@ -64,6 +65,11 @@ namespace MediaServer
                     Playlist.Items.Add(v.name);
                 }
             }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            FileServer.Instance.StopListening();
         }
     }
 }

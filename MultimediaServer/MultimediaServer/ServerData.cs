@@ -43,6 +43,7 @@ namespace MediaServer
                     Playlist tmp = new Playlist();
                     tmp = (Playlist)sr.Deserialize(stream);
                     Playlists.Add(tmp.Name, tmp);
+                    stream.Close();
                 }
             }
             else

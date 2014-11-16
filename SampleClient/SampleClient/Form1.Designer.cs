@@ -28,18 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.PlaylistBox = new System.Windows.Forms.ListBox();
             this.Connect = new System.Windows.Forms.Button();
             this.Play = new System.Windows.Forms.Button();
+            this.PlaylistBox = new System.Windows.Forms.ListView();
+            this.Stop = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // PlaylistBox
-            // 
-            this.PlaylistBox.FormattingEnabled = true;
-            this.PlaylistBox.Location = new System.Drawing.Point(12, 28);
-            this.PlaylistBox.Name = "PlaylistBox";
-            this.PlaylistBox.Size = new System.Drawing.Size(185, 212);
-            this.PlaylistBox.TabIndex = 0;
             // 
             // Connect
             // 
@@ -61,25 +54,50 @@
             this.Play.UseVisualStyleBackColor = true;
             this.Play.Click += new System.EventHandler(this.Play_Click);
             // 
+            // PlaylistBox
+            // 
+            this.PlaylistBox.CheckBoxes = true;
+            this.PlaylistBox.LabelWrap = false;
+            this.PlaylistBox.Location = new System.Drawing.Point(12, 12);
+            this.PlaylistBox.MultiSelect = false;
+            this.PlaylistBox.Name = "PlaylistBox";
+            this.PlaylistBox.ShowGroups = false;
+            this.PlaylistBox.Size = new System.Drawing.Size(187, 237);
+            this.PlaylistBox.TabIndex = 9;
+            this.PlaylistBox.UseCompatibleStateImageBehavior = false;
+            this.PlaylistBox.View = System.Windows.Forms.View.SmallIcon;
+            // 
+            // Stop
+            // 
+            this.Stop.Location = new System.Drawing.Point(332, 126);
+            this.Stop.Name = "Stop";
+            this.Stop.Size = new System.Drawing.Size(75, 23);
+            this.Stop.TabIndex = 10;
+            this.Stop.Text = "Stop";
+            this.Stop.UseVisualStyleBackColor = true;
+            this.Stop.Click += new System.EventHandler(this.Stop_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(503, 261);
+            this.Controls.Add(this.Stop);
+            this.Controls.Add(this.PlaylistBox);
             this.Controls.Add(this.Play);
             this.Controls.Add(this.Connect);
-            this.Controls.Add(this.PlaylistBox);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "ClientPlayer";
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.ListBox PlaylistBox;
         private System.Windows.Forms.Button Connect;
         private System.Windows.Forms.Button Play;
+        private System.Windows.Forms.ListView PlaylistBox;
+        private System.Windows.Forms.Button Stop;
     }
 }
 

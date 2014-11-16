@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace MediaServer
 {
@@ -314,6 +315,88 @@ namespace MediaServer
         public override void handlePOSTRequest(HttpProcessor p, StreamReader inputData)
         {
             
+        }
+    }
+
+    public class FileServer
+    {
+        TcpListener listener;
+        int bufferSize = 65536;
+        public static FileServer Instance { get; private set; }
+        Thread workThread;
+        private bool acceptConnections = false;
+        public static void Init(int port)
+        {
+            Instance = new FileServer(port);
+        }
+
+        private FileServer(int port)
+        {
+            listener = new TcpListener(port);
+            listener.Start();
+            StartListening();
+        }
+
+        public void StartListening()
+        {
+            acceptConnections = true;
+            workThread = new Thread(HandleConnection);
+            workThread.Start();
+        }
+
+        ~FileServer()
+        {
+            StopListening();
+        }
+
+        public void StopListening()
+        {
+            acceptConnections = false;
+            listener.Stop();
+            workThread.Abort();
+        }
+
+        void HandleConnection()
+        {
+            while (acceptConnections)
+            {
+                try
+                {
+                    var client = listener.AcceptTcpClient();
+                    ThreadPool.QueueUserWorkItem(o => ProcessClient(client));
+                }
+                catch { }
+            }
+        }
+
+        void ProcessClient(TcpClient client)
+        {
+            try
+            {
+                var clientStream = client.GetStream();
+                while (!clientStream.DataAvailable)
+                {
+                    Thread.Sleep(10);
+                }
+                string request = "";
+                byte[] buffer = new byte[bufferSize];
+                int readCount = 0;
+                readCount = clientStream.Read(buffer, 0, bufferSize);
+                request = Encoding.UTF8.GetString(buffer, 0, readCount);
+                if (File.Exists(request))
+                {
+                    FileStream fileStream = File.Open(request, FileMode.Open);
+                    while ((readCount = fileStream.Read(buffer, 0, bufferSize)) > 0)
+                        //data.AddRange(buffer);
+                        clientStream.Write(buffer, 0, readCount);
+                    clientStream.Flush();
+                    fileStream.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
         }
     }
 }
