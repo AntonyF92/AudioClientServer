@@ -55,14 +55,18 @@ namespace SampleClient
         {
 
             PlaylistBox.Invoke(new Action(() =>
-            PlaylistBox.Items.Clear()));
-            PlaylistBox.Invoke(new Action(() =>
             {
+                PlaylistBox.BeginUpdate();
+                PlaylistBox.Items.Clear();
                 foreach (var item in pl.FileList)
                 {
                     var plItem = PlaylistBox.Items.Add(item.name);
                     plItem.Tag = item;
+                    plItem.Checked = true;
+                    while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 2)
+                        plItem.Text += " ";
                 }
+                PlaylistBox.EndUpdate();
             }));
         }
 
