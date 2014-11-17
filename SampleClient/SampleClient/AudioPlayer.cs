@@ -18,11 +18,15 @@ namespace SampleClient
         private Playlist currentPlaylist = null;
         private NetworkFileInfo currentFile = null;
         TcpClient client = new TcpClient();
+        AutoResetEvent triggerWait = new AutoResetEvent(false);
+        Thread triggerThread;
 
         public AudioPlayer()
         {
             client.Connect(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.audio_port);
             playlistManager = new PlaylistManager((pl, file) => Play(file, pl));
+            //triggerThread = new Thread(TriggerNextTrack);
+            //triggerThread.Start();
         }
 
         public void Play(NetworkFileInfo fi, Playlist pl)
@@ -72,22 +76,31 @@ namespace SampleClient
 
             ms.Position = 0;
             blockAlignedStream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(new Mp3FileReader(ms)));
-                player = new WaveOut(WaveCallbackInfo.FunctionCallback());
-                player.PlaybackStopped += player_PlaybackStopped;
-                    player.Init(blockAlignedStream);
-                    player.Play();
-                    /*while (player.PlaybackState == PlaybackState.Playing)
-                    {
-                        System.Threading.Thread.Sleep(100);
-                    }
-                    ms.Flush();
-                    ms.Close();*/
+            player = new WaveOut(WaveCallbackInfo.FunctionCallback());
+            //player.PlaybackStopped += player_PlaybackStopped;
+            player.Init(blockAlignedStream);
+            player.Play();
+            while (player.PlaybackState != PlaybackState.Stopped)
+            {
+                System.Threading.Thread.Sleep(100);
+            }
+            //blockAlignedStream.Dispose();
+            NextTrack();
         }
 
         void player_PlaybackStopped(object sender, StoppedEventArgs e)
         {
             blockAlignedStream.Dispose();
-            NextTrack();
+            triggerWait.Set();
+        }
+
+        void TriggerNextTrack()
+        {
+            while (true)
+            {
+                triggerWait.WaitOne();
+                NextTrack();
+            }
         }
 
         public void StopPlayer()

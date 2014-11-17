@@ -67,7 +67,7 @@ namespace SampleClient
                     ListView PlaylistBox = new ListView();
                     page.Controls.Add(PlaylistBox);
                     PlaylistBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-                    PlaylistBox.CheckBoxes = true;
+                    PlaylistBox.CheckBoxes = false;
                     PlaylistBox.Dock = System.Windows.Forms.DockStyle.Fill;
                     PlaylistBox.HideSelection = false;
                     PlaylistBox.LabelWrap = false;
@@ -80,6 +80,7 @@ namespace SampleClient
                     PlaylistBox.UseCompatibleStateImageBehavior = false;
                     PlaylistBox.View = System.Windows.Forms.View.SmallIcon;
                     PlaylistBox.MouseDoubleClick += PlaylistBox_MouseDoubleClick;
+                    control.TabPages.Add(page);
                     PlaylistBox.BeginUpdate();
                     foreach (var item in pl.FileList)
                     {
@@ -90,7 +91,6 @@ namespace SampleClient
                             plItem.Text += " ";
                     }
                     PlaylistBox.EndUpdate();
-                    control.TabPages.Add(page);
                 }
             }));
         }
