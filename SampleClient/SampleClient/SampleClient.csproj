@@ -53,14 +53,10 @@
     <Compile Include="..\..\MultimediaServer\MultimediaServer\NetworkFileInfo.cs">
       <Link>NetworkFileInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\MultimediaServer\MultimediaServer\PeerBase.cs">
-      <Link>PeerBase.cs</Link>
-    </Compile>
     <Compile Include="..\..\MultimediaServer\MultimediaServer\Playlist.cs">
       <Link>Playlist.cs</Link>
     </Compile>
     <Compile Include="AudioPlayer.cs" />
-    <Compile Include="ClientPeer.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="Form1.cs">
