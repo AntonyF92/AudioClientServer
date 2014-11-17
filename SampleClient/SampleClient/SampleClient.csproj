@@ -59,13 +59,18 @@
     <Compile Include="..\..\MultimediaServer\MultimediaServer\Playlist.cs">
       <Link>Playlist.cs</Link>
     </Compile>
+    <Compile Include="AudioPlayer.cs" />
     <Compile Include="ClientPeer.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="ConfigManager.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="HttpClient.cs" />
+    <Compile Include="PlaylistManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

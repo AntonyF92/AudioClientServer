@@ -22,112 +22,28 @@ namespace SampleClient
 {
     public partial class Form1 : Form
     {
+        AudioPlayer audioPlayer;
+        HttpClient httpClient;
 
         public Form1()
         {
             InitializeComponent();
-        }
-
-        private WaveOut player = null;
-
-        private void Connect_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create("http://localhost:11000/method_name=get_playlist&name=new");
-                request.Method = "GET";
-                request.KeepAlive = false;
-                request.ProtocolVersion = HttpVersion.Version10;
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                XmlSerializer sr = new XmlSerializer(typeof(Playlist));
-                Playlist pl = new Playlist();
-                pl = (Playlist)sr.Deserialize(response.GetResponseStream());
-                LoadList(pl);
-                response.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        public void LoadList(Playlist pl)
-        {
-
-            PlaylistBox.Invoke(new Action(() =>
-            {
-                PlaylistBox.BeginUpdate();
-                PlaylistBox.Items.Clear();
-                foreach (var item in pl.FileList)
-                {
-                    var plItem = PlaylistBox.Items.Add(item.name);
-                    plItem.Tag = item;
-                    plItem.Checked = true;
-                    while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 2)
-                        plItem.Text += " ";
-                }
-                PlaylistBox.EndUpdate();
-            }));
-        }
-
-        public void PlayMp3FromStream(Stream stream)
-        {
-            Stream ms = new MemoryStream();
-            new Thread(delegate(object o)
-            {
-                    byte[] buffer = new byte[65536]; // 64KB chunks
-                    int read;
-                    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
-                    {
-                        var pos = ms.Position;
-                        ms.Position = ms.Length;
-                        ms.Write(buffer, 0, read);
-                        ms.Position = pos;
-                    }
-            }).Start();
-
-            // Pre-buffering some data to allow NAudio to start playing
-            while (ms.Length < 65536 * 10)
-                Thread.Sleep(1000);
-
-            ms.Position = 0;
-            using (WaveStream blockAlignedStream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(new Mp3FileReader(ms))))
-            {
-                StopPlayer();
-                player = new WaveOut(WaveCallbackInfo.FunctionCallback());
-                {
-                    player.Init(blockAlignedStream);
-                    player.Play();
-                    while (player.PlaybackState == PlaybackState.Playing)
-                    {
-                        System.Threading.Thread.Sleep(100);
-                    }
-                    ms.Flush();
-                }
-            }
+            ConfigManager.Init();
+            audioPlayer = new AudioPlayer();
+            httpClient = new HttpClient(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.http_port);
         }
 
         private void Play_Click(object sender, EventArgs e)
         {
-            ThreadPool.QueueUserWorkItem(o =>
+            Playlist pl = audioPlayer.playlistManager[PlaylistCollectionWindow.SelectedTab.Name];
+            if (pl != null)
             {
-                NetworkFileInfo fi = null;
-                PlaylistBox.Invoke(new Action(() =>
-                    fi = (NetworkFileInfo)PlaylistBox.SelectedItems[0].Tag));
-                TcpClient client = new TcpClient();
-                client.Connect("localhost", 10000);
-                var stream = client.GetStream();
-                byte[] data = Encoding.UTF8.GetBytes(fi.path);
-                stream.Write(data, 0, data.Length);
-                stream.Flush();
-                while (!client.GetStream().DataAvailable)
-                {
-                    Thread.Sleep(10);
-                }
-                PlayMp3FromStream(client.GetStream());
-                //client.Close();
-            });
+                NetworkFileInfo file = ((ListView)PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"]).SelectedItems[0].Tag as NetworkFileInfo;
+                audioPlayer.Play(file, pl);
+            }
         }
+
+
 
         private void Stop_Click(object sender, EventArgs e)
         {
@@ -136,8 +52,20 @@ namespace SampleClient
 
         void StopPlayer()
         {
-            if (player != null && player.PlaybackState == PlaybackState.Playing)
-                player.Stop();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ConfigManager.Instance.SaveConfig();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            httpClient.ExecGETquery("method_name=get_playlists", (response) =>
+                {
+                    audioPlayer.playlistManager.LoadCollection(response.GetResponseStream());
+                });
+            audioPlayer.playlistManager.LoadPlaylistCollectionIntoTabControl(PlaylistCollectionWindow);
         }
     }
 }

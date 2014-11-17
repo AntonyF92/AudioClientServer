@@ -8,7 +8,6 @@ using System.Threading.Tasks;
     {
         public string name;
         public string path;
-        public string networkPath;
         public override string ToString()
         {
             return name;
