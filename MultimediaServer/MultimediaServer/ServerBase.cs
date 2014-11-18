@@ -261,7 +261,7 @@ namespace MediaServer
                         string[] method = parameters[0].Split('=');
                         switch (method[1])
                         {
-                            case "get_playlists": ProcessGetPlaylists(p); break; 
+                            case "get_playlists": ProcessGetPlaylists(p); break;
                             case "get_playlist":
                                 {
                                     ProcessGetPlaylist(parameters[1].Split('='), p);
@@ -314,7 +314,7 @@ namespace MediaServer
 
         public override void handlePOSTRequest(HttpProcessor p, StreamReader inputData)
         {
-            
+
         }
     }
 
@@ -374,28 +374,33 @@ namespace MediaServer
             try
             {
                 var clientStream = client.GetStream();
-                while (!clientStream.DataAvailable)
+                //byte[] buffer = new byte[bufferSize];
+                //int readCount = 0;
+                //while ((readCount = clientStream.Read(buffer, 0, bufferSize)) > 0)
                 {
-                    Thread.Sleep(10);
-                }
-                string request = "";
-                byte[] buffer = new byte[bufferSize];
-                int readCount = 0;
-                readCount = clientStream.Read(buffer, 0, bufferSize);
-                request = Encoding.UTF8.GetString(buffer, 0, readCount);
-                if (File.Exists(request))
-                {
-                    FileStream fileStream = File.Open(request, FileMode.Open);
-                    while ((readCount = fileStream.Read(buffer, 0, bufferSize)) > 0)
-                        //data.AddRange(buffer);
-                        clientStream.Write(buffer, 0, readCount);
-                    clientStream.Flush();
-                    fileStream.Close();
+                    while (!clientStream.DataAvailable)
+                    {
+                        Thread.Sleep(10);
+                    }
+                    string request = "";
+                    byte[] buffer = new byte[bufferSize];
+                    int readCount = 0;
+                    readCount = clientStream.Read(buffer, 0, bufferSize);
+                    request = Encoding.UTF8.GetString(buffer, 0, readCount);
+                    if (File.Exists(request))
+                    {
+                        FileStream fileStream = File.Open(request, FileMode.Open);
+                        while ((readCount = fileStream.Read(buffer, 0, bufferSize)) > 0)
+                            //data.AddRange(buffer);
+                            clientStream.Write(buffer, 0, readCount);
+                        clientStream.Flush();
+                        fileStream.Close();
+                    }
                 }
             }
             catch (Exception ex)
             {
-                
+
             }
         }
     }

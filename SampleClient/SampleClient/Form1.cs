@@ -46,7 +46,7 @@ namespace SampleClient
 
         private void Stop_Click(object sender, EventArgs e)
         {
-            
+            audioPlayer.StopPlayer();
         }
 
         void StopPlayer()
@@ -56,6 +56,7 @@ namespace SampleClient
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             ConfigManager.Instance.SaveConfig();
+            audioPlayer.Dispose();
         }
 
         private void Form1_Load(object sender, EventArgs e)

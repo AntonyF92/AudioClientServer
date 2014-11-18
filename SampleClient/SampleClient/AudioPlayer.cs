@@ -17,13 +17,15 @@ namespace SampleClient
         public PlaylistManager playlistManager { get; private set; }
         private Playlist currentPlaylist = null;
         private NetworkFileInfo currentFile = null;
+        private Mp3FileReader mp3Reader = null;
         TcpClient client = new TcpClient();
         AutoResetEvent triggerWait = new AutoResetEvent(false);
         Thread triggerThread;
+        bool manuallyStopped = false;
 
         public AudioPlayer()
         {
-            client.Connect(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.audio_port);
+            //client.Connect(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.audio_port);
             playlistManager = new PlaylistManager((pl, file) => Play(file, pl));
             //triggerThread = new Thread(TriggerNextTrack);
             //triggerThread.Start();
@@ -38,10 +40,12 @@ namespace SampleClient
                 else
                 {
                     StopPlayer();
+                    client = new TcpClient();
+                    client.Connect(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.audio_port);
                     var stream = client.GetStream();
                     byte[] data = Encoding.UTF8.GetBytes(fi.path);
                     stream.Write(data, 0, data.Length);
-                    stream.Flush();
+                    //stream.Flush();
                     while (!client.GetStream().DataAvailable)
                     {
                         Thread.Sleep(10);
@@ -59,39 +63,54 @@ namespace SampleClient
             Stream ms = new MemoryStream();
             new Thread(delegate(object o)
             {
-                byte[] buffer = new byte[ConfigManager.Instance.config.audio_buffer_size]; // 64KB chunks
-                int read;
-                while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                try
                 {
-                    var pos = ms.Position;
-                    ms.Position = ms.Length;
-                    ms.Write(buffer, 0, read);
-                    ms.Position = pos;
+                    byte[] buffer = new byte[ConfigManager.Instance.config.audio_buffer_size]; // 64KB chunks
+                    int read;
+                    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        var pos = ms.Position;
+                        ms.Position = ms.Length;
+                        ms.Write(buffer, 0, read);
+                        ms.Position = pos;
+                    }
                 }
+                catch { }
             }).Start();
 
             // Pre-buffering some data to allow NAudio to start playing
-            while (ms.Length < 65536 * 10)
-                Thread.Sleep(1000);
+            while (ms.Length < 65536 * 2)
+                Thread.Sleep(100);
 
             ms.Position = 0;
-            blockAlignedStream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(new Mp3FileReader(ms)));
+            mp3Reader = new Mp3FileReader(ms);
+            blockAlignedStream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(mp3Reader));
             player = new WaveOut(WaveCallbackInfo.FunctionCallback());
-            //player.PlaybackStopped += player_PlaybackStopped;
+            player.PlaybackStopped += player_PlaybackStopped;
             player.Init(blockAlignedStream);
             player.Play();
-            while (player.PlaybackState != PlaybackState.Stopped)
+            /*while (player.PlaybackState != PlaybackState.Stopped)
             {
                 System.Threading.Thread.Sleep(100);
             }
-            //blockAlignedStream.Dispose();
-            NextTrack();
+            blockAlignedStream.Dispose();*/
+            //NextTrack();
         }
 
         void player_PlaybackStopped(object sender, StoppedEventArgs e)
         {
-            blockAlignedStream.Dispose();
-            triggerWait.Set();
+            /*if (blockAlignedStream != null)
+                blockAlignedStream.Dispose();
+            blockAlignedStream = null;
+            if (mp3Reader != null)
+                mp3Reader.Close();
+            mp3Reader = null;
+            if (player != null)
+                player.Dispose();*/
+            player = null;
+            client.Close();
+            if (!manuallyStopped)
+                NextTrack();
         }
 
         void TriggerNextTrack()
@@ -103,10 +122,20 @@ namespace SampleClient
             }
         }
 
-        public void StopPlayer()
+        private void Stop()
         {
             if (player != null && player.PlaybackState == PlaybackState.Playing)
                 player.Stop();
+        }
+
+        public void StopPlayer()
+        {
+            if (player != null && player.PlaybackState == PlaybackState.Playing)
+            {
+                manuallyStopped = true;
+                player.Stop();
+                manuallyStopped = false;
+            }
         }
 
         public void PausePlayer()
@@ -147,6 +176,18 @@ namespace SampleClient
                     Play(file, currentPlaylist);
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                manuallyStopped = true;
+                StopPlayer();
+                client.Close();
+                triggerThread.Abort();
+            }
+            catch { }
         }
     }
 }
