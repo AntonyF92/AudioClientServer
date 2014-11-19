@@ -11,5 +11,6 @@ namespace SampleClient
         public int audio_port = 10000;
         public string audio_server_dns = "localhost";
         public int audio_buffer_size = 65536;
+        public List<string> possible_hosts = new List<string>();
     }
 }

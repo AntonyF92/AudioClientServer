@@ -8,6 +8,13 @@ using System.Xml.Serialization;
 
 namespace SampleClient
 {
+    public enum ConfigFields
+    {
+        http_port,
+        audio_port,
+        audio_buffer_size
+    }
+
     public class ConfigManager
     {
         public Config config { get; private set; }
@@ -72,5 +79,22 @@ namespace SampleClient
             return int.Parse(GetStringOption(name));
         }
 
+        public void SetHost(string host)
+        {
+            config.audio_server_dns = host;
+            if (!config.possible_hosts.Contains(host))
+                config.possible_hosts.Add(host);
+        }
+
+        public void SetIntOption(ConfigFields field, string value)
+        {
+            int v = int.Parse(value);
+            switch (field)
+            {
+                case ConfigFields.audio_buffer_size: config.audio_buffer_size = v; break;
+                case ConfigFields.audio_port: config.audio_port = v; break;
+                case ConfigFields.http_port: config.http_port = v; break;
+            }
+        }
     }
 }

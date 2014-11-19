@@ -17,26 +17,36 @@ using System.IO;
 using System.Threading;
 using NAudio.Wave;
 using NAudio.Gui;
+using System.Diagnostics;
 
 namespace SampleClient
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         AudioPlayer audioPlayer;
         HttpClient httpClient;
         VolumeSlider volume;
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             ConfigManager.Init();
-            audioPlayer = new AudioPlayer();
-            httpClient = new HttpClient(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.http_port);
             volume = new VolumeSlider();
             volume.Location = new Point(3, 80);
             volume.Size = new Size(132, 15);
             splitContainer1.Panel1.Controls.Add(volume);
             volume.VolumeChanged += volume_VolumeChanged;
+        }
+
+        void Init()
+        {
+            audioPlayer = new AudioPlayer();
+            httpClient = new HttpClient(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.http_port);
+            httpClient.ExecGETquery("method_name=get_playlists", (response) =>
+            {
+                audioPlayer.playlistManager.LoadCollection(response.GetResponseStream());
+            });
+            audioPlayer.playlistManager.LoadPlaylistCollectionIntoTabControl(PlaylistCollectionWindow);
         }
 
         void volume_VolumeChanged(object sender, EventArgs e)
@@ -73,11 +83,7 @@ namespace SampleClient
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            httpClient.ExecGETquery("method_name=get_playlists", (response) =>
-                {
-                    audioPlayer.playlistManager.LoadCollection(response.GetResponseStream());
-                });
-            audioPlayer.playlistManager.LoadPlaylistCollectionIntoTabControl(PlaylistCollectionWindow);
+            Init();
         }
 
         private void NextTrack_Click(object sender, EventArgs e)
@@ -123,6 +129,17 @@ namespace SampleClient
             if (e.Button == MouseButtons.Left)
                 this.Location = new Point(iFormX + (iMouseX2 - iMouseX), iFormY + (iMouseY2 - iMouseY));
 
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (new Settings().ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                Init();
         }
     }
 }

@@ -10,6 +10,9 @@ using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 using NLog;
+using Id3.Id3v2;
+using Id3.Info;
+using Id3;
 
 namespace MediaServer
 {
