@@ -99,15 +99,15 @@ namespace SampleClient
 
         void player_PlaybackStopped(object sender, StoppedEventArgs e)
         {
-            /*if (blockAlignedStream != null)
+            if (blockAlignedStream != null)
                 blockAlignedStream.Dispose();
             blockAlignedStream = null;
             if (mp3Reader != null)
                 mp3Reader.Close();
             mp3Reader = null;
-            if (player != null)
-                player.Dispose();*/
-            player = null;
+            /*if (player != null)
+                player.Dispose();
+            player = null;*/
             client.Close();
             if (!manuallyStopped)
                 NextTrack();
@@ -156,6 +156,7 @@ namespace SampleClient
                         file = currentPlaylist.FileList[index + 1];
                     else
                         file = currentPlaylist.FileList[0];
+                    playlistManager.ChangeTrack(currentPlaylist, file);
                     Play(file, currentPlaylist);
                 }
             }
@@ -173,6 +174,7 @@ namespace SampleClient
                         file = currentPlaylist.FileList[index - 1];
                     else
                         file = currentPlaylist.FileList[currentPlaylist.FileList.Count - 1];
+                    playlistManager.ChangeTrack(currentPlaylist, file);
                     Play(file, currentPlaylist);
                 }
             }
@@ -188,6 +190,12 @@ namespace SampleClient
                 triggerThread.Abort();
             }
             catch { }
+        }
+
+        public void SetVolume(float value)
+        {
+            if (player != null)
+                player.Volume = value;
         }
     }
 }

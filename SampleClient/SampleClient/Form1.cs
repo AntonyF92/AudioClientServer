@@ -16,6 +16,7 @@ using NAudio;
 using System.IO;
 using System.Threading;
 using NAudio.Wave;
+using NAudio.Gui;
 
 namespace SampleClient
 {
@@ -23,6 +24,7 @@ namespace SampleClient
     {
         AudioPlayer audioPlayer;
         HttpClient httpClient;
+        VolumeSlider volume;
 
         public Form1()
         {
@@ -30,6 +32,16 @@ namespace SampleClient
             ConfigManager.Init();
             audioPlayer = new AudioPlayer();
             httpClient = new HttpClient(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.http_port);
+            volume = new VolumeSlider();
+            volume.Location = new Point(3, 80);
+            volume.Size = new Size(132, 15);
+            splitContainer1.Panel1.Controls.Add(volume);
+            volume.VolumeChanged += volume_VolumeChanged;
+        }
+
+        void volume_VolumeChanged(object sender, EventArgs e)
+        {
+            audioPlayer.SetVolume(volume.Volume);
         }
 
         private void Play_Click(object sender, EventArgs e)
@@ -66,6 +78,51 @@ namespace SampleClient
                     audioPlayer.playlistManager.LoadCollection(response.GetResponseStream());
                 });
             audioPlayer.playlistManager.LoadPlaylistCollectionIntoTabControl(PlaylistCollectionWindow);
+        }
+
+        private void NextTrack_Click(object sender, EventArgs e)
+        {
+            audioPlayer.NextTrack();
+        }
+
+        private void PrevTrack_Click(object sender, EventArgs e)
+        {
+            audioPlayer.PreviousTrack();
+        }
+
+        private void Pause_Click(object sender, EventArgs e)
+        {
+            audioPlayer.PausePlayer();
+        }
+
+        private void CloseButton_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void MinimizeButton_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        int iFormX, iFormY, iMouseX, iMouseY;
+
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+            iFormX = this.Location.X;
+            iFormY = this.Location.Y;
+            iMouseX = MousePosition.X;
+            iMouseY = MousePosition.Y;
+
+        }
+
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            int iMouseX2 = MousePosition.X;
+            int iMouseY2 = MousePosition.Y;
+            if (e.Button == MouseButtons.Left)
+                this.Location = new Point(iFormX + (iMouseX2 - iMouseX), iFormY + (iMouseY2 - iMouseY));
+
         }
     }
 }

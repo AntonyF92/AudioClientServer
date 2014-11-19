@@ -12,6 +12,7 @@ namespace SampleClient
     public class PlaylistManager
     {
         Dictionary<string, Playlist> playlistCollection = new Dictionary<string, Playlist>();
+        TabControl tabControl = null;
 
         public Playlist this[string name]
         {
@@ -56,6 +57,7 @@ namespace SampleClient
 
         public void LoadPlaylistCollectionIntoTabControl(TabControl control)
         {
+            this.tabControl = control;
             control.Invoke(new Action(() =>
             {
                 control.TabPages.Clear();
@@ -85,6 +87,7 @@ namespace SampleClient
                     foreach (var item in pl.FileList)
                     {
                         var plItem = PlaylistBox.Items.Add(item.name);
+                        plItem.Name = item.name;
                         plItem.Tag = item;
                         plItem.Checked = true;
                         while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 2)
@@ -92,6 +95,18 @@ namespace SampleClient
                     }
                     PlaylistBox.EndUpdate();
                 }
+            }));
+        }
+
+        public void ChangeTrack(Playlist pl, NetworkFileInfo fi)
+        {
+            ListView lv = null;
+            tabControl.Invoke(new Action(() =>
+                lv = ((ListView)tabControl.TabPages[pl.Name].Controls["PlaylistBox"])));
+            lv.Invoke(new Action(() =>
+            {
+                lv.SelectedItems.Clear();
+                lv.Items[fi.name].Selected = true;
             }));
         }
 
