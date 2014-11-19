@@ -40,13 +40,20 @@ namespace SampleClient
 
         void Init()
         {
-            audioPlayer = new AudioPlayer();
-            httpClient = new HttpClient(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.http_port);
-            httpClient.ExecGETquery("method_name=get_playlists", (response) =>
+            try
             {
-                audioPlayer.playlistManager.LoadCollection(response.GetResponseStream());
-            });
-            audioPlayer.playlistManager.LoadPlaylistCollectionIntoTabControl(PlaylistCollectionWindow);
+                audioPlayer = new AudioPlayer();
+                httpClient = new HttpClient(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.http_port);
+                httpClient.ExecGETquery("method_name=get_playlists", (response) =>
+                {
+                    audioPlayer.playlistManager.LoadCollection(response.GetResponseStream());
+                });
+                audioPlayer.playlistManager.LoadPlaylistCollectionIntoTabControl(PlaylistCollectionWindow);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Initialization error");
+            }
         }
 
         void volume_VolumeChanged(object sender, EventArgs e)
