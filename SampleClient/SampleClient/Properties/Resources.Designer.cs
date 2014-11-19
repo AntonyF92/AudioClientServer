@@ -63,39 +63,9 @@ namespace SampleClient.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _1416407809_ic_close_48px_128 {
-            get {
-                object obj = ResourceManager.GetObject("1416407809_ic_close_48px-128", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _1416407846_ic_close_48px_32 {
-            get {
-                object obj = ResourceManager.GetObject("1416407846_ic_close_48px-32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap _1416407871_ic_close_48px_24 {
             get {
                 object obj = ResourceManager.GetObject("1416407871_ic_close_48px-24", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _1416408487_minimize {
-            get {
-                object obj = ResourceManager.GetObject("1416408487_minimize", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -126,16 +96,6 @@ namespace SampleClient.Properties {
         internal static System.Drawing.Bitmap Loop {
             get {
                 object obj = ResourceManager.GetObject("Loop", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap min {
-            get {
-                object obj = ResourceManager.GetObject("min", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
