@@ -284,7 +284,7 @@ namespace MediaServer
             {
                 p.writeSuccess("text/xml");
                 XmlSerializer sr = new XmlSerializer(typeof(List<Playlist>));
-                sr.Serialize(p.outputStream.BaseStream, ServerData.Instance.Playlists.Values.ToList());
+                sr.Serialize(p.outputStream.BaseStream, ServerData.Instance.playlistManager.playlistCollection.ToList());
             }
             catch (Exception ex)
             {
@@ -297,11 +297,11 @@ namespace MediaServer
         {
             try
             {
-                if (ServerData.Instance.Playlists.ContainsKey(parameters[1]))
+                if (ServerData.Instance.playlistManager.playlistCollection.ContainsKey(parameters[1]))
                 {
                     p.writeSuccess("text/xml");
                     XmlSerializer sr = new XmlSerializer(typeof(Playlist));
-                    sr.Serialize(p.outputStream.BaseStream, ServerData.Instance.Playlists[parameters[1]]);
+                    sr.Serialize(p.outputStream.BaseStream, ServerData.Instance.playlistManager.playlistCollection[parameters[1]]);
                 }
                 else
                     p.writeFailure();
