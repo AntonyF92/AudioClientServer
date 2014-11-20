@@ -57,7 +57,7 @@ namespace SampleClient
             }
         }
 
-        void playlistManager_OnChangeTrackEvent(Playlist pl, NetworkFileInfo fileInfo)
+        void playlistManager_OnChangeTrackEvent(Playlist pl, AudioFileInfo fileInfo)
         {
             ListView lv = null;
             PlaylistCollectionWindow.Invoke(new Action(() =>
@@ -115,7 +115,7 @@ namespace SampleClient
         void PlaylistBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             var item = ((ListView)sender);
-            audioPlayer.Play((NetworkFileInfo)item.SelectedItems[0].Tag, (Playlist)item.Tag);
+            audioPlayer.Play((AudioFileInfo)item.SelectedItems[0].Tag, (Playlist)item.Tag);
         }
 
         void volume_VolumeChanged(object sender, EventArgs e)
@@ -128,7 +128,7 @@ namespace SampleClient
             Playlist pl = audioPlayer.playlistManager[PlaylistCollectionWindow.SelectedTab.Name];
             if (pl != null)
             {
-                NetworkFileInfo file = ((ListView)PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"]).SelectedItems[0].Tag as NetworkFileInfo;
+                AudioFileInfo file = ((ListView)PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"]).SelectedItems[0].Tag as AudioFileInfo;
                 audioPlayer.Play(file, pl);
             }
         }

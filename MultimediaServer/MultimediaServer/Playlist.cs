@@ -8,7 +8,7 @@ using System.Threading.Tasks;
     public class Playlist
     {
         public string Name;
-        public List<NetworkFileInfo> FileList;
+        public List<AudioFileInfo> FileList;
 
         public Playlist()
         {

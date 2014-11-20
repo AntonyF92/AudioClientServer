@@ -11,11 +11,11 @@ namespace SampleClient
 {
     public class PlaylistManager
     {
-        Dictionary<string, Playlist> playlistCollection = new Dictionary<string, Playlist>();
+        public Dictionary<string, Playlist> playlistCollection = new Dictionary<string, Playlist>();
 
         public delegate void CollectionLoadEventHandler(Dictionary<string, Playlist> playlistCollection);
         public event CollectionLoadEventHandler OnCollectionLoadEvent;
-        public delegate void ChangeTrackEventHandler(Playlist pl, NetworkFileInfo fileInfo);
+        public delegate void ChangeTrackEventHandler(Playlist pl, AudioFileInfo fileInfo);
         public event ChangeTrackEventHandler OnChangeTrackEvent;
 
         public Playlist this[string name]
@@ -44,6 +44,11 @@ namespace SampleClient
             List<Playlist> list = new List<Playlist>();
             XmlSerializer sr = new XmlSerializer(typeof(List<Playlist>));
             list = (List<Playlist>)sr.Deserialize(stream);
+            LoadCollection(list);
+        }
+
+        public void LoadCollection(List<Playlist> list)
+        {
             foreach (var pl in list)
                 playlistCollection.Add(pl.Name, pl);
             if (OnCollectionLoadEvent != null)
@@ -57,7 +62,7 @@ namespace SampleClient
         }
 
 
-        public void ChangeTrack(Playlist pl, NetworkFileInfo fi)
+        public void ChangeTrack(Playlist pl, AudioFileInfo fi)
         {
             if (OnChangeTrackEvent != null)
                 OnChangeTrackEvent(pl, fi);

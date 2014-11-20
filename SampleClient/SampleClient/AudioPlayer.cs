@@ -16,7 +16,7 @@ namespace SampleClient
         WaveStream blockAlignedStream = null;
         public PlaylistManager playlistManager { get; private set; }
         private Playlist currentPlaylist = null;
-        private NetworkFileInfo currentFile = null;
+        private AudioFileInfo currentFile = null;
         private Mp3FileReader mp3Reader = null;
         TcpClient client = new TcpClient();
         AutoResetEvent triggerWait = new AutoResetEvent(false);
@@ -31,7 +31,7 @@ namespace SampleClient
             //triggerThread.Start();
         }
 
-        public void Play(NetworkFileInfo fi, Playlist pl)
+        public void Play(AudioFileInfo fi, Playlist pl)
         {
             ThreadPool.QueueUserWorkItem(o =>
             {
@@ -146,7 +146,7 @@ namespace SampleClient
 
         public void NextTrack()
         {
-            NetworkFileInfo file = null;
+            AudioFileInfo file = null;
             if (currentFile != null && currentPlaylist != null)
             {
                 int index = currentPlaylist.FileList.IndexOf(currentFile);
@@ -164,7 +164,7 @@ namespace SampleClient
 
         public void PreviousTrack()
         {
-            NetworkFileInfo file = null;
+            AudioFileInfo file = null;
             if (currentFile != null && currentPlaylist != null)
             {
                 int index = currentPlaylist.FileList.IndexOf(currentFile);

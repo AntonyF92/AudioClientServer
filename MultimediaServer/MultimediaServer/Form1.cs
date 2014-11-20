@@ -19,14 +19,14 @@ namespace MediaServer
 
     public partial class Form1 : Form
     {
-        List<NetworkFileInfo> playlist = new List<NetworkFileInfo>();
-        MediaServer server = new MediaServer(11000);
+        List<AudioFileInfo> playlist = new List<AudioFileInfo>();
+        MediaServer server = new MediaServer(ServerSettings.Default.http_port);
 
         public Form1()
         {
             GlobalDiagnosticsContext.Set("ApplicationName", "MediaServer");
             ServerData.Init();
-            FileServer.Init(10000);
+            FileServer.Init(ServerSettings.Default.data_port);
             InitializeComponent();
         }
 
@@ -39,7 +39,7 @@ namespace MediaServer
                 ServerData.Instance.Playlists.Clear();
                 foreach (var file in OpenFilesDialog.FileNames)
                 {
-                    NetworkFileInfo mp3 = new NetworkFileInfo()
+                    AudioFileInfo mp3 = new AudioFileInfo()
                     {
                         name = Path.GetFileName(file),
                         path = Path.GetFullPath(file)
@@ -47,7 +47,7 @@ namespace MediaServer
                     playlist.Add(mp3);
                     Playlist.Items.Add(mp3);
                 }
-                ServerData.Instance.Playlists.Add("new", new Playlist() { Name = "new", FileList = new List<NetworkFileInfo>(playlist) });
+                ServerData.Instance.Playlists.Add("new", new Playlist() { Name = "new", FileList = new List<AudioFileInfo>(playlist) });
                 ServerData.Instance.SavePlaylists();
             }
         }

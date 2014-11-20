@@ -31,5 +31,29 @@ namespace MediaServer {
                 return ((string)(this["PlaylistFolder"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("11000")]
+        public int http_port {
+            get {
+                return ((int)(this["http_port"]));
+            }
+            set {
+                this["http_port"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
+        public int data_port {
+            get {
+                return ((int)(this["data_port"]));
+            }
+            set {
+                this["data_port"] = value;
+            }
+        }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-    public class NetworkFileInfo
+    public class AudioFileInfo
     {
         public string name;
         public string path;
