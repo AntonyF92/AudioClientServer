@@ -26,7 +26,7 @@ namespace SampleClient
         public AudioPlayer()
         {
             //client.Connect(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.audio_port);
-            playlistManager = new PlaylistManager((pl, file) => Play(file, pl));
+            playlistManager = new PlaylistManager();
             //triggerThread = new Thread(TriggerNextTrack);
             //triggerThread.Start();
         }

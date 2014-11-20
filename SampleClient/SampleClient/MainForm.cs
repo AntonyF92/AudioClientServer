@@ -43,17 +43,79 @@ namespace SampleClient
             try
             {
                 audioPlayer = new AudioPlayer();
+                audioPlayer.playlistManager.OnCollectionLoadEvent += playlistManager_OnCollectionLoadEvent;
+                audioPlayer.playlistManager.OnChangeTrackEvent += playlistManager_OnChangeTrackEvent;
                 httpClient = new HttpClient(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.http_port);
                 httpClient.ExecGETquery("method_name=get_playlists", (response) =>
                 {
                     audioPlayer.playlistManager.LoadCollection(response.GetResponseStream());
                 });
-                audioPlayer.playlistManager.LoadPlaylistCollectionIntoTabControl(PlaylistCollectionWindow);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Initialization error");
             }
+        }
+
+        void playlistManager_OnChangeTrackEvent(Playlist pl, NetworkFileInfo fileInfo)
+        {
+            ListView lv = null;
+            PlaylistCollectionWindow.Invoke(new Action(() =>
+                lv = ((ListView)PlaylistCollectionWindow.TabPages[pl.Name].Controls["PlaylistBox"])));
+            lv.Invoke(new Action(() =>
+            {
+                lv.SelectedItems.Clear();
+                lv.Items[fileInfo.name].Selected = true;
+            }));
+        }
+
+        void playlistManager_OnCollectionLoadEvent(Dictionary<string, Playlist> playlistCollection)
+        {
+            PlaylistCollectionWindow.Invoke(new Action(() =>
+            {
+                PlaylistCollectionWindow.TabPages.Clear();
+                foreach (var pl in playlistCollection.Values)
+                {
+                    TabPage page = new TabPage();
+                    page.Name = pl.Name;
+                    page.Text = pl.Name;
+                    ListView PlaylistBox = new ListView();
+                    page.Controls.Add(PlaylistBox);
+                    PlaylistBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+                    PlaylistBox.CheckBoxes = false;
+                    PlaylistBox.Dock = System.Windows.Forms.DockStyle.Fill;
+                    PlaylistBox.HideSelection = false;
+                    PlaylistBox.LabelWrap = false;
+                    PlaylistBox.Location = new System.Drawing.Point(3, 3);
+                    PlaylistBox.MultiSelect = false;
+                    PlaylistBox.Name = "PlaylistBox";
+                    PlaylistBox.ShowGroups = false;
+                    PlaylistBox.Size = new System.Drawing.Size(232, 305);
+                    PlaylistBox.TabIndex = 9;
+                    PlaylistBox.UseCompatibleStateImageBehavior = false;
+                    PlaylistBox.View = System.Windows.Forms.View.SmallIcon;
+                    PlaylistBox.Tag = pl;
+                    PlaylistBox.MouseDoubleClick += PlaylistBox_MouseDoubleClick;
+                    PlaylistCollectionWindow.TabPages.Add(page);
+                    PlaylistBox.BeginUpdate();
+                    foreach (var item in pl.FileList)
+                    {
+                        var plItem = PlaylistBox.Items.Add(item.name);
+                        plItem.Name = item.name;
+                        plItem.Tag = item;
+                        plItem.Checked = true;
+                        while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 2)
+                            plItem.Text += " ";
+                    }
+                    PlaylistBox.EndUpdate();
+                }
+            }));
+        }
+
+        void PlaylistBox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            var item = ((ListView)sender);
+            audioPlayer.Play((NetworkFileInfo)item.SelectedItems[0].Tag, (Playlist)item.Tag);
         }
 
         void volume_VolumeChanged(object sender, EventArgs e)

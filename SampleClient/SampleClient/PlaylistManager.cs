@@ -12,7 +12,11 @@ namespace SampleClient
     public class PlaylistManager
     {
         Dictionary<string, Playlist> playlistCollection = new Dictionary<string, Playlist>();
-        TabControl tabControl = null;
+
+        public delegate void CollectionLoadEventHandler(Dictionary<string, Playlist> playlistCollection);
+        public event CollectionLoadEventHandler OnCollectionLoadEvent;
+        public delegate void ChangeTrackEventHandler(Playlist pl, NetworkFileInfo fileInfo);
+        public event ChangeTrackEventHandler OnChangeTrackEvent;
 
         public Playlist this[string name]
         {
@@ -24,13 +28,8 @@ namespace SampleClient
             }
         }
 
-        private Action<Playlist, NetworkFileInfo> PlaylistItemDoubleClickHandler = null;
-
-        public PlaylistManager(Action<Playlist, NetworkFileInfo> PlaylistItemDoubleClickHandler)
+        public PlaylistManager()
         {
-            if (PlaylistItemDoubleClickHandler == null)
-                throw new ArgumentNullException("PlaylistItemDoubleClickHandler");
-            this.PlaylistItemDoubleClickHandler = PlaylistItemDoubleClickHandler;
         }
 
         public void AddPlaylist(Playlist pl)
@@ -47,6 +46,8 @@ namespace SampleClient
             list = (List<Playlist>)sr.Deserialize(stream);
             foreach (var pl in list)
                 playlistCollection.Add(pl.Name, pl);
+            if (OnCollectionLoadEvent != null)
+                OnCollectionLoadEvent(playlistCollection);
         }
 
         public void UpdatePlaylist(Playlist pl)
@@ -55,65 +56,12 @@ namespace SampleClient
                 playlistCollection[pl.Name] = pl;
         }
 
-        public void LoadPlaylistCollectionIntoTabControl(TabControl control)
-        {
-            this.tabControl = control;
-            control.Invoke(new Action(() =>
-            {
-                control.TabPages.Clear();
-                foreach (var pl in playlistCollection.Values)
-                {
-                    TabPage page = new TabPage();
-                    page.Name = pl.Name;
-                    page.Text = pl.Name;
-                    ListView PlaylistBox = new ListView();
-                    page.Controls.Add(PlaylistBox);
-                    PlaylistBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-                    PlaylistBox.CheckBoxes = false;
-                    PlaylistBox.Dock = System.Windows.Forms.DockStyle.Fill;
-                    PlaylistBox.HideSelection = false;
-                    PlaylistBox.LabelWrap = false;
-                    PlaylistBox.Location = new System.Drawing.Point(3, 3);
-                    PlaylistBox.MultiSelect = false;
-                    PlaylistBox.Name = "PlaylistBox";
-                    PlaylistBox.ShowGroups = false;
-                    PlaylistBox.Size = new System.Drawing.Size(232, 305);
-                    PlaylistBox.TabIndex = 9;
-                    PlaylistBox.UseCompatibleStateImageBehavior = false;
-                    PlaylistBox.View = System.Windows.Forms.View.SmallIcon;
-                    PlaylistBox.MouseDoubleClick += PlaylistBox_MouseDoubleClick;
-                    control.TabPages.Add(page);
-                    PlaylistBox.BeginUpdate();
-                    foreach (var item in pl.FileList)
-                    {
-                        var plItem = PlaylistBox.Items.Add(item.name);
-                        plItem.Name = item.name;
-                        plItem.Tag = item;
-                        plItem.Checked = true;
-                        while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 2)
-                            plItem.Text += " ";
-                    }
-                    PlaylistBox.EndUpdate();
-                }
-            }));
-        }
 
         public void ChangeTrack(Playlist pl, NetworkFileInfo fi)
         {
-            ListView lv = null;
-            tabControl.Invoke(new Action(() =>
-                lv = ((ListView)tabControl.TabPages[pl.Name].Controls["PlaylistBox"])));
-            lv.Invoke(new Action(() =>
-            {
-                lv.SelectedItems.Clear();
-                lv.Items[fi.name].Selected = true;
-            }));
+            if (OnChangeTrackEvent != null)
+                OnChangeTrackEvent(pl, fi);
         }
 
-        void PlaylistBox_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            var item = ((ListView)sender).SelectedItems[0];
-            PlaylistItemDoubleClickHandler(playlistCollection[((ListView)sender).Parent.Name], (NetworkFileInfo)item.Tag);
-        }
     }
 }
