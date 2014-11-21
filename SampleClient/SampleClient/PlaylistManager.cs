@@ -17,6 +17,8 @@ namespace SampleClient
         public event CollectionLoadEventHandler OnCollectionLoadEvent;
         public delegate void ChangeTrackEventHandler(Playlist pl, AudioFileInfo fileInfo);
         public event ChangeTrackEventHandler OnChangeTrackEvent;
+        public delegate void PlaylistAddEventHandler(Playlist playlist);
+        public event PlaylistAddEventHandler OnPlaylistAddEvent;
 
         public Playlist this[string name]
         {
@@ -35,7 +37,11 @@ namespace SampleClient
         public void AddPlaylist(Playlist pl)
         {
             if (!playlistCollection.ContainsKey(pl.Name))
+            {
                 playlistCollection.Add(pl.Name, pl);
+                if (OnPlaylistAddEvent != null)
+                    OnPlaylistAddEvent(pl);
+            }
         }
 
         public void LoadCollection(Stream stream)

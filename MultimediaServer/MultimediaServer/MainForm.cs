@@ -19,7 +19,6 @@ namespace MediaServer
 
     public partial class MainForm : Form
     {
-        List<AudioFileInfo> playlist = new List<AudioFileInfo>();
         MediaServer server = new MediaServer(ServerSettings.Default.http_port);
 
         public MainForm()
@@ -28,7 +27,48 @@ namespace MediaServer
             ServerData.Init();
             FileServer.Init(ServerSettings.Default.data_port);
             ServerData.Instance.playlistManager.OnCollectionLoadEvent += playlistManager_OnCollectionLoadEvent;
+            ServerData.Instance.playlistManager.OnPlaylistAddEvent += playlistManager_OnPlaylistAddEvent;
             InitializeComponent();
+        }
+
+        void playlistManager_OnPlaylistAddEvent(Playlist playlist)
+        {
+            PlaylistCollectionWindow.Invoke(new Action(() => AddTabPaige(playlist)));
+        }
+
+        void AddTabPaige(Playlist pl)
+        {
+            TabPage page = new TabPage();
+            page.Name = pl.Name;
+            page.Text = pl.Name;
+            ListView PlaylistBox = new ListView();
+            page.Controls.Add(PlaylistBox);
+            PlaylistBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            PlaylistBox.CheckBoxes = false;
+            PlaylistBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            PlaylistBox.HideSelection = false;
+            PlaylistBox.LabelWrap = false;
+            PlaylistBox.Location = new System.Drawing.Point(3, 3);
+            PlaylistBox.MultiSelect = false;
+            PlaylistBox.Name = "PlaylistBox";
+            PlaylistBox.ShowGroups = false;
+            PlaylistBox.Size = new System.Drawing.Size(232, 305);
+            PlaylistBox.TabIndex = 9;
+            PlaylistBox.UseCompatibleStateImageBehavior = false;
+            PlaylistBox.View = System.Windows.Forms.View.SmallIcon;
+            PlaylistBox.Tag = pl;
+            PlaylistCollectionWindow.TabPages.Add(page);
+            PlaylistBox.BeginUpdate();
+            foreach (var item in pl.FileList)
+            {
+                var plItem = PlaylistBox.Items.Add(item.name);
+                plItem.Name = item.name;
+                plItem.Tag = item;
+                plItem.Checked = true;
+                while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 2)
+                    plItem.Text += " ";
+            }
+            PlaylistBox.EndUpdate();
         }
 
         void playlistManager_OnCollectionLoadEvent(Dictionary<string, Playlist> playlistCollection)
@@ -38,37 +78,7 @@ namespace MediaServer
                 PlaylistCollectionWindow.TabPages.Clear();
                 foreach (var pl in playlistCollection.Values)
                 {
-                    TabPage page = new TabPage();
-                    page.Name = pl.Name;
-                    page.Text = pl.Name;
-                    ListView PlaylistBox = new ListView();
-                    page.Controls.Add(PlaylistBox);
-                    PlaylistBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-                    PlaylistBox.CheckBoxes = false;
-                    PlaylistBox.Dock = System.Windows.Forms.DockStyle.Fill;
-                    PlaylistBox.HideSelection = false;
-                    PlaylistBox.LabelWrap = false;
-                    PlaylistBox.Location = new System.Drawing.Point(3, 3);
-                    PlaylistBox.MultiSelect = false;
-                    PlaylistBox.Name = "PlaylistBox";
-                    PlaylistBox.ShowGroups = false;
-                    PlaylistBox.Size = new System.Drawing.Size(232, 305);
-                    PlaylistBox.TabIndex = 9;
-                    PlaylistBox.UseCompatibleStateImageBehavior = false;
-                    PlaylistBox.View = System.Windows.Forms.View.SmallIcon;
-                    PlaylistBox.Tag = pl;
-                    PlaylistCollectionWindow.TabPages.Add(page);
-                    PlaylistBox.BeginUpdate();
-                    foreach (var item in pl.FileList)
-                    {
-                        var plItem = PlaylistBox.Items.Add(item.name);
-                        plItem.Name = item.name;
-                        plItem.Tag = item;
-                        plItem.Checked = true;
-                        while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 2)
-                            plItem.Text += " ";
-                    }
-                    PlaylistBox.EndUpdate();
+                    AddTabPaige(pl);
                 }
             }));
         }
@@ -137,22 +147,48 @@ namespace MediaServer
             {
                 if (OpenFilesDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    foreach (var file in OpenFilesDialog.FileNames)
+                    string name;
+                    if (InputBox.ShowBox("Enter playlist name:", out name) == System.Windows.Forms.DialogResult.OK)
                     {
-                        Mp3File mp3 = new Mp3File(file);
-                        Id3Tag tag = mp3.GetTag(Id3TagFamily.Version2x);
-                        AudioFileInfo afi = new AudioFileInfo()
+                        Playlist pl = new Playlist();
+                        pl.FileList = new List<AudioFileInfo>();
+                        pl.Name = name;
+                        foreach (var file in OpenFilesDialog.FileNames)
                         {
-                            album = tag.Album.Value,
-                            author = tag.Band.Value,
-                            bitrate = mp3.Audio.Bitrate,
-                            length = mp3.Audio.Duration,
-                            name = Path.GetFileNameWithoutExtension(file),
-                            path = file,
-                            song = tag.Title.Value,
-                            year = tag.Year.Value + ""
-                        };
-
+                            Mp3File mp3 = new Mp3File(file);
+                            Id3Tag tag=null;
+                            try
+                            {
+                                tag = mp3.GetTag(Id3TagFamily.Version1x);
+                            }
+                            catch { tag = null; }
+                            if (tag == null)
+                                try
+                                {
+                                    tag = mp3.GetTag(Id3TagFamily.Version2x);
+                                }
+                                catch { tag = null; }
+                            AudioFileInfo afi = new AudioFileInfo();
+                            try
+                            {
+                                afi.bitrate = mp3.Audio.Bitrate;
+                                afi.length = mp3.Audio.Duration;
+                            }
+                            catch { }
+                            afi.name = Path.GetFileNameWithoutExtension(file);
+                            afi.path = file;
+                            
+                            /*if (tag != null)
+                            {
+                                afi.album = tag.Album.Value;
+                                afi.author = tag.Band.Value;
+                                afi.song = tag.Title.Value;
+                                afi.year = tag.Year.Value + "";
+                            }*/
+                            pl.FileList.Add(afi);
+                        }
+                        ServerData.Instance.playlistManager.AddPlaylist(pl);
+                        ServerData.Instance.SavePlaylists();
                     }
                 }
             }

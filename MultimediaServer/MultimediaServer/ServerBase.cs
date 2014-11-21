@@ -284,7 +284,8 @@ namespace MediaServer
             {
                 p.writeSuccess("text/xml");
                 XmlSerializer sr = new XmlSerializer(typeof(List<Playlist>));
-                sr.Serialize(p.outputStream.BaseStream, ServerData.Instance.playlistManager.playlistCollection.ToList());
+                sr.Serialize(p.outputStream.BaseStream, ServerData.Instance.playlistManager.playlistCollection.Values.ToList());
+                XmlSerializer ser = new XmlSerializer(typeof(List<Playlist>));
             }
             catch (Exception ex)
             {
