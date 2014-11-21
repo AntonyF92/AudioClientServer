@@ -36,7 +36,16 @@ namespace MediaServer
         private ServerData()
         {
             playlistManager = new PlaylistManager();
-            
+            playlistManager.OnPlaylistRemoveEvent += playlistManager_OnPlaylistRemoveEvent;
+        }
+
+        void playlistManager_OnPlaylistRemoveEvent(Playlist pl)
+        {
+            try
+            {
+                File.Delete(Path.Combine(Environment.CurrentDirectory, ServerSettings.Default.PlaylistFolder, pl.Name));
+            }
+            catch { }
         }
 
         public void LoadData()

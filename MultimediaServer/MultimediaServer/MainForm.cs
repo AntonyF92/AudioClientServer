@@ -10,9 +10,6 @@ using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 using NLog;
-using Id3.Id3v2;
-using Id3.Info;
-using Id3;
 
 namespace MediaServer
 {
@@ -58,18 +55,35 @@ namespace MediaServer
             PlaylistBox.View = System.Windows.Forms.View.SmallIcon;
             PlaylistBox.Tag = pl;
             PlaylistCollectionWindow.TabPages.Add(page);
-            PlaylistBox.BeginUpdate();
+            PlaylistCollectionWindow.SelectedTab = page;
+            Application.DoEvents();
+            //PlaylistBox.BeginUpdate();
             foreach (var item in pl.FileList)
             {
                 var plItem = PlaylistBox.Items.Add(item.name);
                 plItem.Name = item.name;
                 plItem.Tag = item;
                 plItem.Checked = true;
-                while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 2)
+                while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 25)
                     plItem.Text += " ";
+                Application.DoEvents();
             }
-            PlaylistBox.EndUpdate();
+            //PlaylistBox.EndUpdate();
         }
+
+        List<string> GetFilesInFolder(string path, bool include_subfolders = true)
+        {
+            List<string> files = new List<string>();
+            foreach (var file in Directory.GetFiles(path))
+                if (Path.GetExtension(file) == ".mp3")
+                    files.Add(file);
+            if (include_subfolders)
+                foreach (var subfolder in Directory.GetDirectories(path))
+                    files.AddRange(GetFilesInFolder(subfolder, include_subfolders));
+            return files;
+        }
+
+
 
         void playlistManager_OnCollectionLoadEvent(Dictionary<string, Playlist> playlistCollection)
         {
@@ -155,37 +169,7 @@ namespace MediaServer
                         pl.Name = name;
                         foreach (var file in OpenFilesDialog.FileNames)
                         {
-                            Mp3File mp3 = new Mp3File(file);
-                            Id3Tag tag=null;
-                            try
-                            {
-                                tag = mp3.GetTag(Id3TagFamily.Version1x);
-                            }
-                            catch { tag = null; }
-                            if (tag == null)
-                                try
-                                {
-                                    tag = mp3.GetTag(Id3TagFamily.Version2x);
-                                }
-                                catch { tag = null; }
-                            AudioFileInfo afi = new AudioFileInfo();
-                            try
-                            {
-                                afi.bitrate = mp3.Audio.Bitrate;
-                                afi.length = mp3.Audio.Duration;
-                            }
-                            catch { }
-                            afi.name = Path.GetFileNameWithoutExtension(file);
-                            afi.path = file;
-                            
-                            /*if (tag != null)
-                            {
-                                afi.album = tag.Album.Value;
-                                afi.author = tag.Band.Value;
-                                afi.song = tag.Title.Value;
-                                afi.year = tag.Year.Value + "";
-                            }*/
-                            pl.FileList.Add(afi);
+                            pl.FileList.Add(GetFileInfo(file));
                         }
                         ServerData.Instance.playlistManager.AddPlaylist(pl);
                         ServerData.Instance.SavePlaylists();
@@ -195,6 +179,76 @@ namespace MediaServer
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Open files error");
+            }
+        }
+
+        AudioFileInfo GetFileInfo(string file)
+        {
+            AudioFileInfo info = new AudioFileInfo();
+            TagLib.File f = TagLib.File.Create(file);
+            info.name = Path.GetFileNameWithoutExtension(file);
+            info.path = file;
+            if (f.Tag != null)
+            {
+                info.album = f.Tag.Album;
+                info.singer = string.Join("|", f.Tag.Performers);
+                info.song = f.Tag.Title;
+                info.year = f.Tag.Year.ToString();
+            }
+            if (f.Properties != null)
+            {
+                info.bitrate = f.Properties.AudioBitrate;
+                info.length = f.Properties.Duration;
+            }
+            return info;
+        }
+
+        private void openFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (OpenFoldersDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    List<string> files = GetFilesInFolder(OpenFoldersDialog.SelectedPath);
+                    if (files.Count > 0)
+                    {
+                        string name = "";
+                        if (InputBox.ShowBox("Enter playlist name:", out name) == System.Windows.Forms.DialogResult.OK)
+                        {
+                            Playlist pl = new Playlist();
+                            pl.Name = name;
+                            foreach (string file in files)
+                                pl.FileList.Add(GetFileInfo(file));
+                            ServerData.Instance.playlistManager.AddPlaylist(pl);
+                            ServerData.Instance.SavePlaylists();
+                        }
+                    }
+                    else
+                        MessageBox.Show("There is no files in that folder", "Create playlist");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error in create playlist by open folder");
+            }
+        }
+
+        private void removePlaylistToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                PlaylistCollectionWindow.Invoke(new Action(() =>
+                    {
+                        Playlist plForRemove = null;
+                        ListView playlistBox = PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"] as ListView;
+                        plForRemove = playlistBox.Tag as Playlist;
+                        ServerData.Instance.playlistManager.RemovePlaylist(plForRemove);
+                        PlaylistCollectionWindow.TabPages.RemoveByKey(plForRemove.Name);
+                    }));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Remove playlist error");
             }
         }
     }

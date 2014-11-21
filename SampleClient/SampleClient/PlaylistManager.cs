@@ -19,6 +19,8 @@ namespace SampleClient
         public event ChangeTrackEventHandler OnChangeTrackEvent;
         public delegate void PlaylistAddEventHandler(Playlist playlist);
         public event PlaylistAddEventHandler OnPlaylistAddEvent;
+        public delegate void RemovePlaylistEventHandler(Playlist pl);
+        public event RemovePlaylistEventHandler OnPlaylistRemoveEvent;
 
         public Playlist this[string name]
         {
@@ -41,6 +43,16 @@ namespace SampleClient
                 playlistCollection.Add(pl.Name, pl);
                 if (OnPlaylistAddEvent != null)
                     OnPlaylistAddEvent(pl);
+            }
+        }
+
+        public void RemovePlaylist(Playlist pl)
+        {
+            if (playlistCollection.ContainsKey(pl.Name))
+            {
+                playlistCollection.Remove(pl.Name);
+                if (OnPlaylistRemoveEvent != null)
+                    OnPlaylistRemoveEvent(pl);
             }
         }
 

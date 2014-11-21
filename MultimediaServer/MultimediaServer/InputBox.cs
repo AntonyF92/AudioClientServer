@@ -14,7 +14,7 @@ namespace MediaServer
     {
         string value = "";
 
-        public InputBox()
+        private InputBox()
         {
             InitializeComponent();
         }
@@ -53,6 +53,11 @@ namespace MediaServer
             value = box.ValueBox.Text;
             box.Dispose();
             return result;
+        }
+
+        private void CloseButton_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
         }
     }
 }

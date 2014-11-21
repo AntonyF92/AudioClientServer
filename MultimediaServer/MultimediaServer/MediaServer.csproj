@@ -32,15 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Id3">
-      <HintPath>lib\Id3.dll</HintPath>
-    </Reference>
-    <Reference Include="Id3.Files">
-      <HintPath>lib\Id3.Files.dll</HintPath>
-    </Reference>
-    <Reference Include="Id3.WinForms">
-      <HintPath>lib\Id3.WinForms.dll</HintPath>
-    </Reference>
     <Reference Include="NAudio, Version=1.7.0.15, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\NAudio.dll</HintPath>
@@ -53,6 +44,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="policy.2.0.taglib-sharp">
+      <HintPath>lib\policy.2.0.taglib-sharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -63,6 +57,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="taglib-sharp">
+      <HintPath>lib\taglib-sharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\SampleClient\SampleClient\PlaylistManager.cs">

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
     {
         public string name;
         public string path;
-        public string author;
+        public string singer;
         public string album;
         public string song;
         public string year;
