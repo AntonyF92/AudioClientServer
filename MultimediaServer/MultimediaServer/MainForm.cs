@@ -58,17 +58,25 @@ namespace MediaServer
             PlaylistCollectionWindow.SelectedTab = page;
             Application.DoEvents();
             //PlaylistBox.BeginUpdate();
-            foreach (var item in pl.FileList)
-            {
-                var plItem = PlaylistBox.Items.Add(item.name);
-                plItem.Name = item.name;
-                plItem.Tag = item;
-                plItem.Checked = true;
-                while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 25)
-                    plItem.Text += " ";
-                Application.DoEvents();
-            }
+            LoadPlaylistIntoListView(PlaylistBox, pl);
             //PlaylistBox.EndUpdate();
+        }
+
+        void LoadPlaylistIntoListView(ListView PlaylistBox, Playlist pl)
+        {
+            PlaylistBox.Invoke(new Action(() =>
+            {
+                foreach (var item in pl.FileList)
+                {
+                    var plItem = PlaylistBox.Items.Add(item.name);
+                    plItem.Name = item.name;
+                    plItem.Tag = item;
+                    plItem.Checked = true;
+                    while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 25)
+                        plItem.Text += " ";
+                    Application.DoEvents();
+                }
+            }));
         }
 
         List<string> GetFilesInFolder(string path, bool include_subfolders = true)
@@ -164,14 +172,7 @@ namespace MediaServer
                     string name;
                     if (InputBox.ShowBox("Enter playlist name:", out name) == System.Windows.Forms.DialogResult.OK)
                     {
-                        Playlist pl = new Playlist();
-                        pl.FileList = new List<AudioFileInfo>();
-                        pl.Name = name;
-                        foreach (var file in OpenFilesDialog.FileNames)
-                        {
-                            pl.FileList.Add(GetFileInfo(file));
-                        }
-                        ServerData.Instance.playlistManager.AddPlaylist(pl);
+                        ServerData.Instance.playlistManager.AddPlaylist(CreatePlaylist(OpenFilesDialog.FileNames, name));
                         ServerData.Instance.SavePlaylists();
                     }
                 }
@@ -182,23 +183,42 @@ namespace MediaServer
             }
         }
 
+        Playlist CreatePlaylist(string[] files, string name)
+        {
+            Playlist pl = new Playlist();
+            pl.Name = name;
+            foreach (var file in files)
+            {
+                pl.FileList.Add(GetFileInfo(file));
+            }
+            return pl;
+        }
+
         AudioFileInfo GetFileInfo(string file)
         {
             AudioFileInfo info = new AudioFileInfo();
-            TagLib.File f = TagLib.File.Create(file);
+            TagLib.File f = null;
+            try
+            {
+                f = TagLib.File.Create(file);
+            }
+            catch { }
             info.name = Path.GetFileNameWithoutExtension(file);
             info.path = file;
-            if (f.Tag != null)
+            if (f != null)
             {
-                info.album = f.Tag.Album;
-                info.singer = string.Join("|", f.Tag.Performers);
-                info.song = f.Tag.Title;
-                info.year = f.Tag.Year.ToString();
-            }
-            if (f.Properties != null)
-            {
-                info.bitrate = f.Properties.AudioBitrate;
-                info.length = f.Properties.Duration;
+                if (f.Tag != null)
+                {
+                    info.album = f.Tag.Album;
+                    info.singer = string.Join("|", f.Tag.Performers);
+                    info.song = f.Tag.Title;
+                    info.year = f.Tag.Year.ToString();
+                }
+                if (f.Properties != null)
+                {
+                    info.bitrate = f.Properties.AudioBitrate;
+                    info.length = (int)f.Properties.Duration.TotalSeconds;
+                }
             }
             return info;
         }
@@ -215,11 +235,7 @@ namespace MediaServer
                         string name = "";
                         if (InputBox.ShowBox("Enter playlist name:", out name) == System.Windows.Forms.DialogResult.OK)
                         {
-                            Playlist pl = new Playlist();
-                            pl.Name = name;
-                            foreach (string file in files)
-                                pl.FileList.Add(GetFileInfo(file));
-                            ServerData.Instance.playlistManager.AddPlaylist(pl);
+                            ServerData.Instance.playlistManager.AddPlaylist(CreatePlaylist(files.ToArray(), name));
                             ServerData.Instance.SavePlaylists();
                         }
                     }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
         public string album;
         public string song;
         public string year;
-        public TimeSpan length;
+        public int length;
         public int bitrate;
 
         public override string ToString()

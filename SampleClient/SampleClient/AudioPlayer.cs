@@ -23,6 +23,9 @@ namespace SampleClient
         Thread triggerThread;
         bool manuallyStopped = false;
 
+        public delegate void ExceptionEventHandler(Exception e);
+        public event ExceptionEventHandler OnExceptionEvnet;
+
         public AudioPlayer()
         {
             //client.Connect(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.audio_port);
@@ -35,66 +38,82 @@ namespace SampleClient
         {
             ThreadPool.QueueUserWorkItem(o =>
             {
-                if (player != null && currentFile == fi && currentPlaylist == pl && player.PlaybackState == PlaybackState.Paused)
-                    player.Resume();
-                else
+                try
                 {
-                    StopPlayer();
-                    client = new TcpClient();
-                    client.Connect(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.audio_port);
-                    var stream = client.GetStream();
-                    byte[] data = Encoding.UTF8.GetBytes(fi.path);
-                    stream.Write(data, 0, data.Length);
-                    //stream.Flush();
-                    while (!client.GetStream().DataAvailable)
+                    if (player != null && currentFile == fi && currentPlaylist == pl && player.PlaybackState == PlaybackState.Paused)
+                        player.Resume();
+                    else
                     {
-                        Thread.Sleep(10);
+                        StopPlayer();
+                        client = new TcpClient();
+                        client.Connect(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.audio_port);
+                        var stream = client.GetStream();
+                        byte[] data = Encoding.UTF8.GetBytes(fi.path);
+                        stream.Write(data, 0, data.Length);
+                        //stream.Flush();
+                        while (!client.GetStream().DataAvailable)
+                        {
+                            Thread.Sleep(10);
+                        }
+                        currentFile = fi;
+                        currentPlaylist = pl;
+                        PlayMp3FromStream(client.GetStream());
+                        //client.Close();
                     }
-                    currentFile = fi;
-                    currentPlaylist = pl;
-                    PlayMp3FromStream(client.GetStream());
-                    //client.Close();
+                }
+                catch (Exception ex)
+                {
+                    if (OnExceptionEvnet != null)
+                        OnExceptionEvnet(ex);
                 }
             });
         }
 
         private void PlayMp3FromStream(Stream stream)
         {
-            Stream ms = new MemoryStream();
-            new Thread(delegate(object o)
+            try
             {
-                try
+                Stream ms = new MemoryStream();
+                new Thread(delegate(object o)
                 {
-                    byte[] buffer = new byte[ConfigManager.Instance.config.audio_buffer_size]; // 64KB chunks
-                    int read;
-                    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                    try
                     {
-                        var pos = ms.Position;
-                        ms.Position = ms.Length;
-                        ms.Write(buffer, 0, read);
-                        ms.Position = pos;
+                        byte[] buffer = new byte[ConfigManager.Instance.config.audio_buffer_size]; // 64KB chunks
+                        int read;
+                        while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            var pos = ms.Position;
+                            ms.Position = ms.Length;
+                            ms.Write(buffer, 0, read);
+                            ms.Position = pos;
+                        }
                     }
+                    catch { }
+                }).Start();
+
+                // Pre-buffering some data to allow NAudio to start playing
+                while (ms.Length < 65536 * 2)
+                    Thread.Sleep(100);
+
+                ms.Position = 0;
+                mp3Reader = new Mp3FileReader(ms);
+                blockAlignedStream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(mp3Reader));
+                player = new WaveOut(WaveCallbackInfo.FunctionCallback());
+                player.PlaybackStopped += player_PlaybackStopped;
+                player.Init(blockAlignedStream);
+                player.Play();
+                /*while (player.PlaybackState != PlaybackState.Stopped)
+                {
+                    System.Threading.Thread.Sleep(100);
                 }
-                catch { }
-            }).Start();
-
-            // Pre-buffering some data to allow NAudio to start playing
-            while (ms.Length < 65536 * 2)
-                Thread.Sleep(100);
-
-            ms.Position = 0;
-            mp3Reader = new Mp3FileReader(ms);
-            blockAlignedStream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(mp3Reader));
-            player = new WaveOut(WaveCallbackInfo.FunctionCallback());
-            player.PlaybackStopped += player_PlaybackStopped;
-            player.Init(blockAlignedStream);
-            player.Play();
-            /*while (player.PlaybackState != PlaybackState.Stopped)
-            {
-                System.Threading.Thread.Sleep(100);
+                blockAlignedStream.Dispose();*/
+                //NextTrack();
             }
-            blockAlignedStream.Dispose();*/
-            //NextTrack();
+            catch (Exception ex)
+            {
+                if (OnExceptionEvnet != null)
+                    OnExceptionEvnet(ex);
+            }
         }
 
         void player_PlaybackStopped(object sender, StoppedEventArgs e)

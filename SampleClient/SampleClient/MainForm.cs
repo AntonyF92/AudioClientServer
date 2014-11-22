@@ -97,7 +97,8 @@ namespace SampleClient
                     PlaylistBox.Tag = pl;
                     PlaylistBox.MouseDoubleClick += PlaylistBox_MouseDoubleClick;
                     PlaylistCollectionWindow.TabPages.Add(page);
-                    PlaylistBox.BeginUpdate();
+                    Application.DoEvents();
+                    //PlaylistBox.BeginUpdate();
                     foreach (var item in pl.FileList)
                     {
                         var plItem = PlaylistBox.Items.Add(item.name);
@@ -106,8 +107,9 @@ namespace SampleClient
                         plItem.Checked = true;
                         while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 2)
                             plItem.Text += " ";
+                        Application.DoEvents();
                     }
-                    PlaylistBox.EndUpdate();
+                    //PlaylistBox.EndUpdate();
                 }
             }));
         }
@@ -152,6 +154,8 @@ namespace SampleClient
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            this.Show();
+            Application.DoEvents();
             Init();
         }
 
