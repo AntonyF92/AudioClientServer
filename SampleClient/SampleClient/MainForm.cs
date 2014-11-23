@@ -45,6 +45,7 @@ namespace SampleClient
                 audioPlayer = new AudioPlayer();
                 audioPlayer.playlistManager.OnCollectionLoadEvent += playlistManager_OnCollectionLoadEvent;
                 audioPlayer.playlistManager.OnChangeTrackEvent += playlistManager_OnChangeTrackEvent;
+                audioPlayer.OnExceptionEvnet += audioPlayer_OnExceptionEvnet;
                 httpClient = new HttpClient(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.http_port);
                 httpClient.ExecGETquery("method_name=get_playlists", (response) =>
                 {
@@ -55,6 +56,11 @@ namespace SampleClient
             {
                 MessageBox.Show(ex.Message, "Initialization error");
             }
+        }
+
+        void audioPlayer_OnExceptionEvnet(Exception e)
+        {
+            MessageBox.Show(e.ToString(), "Error");
         }
 
         void playlistManager_OnChangeTrackEvent(Playlist pl, AudioFileInfo fileInfo)

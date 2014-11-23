@@ -372,36 +372,41 @@ namespace MediaServer
 
         void ProcessClient(TcpClient client)
         {
+            var clientStream = client.GetStream();
             try
             {
-                var clientStream = client.GetStream();
                 //byte[] buffer = new byte[bufferSize];
                 //int readCount = 0;
                 //while ((readCount = clientStream.Read(buffer, 0, bufferSize)) > 0)
                 {
-                    while (!clientStream.DataAvailable)
+                    /*while (!clientStream.DataAvailable)
                     {
                         Thread.Sleep(10);
-                    }
+                    }*/
                     string request = "";
                     byte[] buffer = new byte[bufferSize];
                     int readCount = 0;
                     readCount = clientStream.Read(buffer, 0, bufferSize);
                     request = Encoding.UTF8.GetString(buffer, 0, readCount);
-                    if (File.Exists(request))
+                    //if (request != "<EndOfSession>")
                     {
-                        FileStream fileStream = File.Open(request, FileMode.Open);
-                        while ((readCount = fileStream.Read(buffer, 0, bufferSize)) > 0)
-                            //data.AddRange(buffer);
-                            clientStream.Write(buffer, 0, readCount);
-                        clientStream.Flush();
-                        fileStream.Close();
+                        if (File.Exists(request))
+                        {
+                            FileStream fileStream = File.Open(request, FileMode.Open);
+                            clientStream.Write(new byte[] { Convert.ToByte(true) }, 0, 1);
+                            while ((readCount = fileStream.Read(buffer, 0, bufferSize)) > 0)
+                                //data.AddRange(buffer);
+                                clientStream.Write(buffer, 0, readCount);
+                            clientStream.Flush();
+                            fileStream.Close();
+                        }
                     }
                 }
+                //client.Close();
             }
             catch (Exception ex)
             {
-
+                clientStream.Write(new byte[] { Convert.ToByte(false) }, 0, 1);
             }
         }
     }

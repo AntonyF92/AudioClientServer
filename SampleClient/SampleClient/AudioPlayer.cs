@@ -51,13 +51,18 @@ namespace SampleClient
                         byte[] data = Encoding.UTF8.GetBytes(fi.path);
                         stream.Write(data, 0, data.Length);
                         //stream.Flush();
-                        while (!client.GetStream().DataAvailable)
+                        /*while (!stream.DataAvailable)
                         {
                             Thread.Sleep(10);
-                        }
+                        }*/
                         currentFile = fi;
                         currentPlaylist = pl;
-                        PlayMp3FromStream(client.GetStream());
+                        byte[] res = new byte[1];
+                        stream.Read(res, 0, 1);
+                        if (Convert.ToBoolean(res[0]))
+                            PlayMp3FromStream(stream);
+                        else
+                            NextTrack();
                         //client.Close();
                     }
                 }
@@ -116,6 +121,17 @@ namespace SampleClient
             }
         }
 
+        public void CloseConnection()
+        {
+            if (player != null && player.PlaybackState == PlaybackState.Playing)
+                player.Stop();
+            if (client != null && client.Connected)
+            {
+                var data = Encoding.UTF8.GetBytes("<EndOfSession>");
+                client.GetStream().Write(data, 0, data.Length);
+            }
+        }
+
         void player_PlaybackStopped(object sender, StoppedEventArgs e)
         {
             if (blockAlignedStream != null)
@@ -124,6 +140,8 @@ namespace SampleClient
             if (mp3Reader != null)
                 mp3Reader.Close();
             mp3Reader = null;
+
+            
             /*if (player != null)
                 player.Dispose();
             player = null;*/
