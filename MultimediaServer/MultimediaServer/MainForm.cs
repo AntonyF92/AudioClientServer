@@ -38,21 +38,22 @@ namespace MediaServer
             TabPage page = new TabPage();
             page.Name = pl.Name;
             page.Text = pl.Name;
-            ListView PlaylistBox = new ListView();
+            //ListView PlaylistBox = new ListView();
+            PlaylistPanel PlaylistBox = new PlaylistPanel();
             page.Controls.Add(PlaylistBox);
             PlaylistBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            PlaylistBox.CheckBoxes = false;
+            //PlaylistBox.CheckBoxes = false;
             PlaylistBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            PlaylistBox.HideSelection = false;
-            PlaylistBox.LabelWrap = false;
+            //PlaylistBox.HideSelection = false;
+            //PlaylistBox.LabelWrap = false;
             PlaylistBox.Location = new System.Drawing.Point(3, 3);
-            PlaylistBox.MultiSelect = false;
+            //PlaylistBox.MultiSelect = false;
             PlaylistBox.Name = "PlaylistBox";
-            PlaylistBox.ShowGroups = false;
+            //PlaylistBox.ShowGroups = false;
             PlaylistBox.Size = new System.Drawing.Size(232, 305);
             PlaylistBox.TabIndex = 9;
-            PlaylistBox.UseCompatibleStateImageBehavior = false;
-            PlaylistBox.View = System.Windows.Forms.View.SmallIcon;
+            //PlaylistBox.UseCompatibleStateImageBehavior = false;
+            //PlaylistBox.View = System.Windows.Forms.View.SmallIcon;
             PlaylistBox.Tag = pl;
             PlaylistCollectionWindow.TabPages.Add(page);
             PlaylistCollectionWindow.SelectedTab = page;
@@ -62,18 +63,18 @@ namespace MediaServer
             //PlaylistBox.EndUpdate();
         }
 
-        void LoadPlaylistIntoListView(ListView PlaylistBox, Playlist pl)
+        void LoadPlaylistIntoListView(PlaylistPanel PlaylistBox, Playlist pl)
         {
             PlaylistBox.Invoke(new Action(() =>
             {
                 foreach (var item in pl.FileList)
                 {
-                    var plItem = PlaylistBox.Items.Add(item.name);
-                    plItem.Name = item.name;
+                    PlaylistBox.Items.Add(item);
+                    /*plItem.Name = item.name;
                     plItem.Tag = item;
                     plItem.Checked = true;
                     while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 25)
-                        plItem.Text += " ";
+                        plItem.Text += " ";*/
                     Application.DoEvents();
                 }
             }));
@@ -219,7 +220,7 @@ namespace MediaServer
                     info.bitrate = f.Properties.AudioBitrate;
                     info.length = (int)f.Properties.Duration.TotalSeconds;
                     info.frequency = f.Properties.AudioSampleRate;
-                    info.size = (float)(f.Length / 1024f / 1024f);
+                    info.size = (float)Math.Round((new FileInfo(file).Length / 1024f / 1024f), 2);
                 }
             }
             return info;
@@ -258,7 +259,7 @@ namespace MediaServer
                 PlaylistCollectionWindow.Invoke(new Action(() =>
                     {
                         Playlist plForRemove = null;
-                        ListView playlistBox = PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"] as ListView;
+                        PlaylistPanel playlistBox = PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"] as PlaylistPanel;
                         plForRemove = playlistBox.Tag as Playlist;
                         ServerData.Instance.playlistManager.RemovePlaylist(plForRemove);
                         PlaylistCollectionWindow.TabPages.RemoveByKey(plForRemove.Name);

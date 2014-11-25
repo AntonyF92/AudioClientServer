@@ -39,7 +39,7 @@
             this.Performer.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Performer.Location = new System.Drawing.Point(3, 6);
             this.Performer.Name = "Performer";
-            this.Performer.Size = new System.Drawing.Size(433, 23);
+            this.Performer.Size = new System.Drawing.Size(401, 23);
             this.Performer.TabIndex = 0;
             this.Performer.Text = "label1";
             this.Performer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -48,9 +48,9 @@
             // 
             this.Duration.Enabled = false;
             this.Duration.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Duration.Location = new System.Drawing.Point(442, 6);
+            this.Duration.Location = new System.Drawing.Point(410, 6);
             this.Duration.Name = "Duration";
-            this.Duration.Size = new System.Drawing.Size(53, 23);
+            this.Duration.Size = new System.Drawing.Size(85, 23);
             this.Duration.TabIndex = 2;
             this.Duration.Text = "label1";
             this.Duration.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -79,7 +79,7 @@
             this.Size = new System.Drawing.Size(498, 66);
             this.Load += new System.EventHandler(this.PlaylistElement_Load);
             this.Leave += new System.EventHandler(this.PlaylistElement_Leave);
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PlaylistElement_MouseClick);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PlaylistElement_MouseClick);
             this.ResumeLayout(false);
 
         }

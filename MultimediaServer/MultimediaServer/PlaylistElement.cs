@@ -20,8 +20,18 @@ namespace MediaServer
         public bool IsActive { get; private set; }
         public string PerformerString { get { return fileInfo.singer; } }
         public string TitleString { get { return string.Format("{0} - {1}", fileInfo.singer, fileInfo.song); } }
-        public string DurationString { get { return TimeSpan.FromSeconds(fileInfo.length).ToString(); } }
-        public string Properties { get { return string.Format("{0} :: {1} kHz|{2} kbps|{3} MB", Path.GetExtension(fileInfo.path), fileInfo.frequency, fileInfo.bitrate, fileInfo.size); } }
+        public string DurationString
+        {
+            get
+            {
+                TimeSpan time = TimeSpan.FromSeconds(fileInfo.length);
+                if (time.Hours == 0)
+                    return string.Format("{0}:{1}", time.Minutes, time.Seconds);
+                else
+                    return string.Format("{0}:{1}:{2}", time.Hours, time.Minutes, time.Seconds);
+            }
+        }
+        public string Properties { get { return string.Format("{0} :: {1} kHz|{2} kbps|{3} MB", Path.GetExtension(fileInfo.path).Replace(".",""), fileInfo.frequency/1000, fileInfo.bitrate, fileInfo.size); } }
 
         Color defaultColor = SystemColors.GradientInactiveCaption;
         Color focusColor = SystemColors.ActiveCaption;
