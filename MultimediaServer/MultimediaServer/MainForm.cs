@@ -218,6 +218,8 @@ namespace MediaServer
                 {
                     info.bitrate = f.Properties.AudioBitrate;
                     info.length = (int)f.Properties.Duration.TotalSeconds;
+                    info.frequency = f.Properties.AudioSampleRate;
+                    info.size = (float)(f.Length / 1024f / 1024f);
                 }
             }
             return info;

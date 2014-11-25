@@ -14,6 +14,8 @@ using System.Threading.Tasks;
         public string year;
         public int length;
         public int bitrate;
+        public int frequency;
+        public float size;
 
         public override string ToString()
         {
