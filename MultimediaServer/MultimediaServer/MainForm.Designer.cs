@@ -194,7 +194,7 @@
             this.CloseButton.FlatAppearance.BorderSize = 0;
             this.CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CloseButton.Image = global::MediaServer.Properties.Resources._1416407871_ic_close_48px_24;
-            this.CloseButton.Location = new System.Drawing.Point(507, 4);
+            this.CloseButton.Location = new System.Drawing.Point(510, 4);
             this.CloseButton.Name = "CloseButton";
             this.CloseButton.Size = new System.Drawing.Size(30, 23);
             this.CloseButton.TabIndex = 18;
@@ -209,7 +209,7 @@
             this.MinimizeButton.FlatAppearance.BorderSize = 0;
             this.MinimizeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MinimizeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.MinimizeButton.Location = new System.Drawing.Point(468, 4);
+            this.MinimizeButton.Location = new System.Drawing.Point(471, 4);
             this.MinimizeButton.Name = "MinimizeButton";
             this.MinimizeButton.Size = new System.Drawing.Size(33, 23);
             this.MinimizeButton.TabIndex = 17;

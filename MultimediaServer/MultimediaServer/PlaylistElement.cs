@@ -19,7 +19,16 @@ namespace MediaServer
         public AudioFileInfo FileInfo { get { return fileInfo; } }
         public bool IsActive { get; private set; }
         public string PerformerString { get { return fileInfo.singer; } }
-        public string TitleString { get { return string.Format("{0} - {1}", fileInfo.singer, fileInfo.song); } }
+        public string TitleString
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(fileInfo.singer) && !string.IsNullOrEmpty(fileInfo.song))
+                    return string.Format("{0} - {1}", fileInfo.singer, fileInfo.song);
+                else
+                    return fileInfo.name;
+            }
+        }
         public string DurationString
         {
             get
