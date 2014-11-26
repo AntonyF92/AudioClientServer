@@ -41,9 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\MultimediaServer\MultimediaServer\NetworkFileInfo.cs">
-      <Link>NetworkFileInfo.cs</Link>
-    </Compile>
+    <Compile Include="NetworkFileInfo.cs" />
     <Compile Include="PlaylistElement.cs">
       <SubType>UserControl</SubType>
     </Compile>
