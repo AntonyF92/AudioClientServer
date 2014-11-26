@@ -26,9 +26,9 @@ namespace MediaServer
             {
                 TimeSpan time = TimeSpan.FromSeconds(fileInfo.length);
                 if (time.Hours == 0)
-                    return string.Format("{0}:{1}", time.Minutes, time.Seconds);
+                    return time.ToString(@"mm\:ss");
                 else
-                    return string.Format("{0}:{1}:{2}", time.Hours, time.Minutes, time.Seconds);
+                    return time.ToString(@"hh\:mm\:ss");
             }
         }
         public string Properties { get { return string.Format("{0} :: {1} kHz|{2} kbps|{3} MB", Path.GetExtension(fileInfo.path).Replace(".",""), fileInfo.frequency/1000, fileInfo.bitrate, fileInfo.size); } }
@@ -51,8 +51,11 @@ namespace MediaServer
 
         private void PlaylistElement_MouseClick(object sender, MouseEventArgs e)
         {
+            if (selectedItem != null)
+                selectedItem.OnLeave(null);
             this.BackColor = focusColor;
             selectedItem = this;
+            this.Focus();
         }
 
         public void SetSelected(bool value)

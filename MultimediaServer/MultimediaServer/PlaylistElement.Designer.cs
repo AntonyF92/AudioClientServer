@@ -35,37 +35,37 @@
             // 
             // Performer
             // 
-            this.Performer.Enabled = false;
             this.Performer.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Performer.Location = new System.Drawing.Point(3, 6);
+            this.Performer.Location = new System.Drawing.Point(3, 0);
             this.Performer.Name = "Performer";
             this.Performer.Size = new System.Drawing.Size(401, 23);
             this.Performer.TabIndex = 0;
             this.Performer.Text = "label1";
             this.Performer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Performer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PlaylistElement_MouseClick);
             // 
             // Duration
             // 
-            this.Duration.Enabled = false;
             this.Duration.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Duration.Location = new System.Drawing.Point(410, 6);
+            this.Duration.Location = new System.Drawing.Point(410, 0);
             this.Duration.Name = "Duration";
             this.Duration.Size = new System.Drawing.Size(85, 23);
             this.Duration.TabIndex = 2;
             this.Duration.Text = "label1";
             this.Duration.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Duration.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PlaylistElement_MouseClick);
             // 
             // Info
             // 
-            this.Info.Enabled = false;
-            this.Info.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Info.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Info.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.Info.Location = new System.Drawing.Point(3, 35);
+            this.Info.Location = new System.Drawing.Point(3, 23);
             this.Info.Name = "Info";
             this.Info.Size = new System.Drawing.Size(280, 23);
             this.Info.TabIndex = 3;
             this.Info.Text = "label1";
             this.Info.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Info.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PlaylistElement_MouseClick);
             // 
             // PlaylistElement
             // 
@@ -75,8 +75,9 @@
             this.Controls.Add(this.Info);
             this.Controls.Add(this.Duration);
             this.Controls.Add(this.Performer);
+            this.DoubleBuffered = true;
             this.Name = "PlaylistElement";
-            this.Size = new System.Drawing.Size(498, 66);
+            this.Size = new System.Drawing.Size(498, 48);
             this.Load += new System.EventHandler(this.PlaylistElement_Load);
             this.Leave += new System.EventHandler(this.PlaylistElement_Leave);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PlaylistElement_MouseClick);

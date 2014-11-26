@@ -85,6 +85,7 @@
             this.ValueBox.Name = "ValueBox";
             this.ValueBox.Size = new System.Drawing.Size(380, 20);
             this.ValueBox.TabIndex = 1;
+            this.ValueBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ValueBox_KeyPress);
             // 
             // Cancel
             // 

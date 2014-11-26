@@ -59,5 +59,11 @@ namespace MediaServer
         {
             this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
         }
+
+        private void ValueBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+                OK_Click(this, null);
+        }
     }
 }
