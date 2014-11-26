@@ -40,6 +40,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\NAudio.WindowsMediaFormat.dll</HintPath>
     </Reference>
+    <Reference Include="PlaylistControls">
+      <HintPath>..\..\PlaylistControls\PlaylistControls\bin\Debug\PlaylistControls.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -52,9 +55,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\MultimediaServer\MultimediaServer\NetworkFileInfo.cs">
-      <Link>NetworkFileInfo.cs</Link>
-    </Compile>
     <Compile Include="..\..\MultimediaServer\MultimediaServer\Playlist.cs">
       <Link>Playlist.cs</Link>
     </Compile>

@@ -14,7 +14,7 @@ namespace PlaylistControls
     {
         public class PlaylistElementCollection : List<PlaylistElement>
         {
-            PlaylistPanel panel = null;
+            public PlaylistPanel panel { get; private set; }
             Point startLocation = new Point(0, 0);
             int rangeBetweenElementsVertical = 0;
             Point currentLocation = new Point(0, 0);
@@ -30,6 +30,10 @@ namespace PlaylistControls
                 item.Location = currentLocation;
                 base.Add(item);
                 panel.Controls.Add(item);
+                if (panel.PlaylistItemMouseDoubleClick != null)
+                {
+                    item.MouseDoubleClick += panel.PlaylistItemMouseDoubleClick;
+                }
                 currentLocation = new Point(0, currentLocation.Y + item.Size.Height + rangeBetweenElementsVertical);
             }
 
@@ -51,6 +55,10 @@ namespace PlaylistControls
         private PlaylistElementCollection items;
         public PlaylistElementCollection Items { get { return items; } }
 
+        [Browsable(true)]
+        //[Category("Appearance")]
+        //[Description("Gets and sets the foreground color of the textbox")]
+        public event MouseEventHandler PlaylistItemMouseDoubleClick;
 
 
         public PlaylistPanel()
@@ -63,7 +71,7 @@ namespace PlaylistControls
         {
             get
             {
-                return items.SingleOrDefault((el) => el.IsActive);
+                return PlaylistElement.selectedItem;
             }
         }
     }

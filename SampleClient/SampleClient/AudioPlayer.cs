@@ -7,6 +7,7 @@ using NAudio.Wave;
 using System.IO;
 using System.Threading;
 using System.Net.Sockets;
+using PlaylistControls;
 
 namespace SampleClient
 {

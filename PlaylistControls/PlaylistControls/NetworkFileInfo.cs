@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+namespace PlaylistControls
+{
     public class AudioFileInfo
     {
         public string name;
@@ -22,4 +24,5 @@ using System.Threading.Tasks;
             return name;
         }
     }
+}
 

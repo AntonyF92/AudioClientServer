@@ -18,6 +18,7 @@ using System.Threading;
 using NAudio.Wave;
 using NAudio.Gui;
 using System.Diagnostics;
+using PlaylistControls;
 
 namespace SampleClient
 {
@@ -32,9 +33,9 @@ namespace SampleClient
             InitializeComponent();
             ConfigManager.Init();
             volume = new VolumeSlider();
-            volume.Location = new Point(3, 80);
+            volume.Location = new Point(9, 84);
             volume.Size = new Size(132, 15);
-            splitContainer1.Panel1.Controls.Add(volume);
+            panel1.Controls.Add(volume);
             volume.VolumeChanged += volume_VolumeChanged;
         }
 
@@ -65,13 +66,12 @@ namespace SampleClient
 
         void playlistManager_OnChangeTrackEvent(Playlist pl, AudioFileInfo fileInfo)
         {
-            ListView lv = null;
+            PlaylistPanel lv = null;
             PlaylistCollectionWindow.Invoke(new Action(() =>
-                lv = ((ListView)PlaylistCollectionWindow.TabPages[pl.Name].Controls["PlaylistBox"])));
+                lv = ((PlaylistPanel)PlaylistCollectionWindow.TabPages[pl.Name].Controls["PlaylistBox"])));
             lv.Invoke(new Action(() =>
             {
-                lv.SelectedItems.Clear();
-                lv.Items[fileInfo.name].Selected = true;
+                
             }));
         }
 
@@ -85,34 +85,34 @@ namespace SampleClient
                     TabPage page = new TabPage();
                     page.Name = pl.Name;
                     page.Text = pl.Name;
-                    ListView PlaylistBox = new ListView();
+                    PlaylistPanel PlaylistBox = new PlaylistPanel();
                     page.Controls.Add(PlaylistBox);
                     PlaylistBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-                    PlaylistBox.CheckBoxes = false;
+                    //PlaylistBox.CheckBoxes = false;
                     PlaylistBox.Dock = System.Windows.Forms.DockStyle.Fill;
-                    PlaylistBox.HideSelection = false;
-                    PlaylistBox.LabelWrap = false;
+                    //PlaylistBox.HideSelection = false;
+                    //PlaylistBox.LabelWrap = false;
                     PlaylistBox.Location = new System.Drawing.Point(3, 3);
-                    PlaylistBox.MultiSelect = false;
+                    //PlaylistBox.MultiSelect = false;
                     PlaylistBox.Name = "PlaylistBox";
-                    PlaylistBox.ShowGroups = false;
+                    //PlaylistBox.ShowGroups = false;
                     PlaylistBox.Size = new System.Drawing.Size(232, 305);
                     PlaylistBox.TabIndex = 9;
-                    PlaylistBox.UseCompatibleStateImageBehavior = false;
-                    PlaylistBox.View = System.Windows.Forms.View.SmallIcon;
+                    //PlaylistBox.UseCompatibleStateImageBehavior = false;
+                    //PlaylistBox.View = System.Windows.Forms.View.SmallIcon;
                     PlaylistBox.Tag = pl;
-                    PlaylistBox.MouseDoubleClick += PlaylistBox_MouseDoubleClick;
+                    PlaylistBox.PlaylistItemMouseDoubleClick += PlaylistBox_MouseDoubleClick;
                     PlaylistCollectionWindow.TabPages.Add(page);
                     Application.DoEvents();
                     //PlaylistBox.BeginUpdate();
                     foreach (var item in pl.FileList)
                     {
-                        var plItem = PlaylistBox.Items.Add(item.name);
-                        plItem.Name = item.name;
-                        plItem.Tag = item;
-                        plItem.Checked = true;
-                        while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 2)
-                            plItem.Text += " ";
+                        PlaylistBox.Items.Add(item);
+                        //plItem.Name = item.name;
+                        //plItem.Tag = item;
+                        //plItem.Checked = true;
+                        //while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 2)
+                        //    plItem.Text += " ";
                         Application.DoEvents();
                     }
                     //PlaylistBox.EndUpdate();
@@ -122,8 +122,9 @@ namespace SampleClient
 
         void PlaylistBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            var item = ((ListView)sender);
-            audioPlayer.Play((AudioFileInfo)item.SelectedItems[0].Tag, (Playlist)item.Tag);
+            PlaylistElement item = sender as PlaylistElement;
+            PlaylistPanel pl = PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"] as PlaylistPanel;
+            audioPlayer.Play(item.FileInfo, (Playlist)pl.Tag);
         }
 
         void volume_VolumeChanged(object sender, EventArgs e)
@@ -136,7 +137,8 @@ namespace SampleClient
             Playlist pl = audioPlayer.playlistManager[PlaylistCollectionWindow.SelectedTab.Name];
             if (pl != null)
             {
-                AudioFileInfo file = ((ListView)PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"]).SelectedItems[0].Tag as AudioFileInfo;
+                PlaylistPanel panel = PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"] as PlaylistPanel;
+                AudioFileInfo file = panel.SelectedItem.FileInfo;
                 audioPlayer.Play(file, pl);
             }
         }

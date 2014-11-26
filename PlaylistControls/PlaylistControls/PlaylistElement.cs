@@ -72,7 +72,7 @@ namespace PlaylistControls
             IsActive = value;
         }
 
-        public void SetDefaultColor(Color newColor)
+        public void SetColor(Color newColor)
         {
             defaultColor = newColor;
             if (this.BackColor != focusColor)
