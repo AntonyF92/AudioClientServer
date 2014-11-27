@@ -15,7 +15,12 @@ namespace PlaylistControls
     {
         public static PlaylistElement selectedItem = null;
         public static PlaylistElement activeElement = null;
+        static Color defaultColor = SystemColors.GradientInactiveCaption;
+        static Color focusColor = SystemColors.ActiveCaption;
+        static Color activeColor = SystemColors.GradientActiveCaption;
 
+
+        Color backgroundColor = defaultColor;
         AudioFileInfo fileInfo = null;
         public AudioFileInfo FileInfo { get { return fileInfo; } }
         public bool IsActive { get; private set; }
@@ -62,9 +67,7 @@ namespace PlaylistControls
             }
         }
 
-        Color defaultColor = SystemColors.GradientInactiveCaption;
-        Color focusColor = SystemColors.ActiveCaption;
-        Color activeColor = SystemColors.GradientActiveCaption;
+        
 
         public PlaylistElement(AudioFileInfo fileInfo)
         {
@@ -93,23 +96,21 @@ namespace PlaylistControls
             IsActive = value;
         }
 
-        public void SetColor(Color newColor)
-        {
-            defaultColor = newColor;
-            if (this.BackColor != focusColor)
-                this.BackColor = defaultColor;
-        }
-
         private void PlaylistElement_Leave(object sender, EventArgs e)
         {
-            this.BackColor = defaultColor;
+            this.BackColor = backgroundColor;
         }
 
         public void SetActive()
         {
             if (activeElement != null)
-                activeElement.BackColor = defaultColor;
-            this.BackColor = activeColor;
+            {
+                activeElement.backgroundColor = defaultColor;
+                activeElement.BackColor = activeElement.backgroundColor;
+            };
+            backgroundColor = activeColor;
+            if (this != selectedItem || !this.Focused)
+                this.BackColor = backgroundColor;
             activeElement = this;
         }
 

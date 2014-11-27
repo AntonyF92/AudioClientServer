@@ -58,7 +58,7 @@ namespace PlaylistControls
 
         [Browsable(true)]
         //[Category("Appearance")]
-        //[Description("Gets and sets the foreground color of the textbox")]
+        //[Description("")]
         public event MouseEventHandler PlaylistItemMouseDoubleClick;
 
 
