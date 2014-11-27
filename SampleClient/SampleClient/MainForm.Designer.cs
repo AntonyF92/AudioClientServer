@@ -47,6 +47,8 @@
             this.PlaylistsContainer = new System.Windows.Forms.GroupBox();
             this.SongInfoContainer = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.PlaybackProgress = new System.Windows.Forms.ProgressBar();
+            this.PlaybackTime = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.PlaybackControlsContainer.SuspendLayout();
@@ -223,6 +225,8 @@
             // 
             // PlaybackControlsContainer
             // 
+            this.PlaybackControlsContainer.Controls.Add(this.PlaybackTime);
+            this.PlaybackControlsContainer.Controls.Add(this.PlaybackProgress);
             this.PlaybackControlsContainer.Controls.Add(this.label2);
             this.PlaybackControlsContainer.Controls.Add(this.Stop);
             this.PlaybackControlsContainer.Controls.Add(this.PrevTrack);
@@ -261,6 +265,24 @@
             this.label2.Size = new System.Drawing.Size(49, 12);
             this.label2.TabIndex = 15;
             this.label2.Text = "VOLUME";
+            // 
+            // PlaybackProgress
+            // 
+            this.PlaybackProgress.Location = new System.Drawing.Point(6, 77);
+            this.PlaybackProgress.MarqueeAnimationSpeed = 0;
+            this.PlaybackProgress.Name = "PlaybackProgress";
+            this.PlaybackProgress.Size = new System.Drawing.Size(673, 17);
+            this.PlaybackProgress.TabIndex = 16;
+            this.PlaybackProgress.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PlaybackProgress_MouseClick);
+            // 
+            // PlaybackTime
+            // 
+            this.PlaybackTime.Location = new System.Drawing.Point(563, 19);
+            this.PlaybackTime.Name = "PlaybackTime";
+            this.PlaybackTime.Size = new System.Drawing.Size(100, 23);
+            this.PlaybackTime.TabIndex = 17;
+            this.PlaybackTime.Text = "label3";
+            this.PlaybackTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
@@ -312,6 +334,8 @@
         private System.Windows.Forms.GroupBox PlaylistsContainer;
         private System.Windows.Forms.GroupBox PlaybackControlsContainer;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ProgressBar PlaybackProgress;
+        private System.Windows.Forms.Label PlaybackTime;
     }
 }
 

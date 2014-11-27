@@ -22,14 +22,15 @@ namespace SampleClient
         TcpClient client = new TcpClient();
         AutoResetEvent triggerWait = new AutoResetEvent(false);
         bool manuallyStopped = false;
+        int timerInterval = 500;
 
         Timer serviceTimer;
 
         public delegate void ExceptionEventHandler(Exception e);
         public event ExceptionEventHandler OnExceptionEvent;
-        public delegate void PlaybackProgressChangeEventHandler(TimeSpan currentTime, long position);
+        public delegate void PlaybackProgressChangeEventHandler(TimeSpan currentTime, TimeSpan totalTime, long position);
         public event PlaybackProgressChangeEventHandler PlaybackProgressChangeEvent;
-        public delegate void PlaybackStartEventHandler(AudioFileInfo file);
+        public delegate void PlaybackStartEventHandler(TimeSpan totalTime, long length);
         public event PlaybackStartEventHandler PlaybackStartEvent;
 
         public AudioPlayer()
@@ -38,13 +39,13 @@ namespace SampleClient
             playlistManager = new PlaylistManager();
             //triggerThread = new Thread(TriggerNextTrack);
             //triggerThread.Start();
-            serviceTimer = new Timer(TimerTick, null, 0, 100);
+            serviceTimer = new Timer(TimerTick, null, 0, timerInterval);
         }
 
         void TimerTick(object state)
         {
             if (player != null && player.PlaybackState == PlaybackState.Playing && PlaybackProgressChangeEvent != null)
-                PlaybackProgressChangeEvent(blockAlignedStream.CurrentTime, blockAlignedStream.Position);
+                PlaybackProgressChangeEvent(blockAlignedStream.CurrentTime, blockAlignedStream.TotalTime, blockAlignedStream.Position);
         }
 
         public void Play(AudioFileInfo fi, Playlist pl)
@@ -87,6 +88,20 @@ namespace SampleClient
             });
         }
 
+        public void SetPosition(long value)
+        {
+            try
+            {
+                if (value % blockAlignedStream.WaveFormat.BlockAlign != 0)
+                    value -= value % blockAlignedStream.WaveFormat.BlockAlign;
+                value = Math.Max(0, Math.Min(blockAlignedStream.Length, value));
+                blockAlignedStream.Position = value;
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
         private void PlayMp3FromStream(Stream stream)
         {
             try
@@ -112,15 +127,15 @@ namespace SampleClient
                 // Pre-buffering some data to allow NAudio to start playing
                 while (ms.Length < 65536 * 2)
                     Thread.Sleep(100);
-
                 ms.Position = 0;
                 mp3Reader = new Mp3FileReader(ms);
                 blockAlignedStream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(mp3Reader));
+                serviceTimer.Change(0, timerInterval);
                 player = new WaveOut(WaveCallbackInfo.FunctionCallback());
                 player.PlaybackStopped += player_PlaybackStopped;
                 player.Init(blockAlignedStream);
                 if (PlaybackStartEvent != null)
-                    PlaybackStartEvent(currentFile);
+                    PlaybackStartEvent(blockAlignedStream.TotalTime, blockAlignedStream.Length);
                 player.Play();
                 /*while (player.PlaybackState != PlaybackState.Stopped)
                 {
@@ -149,6 +164,7 @@ namespace SampleClient
 
         void player_PlaybackStopped(object sender, StoppedEventArgs e)
         {
+            serviceTimer.Change(Timeout.Infinite, timerInterval);
             if (blockAlignedStream != null)
                 blockAlignedStream.Dispose();
             blockAlignedStream = null;

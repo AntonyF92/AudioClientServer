@@ -62,14 +62,29 @@ namespace SampleClient
             }
         }
 
-        void audioPlayer_PlaybackProgressChangeEvent(TimeSpan currentTime, long position)
+        void audioPlayer_PlaybackProgressChangeEvent(TimeSpan currentTime, TimeSpan totalTime, long position)
         {
-            throw new NotImplementedException();
+            PlaybackProgress.Invoke(new Action(() =>
+            {
+                PlaybackProgress.Value = (int)position;
+            }));
+            PlaybackTime.Invoke(new Action(() =>
+            {
+                PlaybackTime.Text = currentTime.ToString(@"mm\:ss") + "/" + totalTime.ToString(@"mm\:ss");
+            }));
         }
 
-        void audioPlayer_PlaybackStartEvent(AudioFileInfo file)
+        void audioPlayer_PlaybackStartEvent(TimeSpan totalTime, long length)
         {
-            throw new NotImplementedException();
+            PlaybackProgress.Invoke(new Action(() =>
+                {
+                    PlaybackProgress.Value = 0;
+                    PlaybackProgress.Maximum = (int)length;
+                }));
+            PlaybackTime.Invoke(new Action(() =>
+                {
+                    PlaybackTime.Text = "00:00/" + totalTime.ToString(@"mm\:ss");
+                }));
         }
 
         void audioPlayer_OnExceptionEvnet(Exception e)
@@ -236,6 +251,19 @@ namespace SampleClient
         {
             if (new Settings().ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 Init();
+        }
+
+        private void PlaybackProgress_MouseClick(object sender, MouseEventArgs e)
+        {
+            // Get mouse position(x) minus the width of the progressbar (so beginning of the progressbar is mousepos = 0 //
+            float absoluteMouse = (PointToClient(MousePosition).X - PlaybackProgress.Bounds.X - PlaybackControlsContainer.Bounds.X - panel1.Bounds.X);
+            // Calculate the factor for converting the position (progbarWidth/100) //
+            float calcFactor = PlaybackProgress.Width / (float)PlaybackProgress.Maximum;
+            // In the end convert the absolute mouse value to a relative mouse value by dividing the absolute mouse by the calcfactor //
+            float relativeMouse = absoluteMouse / calcFactor;
+
+            // Set the calculated relative value to the progressbar //
+            audioPlayer.SetPosition((long)relativeMouse);
         }
     }
 }
