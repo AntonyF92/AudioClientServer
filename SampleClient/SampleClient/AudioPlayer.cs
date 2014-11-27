@@ -21,11 +21,16 @@ namespace SampleClient
         private Mp3FileReader mp3Reader = null;
         TcpClient client = new TcpClient();
         AutoResetEvent triggerWait = new AutoResetEvent(false);
-        Thread triggerThread;
         bool manuallyStopped = false;
 
+        Timer serviceTimer;
+
         public delegate void ExceptionEventHandler(Exception e);
-        public event ExceptionEventHandler OnExceptionEvnet;
+        public event ExceptionEventHandler OnExceptionEvent;
+        public delegate void PlaybackProgressChangeEventHandler(TimeSpan currentTime, long position);
+        public event PlaybackProgressChangeEventHandler PlaybackProgressChangeEvent;
+        public delegate void PlaybackStartEventHandler(AudioFileInfo file);
+        public event PlaybackStartEventHandler PlaybackStartEvent;
 
         public AudioPlayer()
         {
@@ -33,6 +38,13 @@ namespace SampleClient
             playlistManager = new PlaylistManager();
             //triggerThread = new Thread(TriggerNextTrack);
             //triggerThread.Start();
+            serviceTimer = new Timer(TimerTick, null, 0, 100);
+        }
+
+        void TimerTick(object state)
+        {
+            if (player != null && player.PlaybackState == PlaybackState.Playing && PlaybackProgressChangeEvent != null)
+                PlaybackProgressChangeEvent(blockAlignedStream.CurrentTime, blockAlignedStream.Position);
         }
 
         public void Play(AudioFileInfo fi, Playlist pl)
@@ -69,8 +81,8 @@ namespace SampleClient
                 }
                 catch (Exception ex)
                 {
-                    if (OnExceptionEvnet != null)
-                        OnExceptionEvnet(ex);
+                    if (OnExceptionEvent != null)
+                        OnExceptionEvent(ex);
                 }
             });
         }
@@ -107,6 +119,8 @@ namespace SampleClient
                 player = new WaveOut(WaveCallbackInfo.FunctionCallback());
                 player.PlaybackStopped += player_PlaybackStopped;
                 player.Init(blockAlignedStream);
+                if (PlaybackStartEvent != null)
+                    PlaybackStartEvent(currentFile);
                 player.Play();
                 /*while (player.PlaybackState != PlaybackState.Stopped)
                 {
@@ -117,8 +131,8 @@ namespace SampleClient
             }
             catch (Exception ex)
             {
-                if (OnExceptionEvnet != null)
-                    OnExceptionEvnet(ex);
+                if (OnExceptionEvent != null)
+                    OnExceptionEvent(ex);
             }
         }
 
@@ -225,7 +239,6 @@ namespace SampleClient
                 manuallyStopped = true;
                 StopPlayer();
                 client.Close();
-                triggerThread.Abort();
             }
             catch { }
         }

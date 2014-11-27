@@ -33,9 +33,10 @@ namespace SampleClient
             InitializeComponent();
             ConfigManager.Init();
             volume = new VolumeSlider();
-            volume.Location = new Point(9, 84);
-            volume.Size = new Size(132, 15);
-            panel1.Controls.Add(volume);
+            volume.Parent = PlaybackControlsContainer;
+            volume.Location = new Point(260, 32);
+            volume.Size = new Size(149, 15);
+            //panel1.Controls.Add(volume);
             volume.VolumeChanged += volume_VolumeChanged;
         }
 
@@ -46,7 +47,9 @@ namespace SampleClient
                 audioPlayer = new AudioPlayer();
                 audioPlayer.playlistManager.OnCollectionLoadEvent += playlistManager_OnCollectionLoadEvent;
                 audioPlayer.playlistManager.OnChangeTrackEvent += playlistManager_OnChangeTrackEvent;
-                audioPlayer.OnExceptionEvnet += audioPlayer_OnExceptionEvnet;
+                audioPlayer.OnExceptionEvent += audioPlayer_OnExceptionEvnet;
+                audioPlayer.PlaybackStartEvent += audioPlayer_PlaybackStartEvent;
+                audioPlayer.PlaybackProgressChangeEvent += audioPlayer_PlaybackProgressChangeEvent;
                 httpClient = new HttpClient(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.http_port);
                 httpClient.ExecGETquery("method_name=get_playlists", (response) =>
                 {
@@ -57,6 +60,16 @@ namespace SampleClient
             {
                 MessageBox.Show(ex.Message, "Initialization error");
             }
+        }
+
+        void audioPlayer_PlaybackProgressChangeEvent(TimeSpan currentTime, long position)
+        {
+            throw new NotImplementedException();
+        }
+
+        void audioPlayer_PlaybackStartEvent(AudioFileInfo file)
+        {
+            throw new NotImplementedException();
         }
 
         void audioPlayer_OnExceptionEvnet(Exception e)
@@ -71,7 +84,9 @@ namespace SampleClient
                 lv = ((PlaylistPanel)PlaylistCollectionWindow.TabPages[pl.Name].Controls["PlaylistBox"])));
             lv.Invoke(new Action(() =>
             {
-                
+                PlaylistElement item = null;
+                if (lv.TryGetItem(fileInfo, out item))
+                    lv.SetActive(item);
             }));
         }
 
@@ -122,9 +137,9 @@ namespace SampleClient
 
         void PlaylistBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            PlaylistElement item = sender as PlaylistElement;
+            //PlaylistElement item = sender as PlaylistElement;
             PlaylistPanel pl = PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"] as PlaylistPanel;
-            audioPlayer.Play(item.FileInfo, (Playlist)pl.Tag);
+            audioPlayer.Play(pl.SelectedItem.FileInfo, (Playlist)pl.Tag);
         }
 
         void volume_VolumeChanged(object sender, EventArgs e)

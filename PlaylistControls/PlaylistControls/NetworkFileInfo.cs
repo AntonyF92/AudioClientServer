@@ -23,6 +23,14 @@ namespace PlaylistControls
         {
             return name;
         }
+
+        public override bool Equals(object obj)
+        {
+            AudioFileInfo item = obj as AudioFileInfo;
+            return this.album == item.album && this.bitrate == item.bitrate && this.frequency == item.frequency && this.length == item.length &&
+                this.name == item.name && this.path == item.path && this.singer == item.singer && this.size == item.size &&
+                this.song == item.song && this.year == item.year;
+        }
     }
 }
 

@@ -32,7 +32,7 @@ namespace PlaylistControls
                 panel.Controls.Add(item);
                 if (panel.PlaylistItemMouseDoubleClick != null)
                 {
-                    item.MouseDoubleClick += panel.PlaylistItemMouseDoubleClick;
+                    item.ElementDoubleClick += panel.PlaylistItemMouseDoubleClick;
                 }
                 currentLocation = new Point(0, currentLocation.Y + item.Size.Height + rangeBetweenElementsVertical);
             }
@@ -46,6 +46,7 @@ namespace PlaylistControls
             public new void Clear()
             {
                 PlaylistElement.selectedItem = null;
+                PlaylistElement.activeElement = null;
                 base.Clear();
                 panel.Controls.Clear();
             }
@@ -73,6 +74,24 @@ namespace PlaylistControls
             {
                 return PlaylistElement.selectedItem;
             }
+        }
+
+        public void SetActive(PlaylistElement item)
+        {
+            if (items.Contains(item))
+                item.SetActive();
+        }
+
+        public bool TryGetItem(AudioFileInfo fileInfo, out PlaylistElement item)
+        {
+            item = null;
+            foreach(var v in items)
+                if (v.FileInfo.Equals(fileInfo))
+                {
+                    item = v;
+                    return true;
+                }
+            return false;
         }
     }
 }

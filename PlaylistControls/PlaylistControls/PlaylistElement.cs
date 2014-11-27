@@ -14,6 +14,7 @@ namespace PlaylistControls
     public partial class PlaylistElement : UserControl
     {
         public static PlaylistElement selectedItem = null;
+        public static PlaylistElement activeElement = null;
 
         AudioFileInfo fileInfo = null;
         public AudioFileInfo FileInfo { get { return fileInfo; } }
@@ -42,8 +43,28 @@ namespace PlaylistControls
         }
         public string Properties { get { return string.Format("{0} :: {1} kHz|{2} kbps|{3} MB", Path.GetExtension(fileInfo.path).Replace(".", ""), fileInfo.frequency / 1000, fileInfo.bitrate, fileInfo.size); } }
 
+        public event MouseEventHandler ElementDoubleClick
+        {
+            add
+            {
+                this.MouseDoubleClick += value;
+                this.Performer.MouseDoubleClick += value;
+                this.Duration.MouseDoubleClick += value;
+                this.Info.MouseDoubleClick += value;
+            }
+
+            remove
+            {
+                this.MouseDoubleClick -= value;
+                this.Performer.MouseDoubleClick -= value;
+                this.Duration.MouseDoubleClick -= value;
+                this.Info.MouseDoubleClick -= value;
+            }
+        }
+
         Color defaultColor = SystemColors.GradientInactiveCaption;
         Color focusColor = SystemColors.ActiveCaption;
+        Color activeColor = SystemColors.GradientActiveCaption;
 
         public PlaylistElement(AudioFileInfo fileInfo)
         {
@@ -83,5 +104,14 @@ namespace PlaylistControls
         {
             this.BackColor = defaultColor;
         }
+
+        public void SetActive()
+        {
+            if (activeElement != null)
+                activeElement.BackColor = defaultColor;
+            this.BackColor = activeColor;
+            activeElement = this;
+        }
+
     }
 }
