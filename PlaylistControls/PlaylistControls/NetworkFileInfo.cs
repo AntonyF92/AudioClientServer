@@ -18,7 +18,7 @@ namespace PlaylistControls
         public int bitrate;
         public int frequency;
         public float size;
-        public long size_b;
+        public float size_mb;
 
         public override string ToString()
         {
@@ -29,7 +29,7 @@ namespace PlaylistControls
         {
             AudioFileInfo item = obj as AudioFileInfo;
             return this.album == item.album && this.bitrate == item.bitrate && this.frequency == item.frequency && this.length == item.length &&
-                this.name == item.name && this.path == item.path && this.singer == item.singer && this.size_b == item.size_b &&
+                this.name == item.name && this.path == item.path && this.singer == item.singer && this.size == item.size &&
                 this.song == item.song && this.year == item.year;
         }
     }

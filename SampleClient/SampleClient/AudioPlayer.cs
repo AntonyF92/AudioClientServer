@@ -24,6 +24,9 @@ namespace SampleClient
         bool manuallyStopped = false;
         int timerInterval = 100;
 
+        int bytesPerSecond = 0;
+        int currentFileLength = 0;
+
         Timer serviceTimer;
 
         public delegate void ExceptionEventHandler(Exception e);
@@ -94,7 +97,7 @@ namespace SampleClient
             {
                 if (value % blockAlignedStream.WaveFormat.BlockAlign != 0)
                     value -= value % blockAlignedStream.WaveFormat.BlockAlign;
-                value = Math.Max(0, Math.Min(blockAlignedStream.Length, value));
+                value = Math.Max(0, Math.Min(currentFileLength*bytesPerSecond, value));
                 blockAlignedStream.Position = value;
             }
             catch (Exception ex)
@@ -106,6 +109,7 @@ namespace SampleClient
         {
             try
             {
+                currentFileLength = 0;
                 Stream ms = new MemoryStream();
                 new Thread(delegate(object o)
                 {
@@ -115,6 +119,7 @@ namespace SampleClient
                         int read;
                         while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
                         {
+                            currentFileLength += read;
                             var pos = ms.Position;
                             ms.Position = ms.Length;
                             ms.Write(buffer, 0, read);
@@ -123,6 +128,8 @@ namespace SampleClient
                     }
                     catch { }
                 }).Start();
+
+                bytesPerSecond = (int)(currentFile.size / currentFile.length);
 
                 // Pre-buffering some data to allow NAudio to start playing
                 while (ms.Length < 65536 * 2)

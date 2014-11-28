@@ -46,7 +46,7 @@ namespace PlaylistControls
                     return time.ToString(@"hh\:mm\:ss");
             }
         }
-        public string Properties { get { return string.Format("{0} :: {1} kHz|{2} kbps|{3} MB", Path.GetExtension(fileInfo.path).Replace(".", ""), fileInfo.frequency / 1000, fileInfo.bitrate, fileInfo.size); } }
+        public string Properties { get { return string.Format("{0} :: {1} kHz|{2} kbps|{3} MB", Path.GetExtension(fileInfo.path).Replace(".", ""), fileInfo.frequency / 1000, fileInfo.bitrate, fileInfo.size_mb); } }
 
         public event MouseEventHandler ElementDoubleClick
         {
