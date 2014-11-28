@@ -36,6 +36,12 @@
             this.NextTrack = new System.Windows.Forms.Button();
             this.Play = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.SongInfoContainer = new System.Windows.Forms.GroupBox();
+            this.PlaylistsContainer = new System.Windows.Forms.GroupBox();
+            this.PlaybackControlsContainer = new System.Windows.Forms.GroupBox();
+            this.PlaybackTime = new System.Windows.Forms.Label();
+            this.PlaybackProgress = new System.Windows.Forms.ProgressBar();
+            this.label2 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.applicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,16 +49,10 @@
             this.MinimizeButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.CloseButton = new System.Windows.Forms.Button();
-            this.PlaybackControlsContainer = new System.Windows.Forms.GroupBox();
-            this.PlaylistsContainer = new System.Windows.Forms.GroupBox();
-            this.SongInfoContainer = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.PlaybackProgress = new System.Windows.Forms.ProgressBar();
-            this.PlaybackTime = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
-            this.PlaybackControlsContainer.SuspendLayout();
             this.PlaylistsContainer.SuspendLayout();
+            this.PlaybackControlsContainer.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // PlaylistCollectionWindow
@@ -146,6 +146,67 @@
             this.panel1.Size = new System.Drawing.Size(714, 682);
             this.panel1.TabIndex = 13;
             // 
+            // SongInfoContainer
+            // 
+            this.SongInfoContainer.Location = new System.Drawing.Point(15, 133);
+            this.SongInfoContainer.Name = "SongInfoContainer";
+            this.SongInfoContainer.Size = new System.Drawing.Size(142, 515);
+            this.SongInfoContainer.TabIndex = 17;
+            this.SongInfoContainer.TabStop = false;
+            // 
+            // PlaylistsContainer
+            // 
+            this.PlaylistsContainer.Controls.Add(this.PlaylistCollectionWindow);
+            this.PlaylistsContainer.Location = new System.Drawing.Point(163, 133);
+            this.PlaylistsContainer.Name = "PlaylistsContainer";
+            this.PlaylistsContainer.Size = new System.Drawing.Size(537, 515);
+            this.PlaylistsContainer.TabIndex = 16;
+            this.PlaylistsContainer.TabStop = false;
+            // 
+            // PlaybackControlsContainer
+            // 
+            this.PlaybackControlsContainer.Controls.Add(this.PlaybackTime);
+            this.PlaybackControlsContainer.Controls.Add(this.PlaybackProgress);
+            this.PlaybackControlsContainer.Controls.Add(this.label2);
+            this.PlaybackControlsContainer.Controls.Add(this.Stop);
+            this.PlaybackControlsContainer.Controls.Add(this.PrevTrack);
+            this.PlaybackControlsContainer.Controls.Add(this.NextTrack);
+            this.PlaybackControlsContainer.Controls.Add(this.Play);
+            this.PlaybackControlsContainer.Controls.Add(this.Pause);
+            this.PlaybackControlsContainer.Location = new System.Drawing.Point(15, 27);
+            this.PlaybackControlsContainer.Name = "PlaybackControlsContainer";
+            this.PlaybackControlsContainer.Size = new System.Drawing.Size(685, 100);
+            this.PlaybackControlsContainer.TabIndex = 15;
+            this.PlaybackControlsContainer.TabStop = false;
+            // 
+            // PlaybackTime
+            // 
+            this.PlaybackTime.Location = new System.Drawing.Point(563, 19);
+            this.PlaybackTime.Name = "PlaybackTime";
+            this.PlaybackTime.Size = new System.Drawing.Size(100, 23);
+            this.PlaybackTime.TabIndex = 17;
+            this.PlaybackTime.Text = "00:00/00:00";
+            this.PlaybackTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // PlaybackProgress
+            // 
+            this.PlaybackProgress.Location = new System.Drawing.Point(6, 77);
+            this.PlaybackProgress.MarqueeAnimationSpeed = 0;
+            this.PlaybackProgress.Name = "PlaybackProgress";
+            this.PlaybackProgress.Size = new System.Drawing.Size(673, 17);
+            this.PlaybackProgress.TabIndex = 16;
+            this.PlaybackProgress.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PlaybackProgress_MouseClick);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Aharoni", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(312, 19);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(49, 12);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "VOLUME";
+            // 
             // menuStrip1
             // 
             this.menuStrip1.BackColor = System.Drawing.SystemColors.ActiveCaption;
@@ -223,67 +284,6 @@
             this.CloseButton.UseVisualStyleBackColor = false;
             this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
             // 
-            // PlaybackControlsContainer
-            // 
-            this.PlaybackControlsContainer.Controls.Add(this.PlaybackTime);
-            this.PlaybackControlsContainer.Controls.Add(this.PlaybackProgress);
-            this.PlaybackControlsContainer.Controls.Add(this.label2);
-            this.PlaybackControlsContainer.Controls.Add(this.Stop);
-            this.PlaybackControlsContainer.Controls.Add(this.PrevTrack);
-            this.PlaybackControlsContainer.Controls.Add(this.NextTrack);
-            this.PlaybackControlsContainer.Controls.Add(this.Play);
-            this.PlaybackControlsContainer.Controls.Add(this.Pause);
-            this.PlaybackControlsContainer.Location = new System.Drawing.Point(15, 27);
-            this.PlaybackControlsContainer.Name = "PlaybackControlsContainer";
-            this.PlaybackControlsContainer.Size = new System.Drawing.Size(685, 100);
-            this.PlaybackControlsContainer.TabIndex = 15;
-            this.PlaybackControlsContainer.TabStop = false;
-            // 
-            // PlaylistsContainer
-            // 
-            this.PlaylistsContainer.Controls.Add(this.PlaylistCollectionWindow);
-            this.PlaylistsContainer.Location = new System.Drawing.Point(163, 133);
-            this.PlaylistsContainer.Name = "PlaylistsContainer";
-            this.PlaylistsContainer.Size = new System.Drawing.Size(537, 515);
-            this.PlaylistsContainer.TabIndex = 16;
-            this.PlaylistsContainer.TabStop = false;
-            // 
-            // SongInfoContainer
-            // 
-            this.SongInfoContainer.Location = new System.Drawing.Point(15, 133);
-            this.SongInfoContainer.Name = "SongInfoContainer";
-            this.SongInfoContainer.Size = new System.Drawing.Size(142, 515);
-            this.SongInfoContainer.TabIndex = 17;
-            this.SongInfoContainer.TabStop = false;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Aharoni", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(312, 19);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(49, 12);
-            this.label2.TabIndex = 15;
-            this.label2.Text = "VOLUME";
-            // 
-            // PlaybackProgress
-            // 
-            this.PlaybackProgress.Location = new System.Drawing.Point(6, 77);
-            this.PlaybackProgress.MarqueeAnimationSpeed = 0;
-            this.PlaybackProgress.Name = "PlaybackProgress";
-            this.PlaybackProgress.Size = new System.Drawing.Size(673, 17);
-            this.PlaybackProgress.TabIndex = 16;
-            this.PlaybackProgress.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PlaybackProgress_MouseClick);
-            // 
-            // PlaybackTime
-            // 
-            this.PlaybackTime.Location = new System.Drawing.Point(563, 19);
-            this.PlaybackTime.Name = "PlaybackTime";
-            this.PlaybackTime.Size = new System.Drawing.Size(100, 23);
-            this.PlaybackTime.TabIndex = 17;
-            this.PlaybackTime.Text = "label3";
-            this.PlaybackTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -304,11 +304,11 @@
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.PlaylistsContainer.ResumeLayout(false);
             this.PlaybackControlsContainer.ResumeLayout(false);
             this.PlaybackControlsContainer.PerformLayout();
-            this.PlaylistsContainer.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

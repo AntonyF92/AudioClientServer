@@ -14,7 +14,7 @@ namespace PlaylistControls
         public string album;
         public string song;
         public string year;
-        public int length;
+        public double length;
         public int bitrate;
         public int frequency;
         public float size;

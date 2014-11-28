@@ -22,7 +22,7 @@ namespace SampleClient
         TcpClient client = new TcpClient();
         AutoResetEvent triggerWait = new AutoResetEvent(false);
         bool manuallyStopped = false;
-        int timerInterval = 500;
+        int timerInterval = 100;
 
         Timer serviceTimer;
 
@@ -45,7 +45,7 @@ namespace SampleClient
         void TimerTick(object state)
         {
             if (player != null && player.PlaybackState == PlaybackState.Playing && PlaybackProgressChangeEvent != null)
-                PlaybackProgressChangeEvent(blockAlignedStream.CurrentTime, blockAlignedStream.TotalTime, blockAlignedStream.Position);
+                PlaybackProgressChangeEvent(blockAlignedStream.CurrentTime, TimeSpan.FromSeconds(currentFile.length), blockAlignedStream.Position);
         }
 
         public void Play(AudioFileInfo fi, Playlist pl)
@@ -134,14 +134,14 @@ namespace SampleClient
                 player = new WaveOut(WaveCallbackInfo.FunctionCallback());
                 player.PlaybackStopped += player_PlaybackStopped;
                 player.Init(blockAlignedStream);
-                if (PlaybackStartEvent != null)
-                    PlaybackStartEvent(blockAlignedStream.TotalTime, blockAlignedStream.Length);
                 player.Play();
+                if (PlaybackStartEvent != null)
+                    PlaybackStartEvent(TimeSpan.FromSeconds(currentFile.length), (long)(currentFile.length * blockAlignedStream.WaveFormat.AverageBytesPerSecond));
                 /*while (player.PlaybackState != PlaybackState.Stopped)
-                {
-                    System.Threading.Thread.Sleep(100);
-                }
-                blockAlignedStream.Dispose();*/
+                                {
+                                    System.Threading.Thread.Sleep(100);
+                                }
+                                blockAlignedStream.Dispose();*/
                 //NextTrack();
             }
             catch (Exception ex)
