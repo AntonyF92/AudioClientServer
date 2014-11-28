@@ -406,7 +406,11 @@ namespace MediaServer
             }
             catch (Exception ex)
             {
-                clientStream.Write(new byte[] { Convert.ToByte(false) }, 0, 1);
+                try
+                {
+                    clientStream.Write(new byte[] { Convert.ToByte(false) }, 0, 1);
+                }
+                catch { }
             }
         }
     }
