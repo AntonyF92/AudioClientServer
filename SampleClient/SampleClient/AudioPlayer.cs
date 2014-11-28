@@ -35,6 +35,8 @@ namespace SampleClient
         public event PlaybackProgressChangeEventHandler PlaybackProgressChangeEvent;
         public delegate void PlaybackStartEventHandler(TimeSpan totalTime, long length);
         public event PlaybackStartEventHandler PlaybackStartEvent;
+        public delegate void PlaybackStopEventHandler();
+        public event PlaybackStopEventHandler PlaybackStopEvent;
 
         public AudioPlayer()
         {
@@ -97,7 +99,7 @@ namespace SampleClient
             {
                 if (value % blockAlignedStream.WaveFormat.BlockAlign != 0)
                     value -= value % blockAlignedStream.WaveFormat.BlockAlign;
-                value = Math.Max(0, Math.Min(currentFileLength*bytesPerSecond, value));
+                value = Math.Max(0, Math.Min(currentFileLength/bytesPerSecond*blockAlignedStream.WaveFormat.AverageBytesPerSecond, value));
                 blockAlignedStream.Position = value;
             }
             catch (Exception ex)
@@ -130,7 +132,6 @@ namespace SampleClient
                 }).Start();
 
                 bytesPerSecond = (int)(currentFile.size / currentFile.length);
-
                 // Pre-buffering some data to allow NAudio to start playing
                 while (ms.Length < 65536 * 2)
                     Thread.Sleep(100);
@@ -172,6 +173,8 @@ namespace SampleClient
         void player_PlaybackStopped(object sender, StoppedEventArgs e)
         {
             serviceTimer.Change(Timeout.Infinite, timerInterval);
+            if (PlaybackStopEvent != null)
+                PlaybackStopEvent();
             if (blockAlignedStream != null)
                 blockAlignedStream.Dispose();
             blockAlignedStream = null;

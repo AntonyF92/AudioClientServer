@@ -50,6 +50,7 @@ namespace SampleClient
                 audioPlayer.OnExceptionEvent += audioPlayer_OnExceptionEvnet;
                 audioPlayer.PlaybackStartEvent += audioPlayer_PlaybackStartEvent;
                 audioPlayer.PlaybackProgressChangeEvent += audioPlayer_PlaybackProgressChangeEvent;
+                audioPlayer.PlaybackStopEvent += audioPlayer_PlaybackStopEvent;
                 httpClient = new HttpClient(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.http_port);
                 httpClient.ExecGETquery("method_name=get_playlists", (response) =>
                 {
@@ -60,6 +61,18 @@ namespace SampleClient
             {
                 MessageBox.Show(ex.Message, "Initialization error");
             }
+        }
+
+        void audioPlayer_PlaybackStopEvent()
+        {
+            PlaybackProgress.Invoke(new Action(() =>
+            {
+                PlaybackProgress.Value = 0;
+            }));
+            PlaybackTime.Invoke(new Action(() =>
+            {
+                PlaybackTime.Text = "00:00/00:00";
+            }));
         }
 
         void audioPlayer_PlaybackProgressChangeEvent(TimeSpan currentTime, TimeSpan totalTime, long position)
