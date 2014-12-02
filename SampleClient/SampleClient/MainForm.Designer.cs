@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.PlaylistCollectionWindow = new System.Windows.Forms.TabControl();
             this.Stop = new System.Windows.Forms.Button();
@@ -49,7 +50,14 @@
             this.MinimizeButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.CloseButton = new System.Windows.Forms.Button();
+            this.SongTitle = new System.Windows.Forms.Label();
+            this.SongPerformer = new System.Windows.Forms.Label();
+            this.SongAlbum = new System.Windows.Forms.Label();
+            this.SongDuration = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.RandomOrderCheckBox = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
+            this.SongInfoContainer.SuspendLayout();
             this.PlaylistsContainer.SuspendLayout();
             this.PlaybackControlsContainer.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -148,6 +156,10 @@
             // 
             // SongInfoContainer
             // 
+            this.SongInfoContainer.Controls.Add(this.SongDuration);
+            this.SongInfoContainer.Controls.Add(this.SongAlbum);
+            this.SongInfoContainer.Controls.Add(this.SongPerformer);
+            this.SongInfoContainer.Controls.Add(this.SongTitle);
             this.SongInfoContainer.Location = new System.Drawing.Point(15, 133);
             this.SongInfoContainer.Name = "SongInfoContainer";
             this.SongInfoContainer.Size = new System.Drawing.Size(142, 515);
@@ -165,6 +177,7 @@
             // 
             // PlaybackControlsContainer
             // 
+            this.PlaybackControlsContainer.Controls.Add(this.RandomOrderCheckBox);
             this.PlaybackControlsContainer.Controls.Add(this.PlaybackTime);
             this.PlaybackControlsContainer.Controls.Add(this.PlaybackProgress);
             this.PlaybackControlsContainer.Controls.Add(this.label2);
@@ -284,6 +297,56 @@
             this.CloseButton.UseVisualStyleBackColor = false;
             this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
             // 
+            // SongTitle
+            // 
+            this.SongTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SongTitle.Location = new System.Drawing.Point(6, 26);
+            this.SongTitle.Name = "SongTitle";
+            this.SongTitle.Size = new System.Drawing.Size(130, 33);
+            this.SongTitle.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.SongTitle, "SongTitle.Text");
+            this.SongTitle.MouseHover += new System.EventHandler(this.SongTitle_MouseHover);
+            // 
+            // SongPerformer
+            // 
+            this.SongPerformer.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SongPerformer.Location = new System.Drawing.Point(6, 59);
+            this.SongPerformer.Name = "SongPerformer";
+            this.SongPerformer.Size = new System.Drawing.Size(130, 21);
+            this.SongPerformer.TabIndex = 1;
+            // 
+            // SongAlbum
+            // 
+            this.SongAlbum.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SongAlbum.Location = new System.Drawing.Point(6, 80);
+            this.SongAlbum.Name = "SongAlbum";
+            this.SongAlbum.Size = new System.Drawing.Size(130, 23);
+            this.SongAlbum.TabIndex = 2;
+            this.SongAlbum.Click += new System.EventHandler(this.SongAlbum_Click);
+            // 
+            // SongDuration
+            // 
+            this.SongDuration.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SongDuration.Location = new System.Drawing.Point(6, 103);
+            this.SongDuration.Name = "SongDuration";
+            this.SongDuration.Size = new System.Drawing.Size(130, 33);
+            this.SongDuration.TabIndex = 3;
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.AutomaticDelay = 200;
+            // 
+            // RandomOrderCheckBox
+            // 
+            this.RandomOrderCheckBox.AutoSize = true;
+            this.RandomOrderCheckBox.Location = new System.Drawing.Point(8, 54);
+            this.RandomOrderCheckBox.Name = "RandomOrderCheckBox";
+            this.RandomOrderCheckBox.Size = new System.Drawing.Size(139, 17);
+            this.RandomOrderCheckBox.TabIndex = 18;
+            this.RandomOrderCheckBox.Text = "Случайный (вкл/выкл)";
+            this.RandomOrderCheckBox.UseVisualStyleBackColor = true;
+            this.RandomOrderCheckBox.CheckedChanged += new System.EventHandler(this.RandomOrderCheckBox_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -304,6 +367,7 @@
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.SongInfoContainer.ResumeLayout(false);
             this.PlaylistsContainer.ResumeLayout(false);
             this.PlaybackControlsContainer.ResumeLayout(false);
             this.PlaybackControlsContainer.PerformLayout();
@@ -336,6 +400,12 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ProgressBar PlaybackProgress;
         private System.Windows.Forms.Label PlaybackTime;
+        private System.Windows.Forms.Label SongDuration;
+        private System.Windows.Forms.Label SongAlbum;
+        private System.Windows.Forms.Label SongPerformer;
+        private System.Windows.Forms.Label SongTitle;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.CheckBox RandomOrderCheckBox;
     }
 }
 

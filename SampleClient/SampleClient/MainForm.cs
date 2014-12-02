@@ -38,6 +38,7 @@ namespace SampleClient
             volume.Size = new Size(149, 15);
             //panel1.Controls.Add(volume);
             volume.VolumeChanged += volume_VolumeChanged;
+
         }
 
         void Init()
@@ -73,6 +74,7 @@ namespace SampleClient
             {
                 PlaybackTime.Text = "00:00/00:00";
             }));
+            SetCurrentInfo(null, null, null, null);
         }
 
         void audioPlayer_PlaybackProgressChangeEvent(TimeSpan currentTime, TimeSpan totalTime, long position)
@@ -87,7 +89,7 @@ namespace SampleClient
             }));
         }
 
-        void audioPlayer_PlaybackStartEvent(TimeSpan totalTime, long length)
+        void audioPlayer_PlaybackStartEvent(TimeSpan totalTime, long length, AudioFileInfo file)
         {
             PlaybackProgress.Invoke(new Action(() =>
                 {
@@ -98,6 +100,16 @@ namespace SampleClient
                 {
                     PlaybackTime.Text = "00:00/" + totalTime.ToString(@"mm\:ss");
                 }));
+            SetCurrentInfo(file.song, file.album, file.singer, TimeSpan.FromSeconds(file.length).ToString(@"mm\:ss"));
+            PlaylistPanel lv = null;
+            PlaylistCollectionWindow.Invoke(new Action(() =>
+                lv = ((PlaylistPanel)PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"])));
+            lv.Invoke(new Action(() =>
+            {
+                PlaylistElement item = null;
+                if (lv.TryGetItem(file, out item))
+                    lv.SetActive(item);
+            }));
         }
 
         void audioPlayer_OnExceptionEvnet(Exception e)
@@ -116,6 +128,16 @@ namespace SampleClient
                 if (lv.TryGetItem(fileInfo, out item))
                     lv.SetActive(item);
             }));
+
+            SetCurrentInfo(fileInfo.song, fileInfo.album, fileInfo.singer, TimeSpan.FromSeconds(fileInfo.length).ToString(@"mm\:ss"));
+        }
+
+        void SetCurrentInfo(string title, string album, string performer, string duration)
+        {
+            SongTitle.Invoke(new Action(() => SongTitle.Text = title));
+            SongAlbum.Invoke(new Action(() => SongAlbum.Text = album));
+            SongPerformer.Invoke(new Action(() => SongPerformer.Text = performer));
+            SongDuration.Invoke(new Action(() => SongDuration.Text = duration));
         }
 
         void playlistManager_OnCollectionLoadEvent(Dictionary<string, Playlist> playlistCollection)
@@ -181,8 +203,11 @@ namespace SampleClient
             if (pl != null)
             {
                 PlaylistPanel panel = PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"] as PlaylistPanel;
-                AudioFileInfo file = panel.SelectedItem.FileInfo;
-                audioPlayer.Play(file, pl);
+                if (panel.SelectedItem != null)
+                {
+                    AudioFileInfo file = panel.SelectedItem.FileInfo;
+                    audioPlayer.Play(file, pl);
+                }
             }
         }
 
@@ -191,10 +216,6 @@ namespace SampleClient
         private void Stop_Click(object sender, EventArgs e)
         {
             audioPlayer.StopPlayer();
-        }
-
-        void StopPlayer()
-        {
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -278,5 +299,21 @@ namespace SampleClient
             // Set the calculated relative value to the progressbar //
             audioPlayer.SetPosition((long)relativeMouse);
         }
+
+        private void SongTitle_MouseHover(object sender, EventArgs e)
+        {
+            toolTip1.SetToolTip(SongTitle, SongTitle.Text);
+        }
+
+        private void SongAlbum_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RandomOrderCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            audioPlayer.SetRandomOrder(RandomOrderCheckBox.Checked);
+        }
+
     }
 }

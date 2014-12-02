@@ -17,7 +17,7 @@ namespace SampleClient
         WaveStream blockAlignedStream = null;
         public PlaylistManager playlistManager { get; private set; }
         private Playlist currentPlaylist = null;
-        private AudioFileInfo currentFile = null;
+        private AudioFileInfo currentFile = null, previousFile = null;
         private Mp3FileReader mp3Reader = null;
         TcpClient client = new TcpClient();
         AutoResetEvent triggerWait = new AutoResetEvent(false);
@@ -27,13 +27,16 @@ namespace SampleClient
         int bytesPerSecond = 0;
         int currentFileLength = 0;
 
+        bool randomOrder = false;
+        Random rnd = new Random();
+
         Timer serviceTimer;
 
         public delegate void ExceptionEventHandler(Exception e);
         public event ExceptionEventHandler OnExceptionEvent;
         public delegate void PlaybackProgressChangeEventHandler(TimeSpan currentTime, TimeSpan totalTime, long position);
         public event PlaybackProgressChangeEventHandler PlaybackProgressChangeEvent;
-        public delegate void PlaybackStartEventHandler(TimeSpan totalTime, long length);
+        public delegate void PlaybackStartEventHandler(TimeSpan totalTime, long length, AudioFileInfo file);
         public event PlaybackStartEventHandler PlaybackStartEvent;
         public delegate void PlaybackStopEventHandler();
         public event PlaybackStopEventHandler PlaybackStopEvent;
@@ -144,7 +147,7 @@ namespace SampleClient
                 player.Init(blockAlignedStream);
                 player.Play();
                 if (PlaybackStartEvent != null)
-                    PlaybackStartEvent(TimeSpan.FromSeconds(currentFile.length), (long)(currentFile.length * blockAlignedStream.WaveFormat.AverageBytesPerSecond));
+                    PlaybackStartEvent(TimeSpan.FromSeconds(currentFile.length), (long)(currentFile.length * blockAlignedStream.WaveFormat.AverageBytesPerSecond), currentFile);
                 /*while (player.PlaybackState != PlaybackState.Stopped)
                                 {
                                     System.Threading.Thread.Sleep(100);
@@ -191,15 +194,6 @@ namespace SampleClient
                 NextTrack();
         }
 
-        void TriggerNextTrack()
-        {
-            while (true)
-            {
-                triggerWait.WaitOne();
-                NextTrack();
-            }
-        }
-
         private void Stop()
         {
             if (player != null && player.PlaybackState == PlaybackState.Playing)
@@ -230,14 +224,27 @@ namespace SampleClient
                 int index = currentPlaylist.FileList.IndexOf(currentFile);
                 if (index != -1)
                 {
-                    if (index < currentPlaylist.FileList.Count - 1)
-                        file = currentPlaylist.FileList[index + 1];
+                    if (randomOrder)
+                        index = GetRandomIndex(index);
+                    else if (index < currentPlaylist.FileList.Count - 1)
+                        index++;
                     else
-                        file = currentPlaylist.FileList[0];
+                        index = 0;
+                    file = currentPlaylist.FileList[index];
+                    previousFile = currentFile;
                     playlistManager.ChangeTrack(currentPlaylist, file);
                     Play(file, currentPlaylist);
                 }
             }
+        }
+
+        int GetRandomIndex(int currentIndex)
+        {
+            int res;
+            while ((res = rnd.Next(currentPlaylist.FileList.Count)) == currentIndex)
+            {
+            }
+            return res;
         }
 
         public void PreviousTrack()
@@ -248,7 +255,9 @@ namespace SampleClient
                 int index = currentPlaylist.FileList.IndexOf(currentFile);
                 if (index != -1)
                 {
-                    if (index > 0)
+                    if (randomOrder && previousFile != null)
+                        file = previousFile;
+                    else if (index > 0)
                         file = currentPlaylist.FileList[index - 1];
                     else
                         file = currentPlaylist.FileList[currentPlaylist.FileList.Count - 1];
@@ -256,6 +265,11 @@ namespace SampleClient
                     Play(file, currentPlaylist);
                 }
             }
+        }
+
+        public void SetRandomOrder(bool value)
+        {
+            randomOrder = value;
         }
 
         public void Dispose()
