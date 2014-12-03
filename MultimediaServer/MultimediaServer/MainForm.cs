@@ -85,7 +85,7 @@ namespace MediaServer
         {
             List<string> files = new List<string>();
             foreach (var file in Directory.GetFiles(path))
-                if (Path.GetExtension(file) == ".mp3")
+                if (Path.GetExtension(file) == ".mp3" || Path.GetExtension(file) == ".mp3")
                     files.Add(file);
             if (include_subfolders)
                 foreach (var subfolder in Directory.GetDirectories(path))
