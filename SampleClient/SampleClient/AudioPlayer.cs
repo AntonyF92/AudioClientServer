@@ -17,7 +17,8 @@ namespace SampleClient
         WaveStream blockAlignedStream = null;
         public PlaylistManager playlistManager { get; private set; }
         private Playlist currentPlaylist = null;
-        private AudioFileInfo currentFile = null, previousFile = null;
+        private AudioFileInfo currentFile = null;
+        private Stack<AudioFileInfo> history = new Stack<AudioFileInfo>();
         private Mp3FileReader mp3Reader = null;
         TcpClient client = new TcpClient();
         AutoResetEvent triggerWait = new AutoResetEvent(false);
@@ -77,6 +78,10 @@ namespace SampleClient
                         {
                             Thread.Sleep(10);
                         }*/
+                        if (currentPlaylist != pl)
+                            history.Clear();
+                        if (currentFile != null)
+                            history.Push(currentFile);
                         currentFile = fi;
                         currentPlaylist = pl;
                         byte[] res = new byte[1];
@@ -231,7 +236,6 @@ namespace SampleClient
                     else
                         index = 0;
                     file = currentPlaylist.FileList[index];
-                    previousFile = currentFile;
                     playlistManager.ChangeTrack(currentPlaylist, file);
                     Play(file, currentPlaylist);
                 }
@@ -255,8 +259,8 @@ namespace SampleClient
                 int index = currentPlaylist.FileList.IndexOf(currentFile);
                 if (index != -1)
                 {
-                    if (randomOrder && previousFile != null)
-                        file = previousFile;
+                    if (history.Count > 0)
+                        file = history.Pop();
                     else if (index > 0)
                         file = currentPlaylist.FileList[index - 1];
                     else
