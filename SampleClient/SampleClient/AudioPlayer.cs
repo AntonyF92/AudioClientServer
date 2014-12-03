@@ -58,7 +58,16 @@ namespace SampleClient
                 PlaybackProgressChangeEvent(blockAlignedStream.CurrentTime, TimeSpan.FromSeconds(currentFile.length), blockAlignedStream.Position);
         }
 
-        public void Play(AudioFileInfo fi, Playlist pl)
+        public void PlayFile(AudioFileInfo fi, Playlist pl)
+        {
+            if (currentPlaylist != null && currentPlaylist.Name != pl.Name)
+                history.Clear();
+            history.Push(fi);
+            currentPlaylist = pl;
+            Play(fi, pl);
+        }
+
+        private void Play(AudioFileInfo fi, Playlist pl)
         {
             ThreadPool.QueueUserWorkItem(o =>
             {
@@ -79,12 +88,8 @@ namespace SampleClient
                         {
                             Thread.Sleep(10);
                         }*/
-                        if (currentPlaylist != pl)
-                            history.Clear();
-                        if (currentFile != null)
-                            history.Push(currentFile);
+                        
                         currentFile = fi;
-                        currentPlaylist = pl;
                         byte[] res = new byte[1];
                         stream.Read(res, 0, 1);
                         if (Convert.ToBoolean(res[0]))
@@ -241,6 +246,8 @@ namespace SampleClient
                     else
                         index = 0;
                     file = currentPlaylist.FileList[index];
+                    if (history.Peek() != currentFile)
+                        history.Push(currentFile);
                     playlistManager.ChangeTrack(currentPlaylist, file);
                     Play(file, currentPlaylist);
                 }

@@ -189,7 +189,7 @@ namespace SampleClient
         {
             //PlaylistElement item = sender as PlaylistElement;
             PlaylistPanel pl = PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"] as PlaylistPanel;
-            audioPlayer.Play(pl.SelectedItem.FileInfo, (Playlist)pl.Tag);
+            audioPlayer.PlayFile(pl.SelectedItem.FileInfo, (Playlist)pl.Tag);
         }
 
         void volume_VolumeChanged(object sender, EventArgs e)
@@ -206,7 +206,7 @@ namespace SampleClient
                 if (panel.SelectedItem != null)
                 {
                     AudioFileInfo file = panel.SelectedItem.FileInfo;
-                    audioPlayer.Play(file, pl);
+                    audioPlayer.PlayFile(file, pl);
                 }
             }
         }
