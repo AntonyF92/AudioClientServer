@@ -19,6 +19,7 @@ namespace PlaylistControls
         public int frequency;
         public float size;
         public float size_mb;
+        public string exstension;
 
         public override string ToString()
         {

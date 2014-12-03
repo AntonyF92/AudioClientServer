@@ -20,6 +20,7 @@ namespace SampleClient
         private AudioFileInfo currentFile = null;
         private Stack<AudioFileInfo> history = new Stack<AudioFileInfo>();
         private Mp3FileReader mp3Reader = null;
+        private WaveFileReader waveReader = null;
         TcpClient client = new TcpClient();
         AutoResetEvent triggerWait = new AutoResetEvent(false);
         bool manuallyStopped = false;
@@ -144,8 +145,16 @@ namespace SampleClient
                 while (ms.Length < 65536 * 2)
                     Thread.Sleep(100);
                 ms.Position = 0;
-                mp3Reader = new Mp3FileReader(ms);
-                blockAlignedStream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(mp3Reader));
+                if (currentFile.exstension == "mp3")
+                {
+                    mp3Reader = new Mp3FileReader(ms);
+                    blockAlignedStream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(mp3Reader));
+                }
+                else
+                {
+                    waveReader = new WaveFileReader(ms);
+                    blockAlignedStream = new BlockAlignReductionStream(new WaveChannel32(waveReader));
+                }
                 serviceTimer.Change(0, timerInterval);
                 player = new WaveOut(WaveCallbackInfo.FunctionCallback());
                 player.PlaybackStopped += player_PlaybackStopped;
@@ -153,12 +162,6 @@ namespace SampleClient
                 player.Play();
                 if (PlaybackStartEvent != null)
                     PlaybackStartEvent(TimeSpan.FromSeconds(currentFile.length), (long)(currentFile.length * blockAlignedStream.WaveFormat.AverageBytesPerSecond), currentFile);
-                /*while (player.PlaybackState != PlaybackState.Stopped)
-                                {
-                                    System.Threading.Thread.Sleep(100);
-                                }
-                                blockAlignedStream.Dispose();*/
-                //NextTrack();
             }
             catch (Exception ex)
             {
@@ -189,7 +192,9 @@ namespace SampleClient
             if (mp3Reader != null)
                 mp3Reader.Close();
             mp3Reader = null;
-
+            if (waveReader != null)
+                waveReader.Dispose();
+            waveReader = null;
             
             /*if (player != null)
                 player.Dispose();

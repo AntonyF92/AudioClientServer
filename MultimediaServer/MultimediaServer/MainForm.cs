@@ -207,6 +207,7 @@ namespace MediaServer
             catch { }
             info.name = Path.GetFileNameWithoutExtension(file);
             info.path = file;
+            info.exstension = Path.GetExtension(file).Replace(".", "");
             if (f != null)
             {
                 if (f.Tag != null)

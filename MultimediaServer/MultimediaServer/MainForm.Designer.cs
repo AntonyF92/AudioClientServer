@@ -61,7 +61,7 @@
             // 
             // OpenFilesDialog
             // 
-            this.OpenFilesDialog.Filter = "Mp3 files|*.mp3";
+            this.OpenFilesDialog.Filter = "Mp3 & WAV files|*.mp3; *.wav";
             this.OpenFilesDialog.Multiselect = true;
             // 
             // panel1
