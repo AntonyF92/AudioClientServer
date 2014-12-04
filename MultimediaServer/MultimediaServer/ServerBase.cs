@@ -373,16 +373,13 @@ namespace MediaServer
         void ProcessClient(TcpClient client)
         {
             var clientStream = client.GetStream();
+            FileStream fileStream = null;
             try
             {
                 //byte[] buffer = new byte[bufferSize];
                 //int readCount = 0;
                 //while ((readCount = clientStream.Read(buffer, 0, bufferSize)) > 0)
                 {
-                    /*while (!clientStream.DataAvailable)
-                    {
-                        Thread.Sleep(10);
-                    }*/
                     string request = "";
                     byte[] buffer = new byte[bufferSize];
                     int readCount = 0;
@@ -392,10 +389,9 @@ namespace MediaServer
                     {
                         if (File.Exists(request))
                         {
-                            FileStream fileStream = File.Open(request, FileMode.Open);
+                            fileStream = File.Open(request, FileMode.Open);
                             clientStream.Write(new byte[] { Convert.ToByte(true) }, 0, 1);
                             while ((readCount = fileStream.Read(buffer, 0, bufferSize)) > 0)
-                                //data.AddRange(buffer);
                                 clientStream.Write(buffer, 0, readCount);
                             clientStream.Flush();
                             fileStream.Close();
@@ -406,6 +402,8 @@ namespace MediaServer
             }
             catch (Exception ex)
             {
+                if (fileStream != null)
+                    fileStream.Close();
                 try
                 {
                     clientStream.Write(new byte[] { Convert.ToByte(false) }, 0, 1);

@@ -79,14 +79,22 @@ namespace SampleClient
 
         void audioPlayer_PlaybackProgressChangeEvent(TimeSpan currentTime, TimeSpan totalTime, long position)
         {
-            PlaybackProgress.Invoke(new Action(() =>
+            try
             {
-                PlaybackProgress.Value = (int)position;
-            }));
-            PlaybackTime.Invoke(new Action(() =>
+                PlaybackProgress.Invoke(new Action(() =>
+                {
+                    PlaybackProgress.Value = (int)position;
+                }));
+            }
+            catch { }
+            try
             {
-                PlaybackTime.Text = currentTime.ToString(@"mm\:ss") + "/" + totalTime.ToString(@"mm\:ss");
-            }));
+                PlaybackTime.Invoke(new Action(() =>
+                {
+                    PlaybackTime.Text = currentTime.ToString(@"mm\:ss") + "/" + totalTime.ToString(@"mm\:ss");
+                }));
+            }
+            catch { }
         }
 
         void audioPlayer_PlaybackStartEvent(TimeSpan totalTime, long length, AudioFileInfo file)

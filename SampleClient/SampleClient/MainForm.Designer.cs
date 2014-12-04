@@ -38,8 +38,13 @@
             this.Play = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.SongInfoContainer = new System.Windows.Forms.GroupBox();
+            this.SongDuration = new System.Windows.Forms.Label();
+            this.SongAlbum = new System.Windows.Forms.Label();
+            this.SongPerformer = new System.Windows.Forms.Label();
+            this.SongTitle = new System.Windows.Forms.Label();
             this.PlaylistsContainer = new System.Windows.Forms.GroupBox();
             this.PlaybackControlsContainer = new System.Windows.Forms.GroupBox();
+            this.RandomOrderCheckBox = new System.Windows.Forms.CheckBox();
             this.PlaybackTime = new System.Windows.Forms.Label();
             this.PlaybackProgress = new System.Windows.Forms.ProgressBar();
             this.label2 = new System.Windows.Forms.Label();
@@ -50,12 +55,7 @@
             this.MinimizeButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.CloseButton = new System.Windows.Forms.Button();
-            this.SongTitle = new System.Windows.Forms.Label();
-            this.SongPerformer = new System.Windows.Forms.Label();
-            this.SongAlbum = new System.Windows.Forms.Label();
-            this.SongDuration = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.RandomOrderCheckBox = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.SongInfoContainer.SuspendLayout();
             this.PlaylistsContainer.SuspendLayout();
@@ -68,7 +68,7 @@
             this.PlaylistCollectionWindow.Location = new System.Drawing.Point(6, 10);
             this.PlaylistCollectionWindow.Name = "PlaylistCollectionWindow";
             this.PlaylistCollectionWindow.SelectedIndex = 0;
-            this.PlaylistCollectionWindow.Size = new System.Drawing.Size(525, 497);
+            this.PlaylistCollectionWindow.Size = new System.Drawing.Size(475, 497);
             this.PlaylistCollectionWindow.TabIndex = 11;
             // 
             // Stop
@@ -149,9 +149,9 @@
             this.panel1.Controls.Add(this.PlaylistsContainer);
             this.panel1.Controls.Add(this.PlaybackControlsContainer);
             this.panel1.Controls.Add(this.menuStrip1);
-            this.panel1.Location = new System.Drawing.Point(12, 30);
+            this.panel1.Location = new System.Drawing.Point(3, 30);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(714, 682);
+            this.panel1.Size = new System.Drawing.Size(663, 661);
             this.panel1.TabIndex = 13;
             // 
             // SongInfoContainer
@@ -166,12 +166,47 @@
             this.SongInfoContainer.TabIndex = 17;
             this.SongInfoContainer.TabStop = false;
             // 
+            // SongDuration
+            // 
+            this.SongDuration.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SongDuration.Location = new System.Drawing.Point(6, 103);
+            this.SongDuration.Name = "SongDuration";
+            this.SongDuration.Size = new System.Drawing.Size(130, 33);
+            this.SongDuration.TabIndex = 3;
+            // 
+            // SongAlbum
+            // 
+            this.SongAlbum.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SongAlbum.Location = new System.Drawing.Point(6, 80);
+            this.SongAlbum.Name = "SongAlbum";
+            this.SongAlbum.Size = new System.Drawing.Size(130, 23);
+            this.SongAlbum.TabIndex = 2;
+            this.SongAlbum.Click += new System.EventHandler(this.SongAlbum_Click);
+            // 
+            // SongPerformer
+            // 
+            this.SongPerformer.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SongPerformer.Location = new System.Drawing.Point(6, 59);
+            this.SongPerformer.Name = "SongPerformer";
+            this.SongPerformer.Size = new System.Drawing.Size(130, 21);
+            this.SongPerformer.TabIndex = 1;
+            // 
+            // SongTitle
+            // 
+            this.SongTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SongTitle.Location = new System.Drawing.Point(6, 26);
+            this.SongTitle.Name = "SongTitle";
+            this.SongTitle.Size = new System.Drawing.Size(130, 33);
+            this.SongTitle.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.SongTitle, "SongTitle.Text");
+            this.SongTitle.MouseHover += new System.EventHandler(this.SongTitle_MouseHover);
+            // 
             // PlaylistsContainer
             // 
             this.PlaylistsContainer.Controls.Add(this.PlaylistCollectionWindow);
             this.PlaylistsContainer.Location = new System.Drawing.Point(163, 133);
             this.PlaylistsContainer.Name = "PlaylistsContainer";
-            this.PlaylistsContainer.Size = new System.Drawing.Size(537, 515);
+            this.PlaylistsContainer.Size = new System.Drawing.Size(487, 515);
             this.PlaylistsContainer.TabIndex = 16;
             this.PlaylistsContainer.TabStop = false;
             // 
@@ -188,13 +223,24 @@
             this.PlaybackControlsContainer.Controls.Add(this.Pause);
             this.PlaybackControlsContainer.Location = new System.Drawing.Point(15, 27);
             this.PlaybackControlsContainer.Name = "PlaybackControlsContainer";
-            this.PlaybackControlsContainer.Size = new System.Drawing.Size(685, 100);
+            this.PlaybackControlsContainer.Size = new System.Drawing.Size(635, 100);
             this.PlaybackControlsContainer.TabIndex = 15;
             this.PlaybackControlsContainer.TabStop = false;
             // 
+            // RandomOrderCheckBox
+            // 
+            this.RandomOrderCheckBox.AutoSize = true;
+            this.RandomOrderCheckBox.Location = new System.Drawing.Point(8, 54);
+            this.RandomOrderCheckBox.Name = "RandomOrderCheckBox";
+            this.RandomOrderCheckBox.Size = new System.Drawing.Size(139, 17);
+            this.RandomOrderCheckBox.TabIndex = 18;
+            this.RandomOrderCheckBox.Text = "Случайный (вкл/выкл)";
+            this.RandomOrderCheckBox.UseVisualStyleBackColor = true;
+            this.RandomOrderCheckBox.CheckedChanged += new System.EventHandler(this.RandomOrderCheckBox_CheckedChanged);
+            // 
             // PlaybackTime
             // 
-            this.PlaybackTime.Location = new System.Drawing.Point(563, 19);
+            this.PlaybackTime.Location = new System.Drawing.Point(529, 19);
             this.PlaybackTime.Name = "PlaybackTime";
             this.PlaybackTime.Size = new System.Drawing.Size(100, 23);
             this.PlaybackTime.TabIndex = 17;
@@ -206,7 +252,7 @@
             this.PlaybackProgress.Location = new System.Drawing.Point(6, 77);
             this.PlaybackProgress.MarqueeAnimationSpeed = 0;
             this.PlaybackProgress.Name = "PlaybackProgress";
-            this.PlaybackProgress.Size = new System.Drawing.Size(673, 17);
+            this.PlaybackProgress.Size = new System.Drawing.Size(623, 17);
             this.PlaybackProgress.TabIndex = 16;
             this.PlaybackProgress.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PlaybackProgress_MouseClick);
             // 
@@ -227,7 +273,7 @@
             this.applicationToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(714, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(663, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -262,7 +308,7 @@
             this.MinimizeButton.FlatAppearance.BorderSize = 0;
             this.MinimizeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MinimizeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.MinimizeButton.Location = new System.Drawing.Point(657, 1);
+            this.MinimizeButton.Location = new System.Drawing.Point(597, 1);
             this.MinimizeButton.Name = "MinimizeButton";
             this.MinimizeButton.Size = new System.Drawing.Size(33, 23);
             this.MinimizeButton.TabIndex = 15;
@@ -290,69 +336,23 @@
             this.CloseButton.FlatAppearance.BorderSize = 0;
             this.CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CloseButton.Image = global::SampleClient.Properties.Resources._1416407871_ic_close_48px_24;
-            this.CloseButton.Location = new System.Drawing.Point(696, 1);
+            this.CloseButton.Location = new System.Drawing.Point(636, 1);
             this.CloseButton.Name = "CloseButton";
             this.CloseButton.Size = new System.Drawing.Size(30, 23);
             this.CloseButton.TabIndex = 16;
             this.CloseButton.UseVisualStyleBackColor = false;
             this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
             // 
-            // SongTitle
-            // 
-            this.SongTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.SongTitle.Location = new System.Drawing.Point(6, 26);
-            this.SongTitle.Name = "SongTitle";
-            this.SongTitle.Size = new System.Drawing.Size(130, 33);
-            this.SongTitle.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.SongTitle, "SongTitle.Text");
-            this.SongTitle.MouseHover += new System.EventHandler(this.SongTitle_MouseHover);
-            // 
-            // SongPerformer
-            // 
-            this.SongPerformer.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.SongPerformer.Location = new System.Drawing.Point(6, 59);
-            this.SongPerformer.Name = "SongPerformer";
-            this.SongPerformer.Size = new System.Drawing.Size(130, 21);
-            this.SongPerformer.TabIndex = 1;
-            // 
-            // SongAlbum
-            // 
-            this.SongAlbum.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.SongAlbum.Location = new System.Drawing.Point(6, 80);
-            this.SongAlbum.Name = "SongAlbum";
-            this.SongAlbum.Size = new System.Drawing.Size(130, 23);
-            this.SongAlbum.TabIndex = 2;
-            this.SongAlbum.Click += new System.EventHandler(this.SongAlbum_Click);
-            // 
-            // SongDuration
-            // 
-            this.SongDuration.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.SongDuration.Location = new System.Drawing.Point(6, 103);
-            this.SongDuration.Name = "SongDuration";
-            this.SongDuration.Size = new System.Drawing.Size(130, 33);
-            this.SongDuration.TabIndex = 3;
-            // 
             // toolTip1
             // 
             this.toolTip1.AutomaticDelay = 200;
-            // 
-            // RandomOrderCheckBox
-            // 
-            this.RandomOrderCheckBox.AutoSize = true;
-            this.RandomOrderCheckBox.Location = new System.Drawing.Point(8, 54);
-            this.RandomOrderCheckBox.Name = "RandomOrderCheckBox";
-            this.RandomOrderCheckBox.Size = new System.Drawing.Size(139, 17);
-            this.RandomOrderCheckBox.TabIndex = 18;
-            this.RandomOrderCheckBox.Text = "Случайный (вкл/выкл)";
-            this.RandomOrderCheckBox.UseVisualStyleBackColor = true;
-            this.RandomOrderCheckBox.CheckedChanged += new System.EventHandler(this.RandomOrderCheckBox_CheckedChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(729, 719);
+            this.ClientSize = new System.Drawing.Size(669, 700);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.CloseButton);
             this.Controls.Add(this.panel1);

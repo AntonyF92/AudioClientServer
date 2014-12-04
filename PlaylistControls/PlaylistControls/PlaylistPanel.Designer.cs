@@ -38,7 +38,7 @@
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.DoubleBuffered = true;
             this.Name = "PlaylistPanel";
-            this.Size = new System.Drawing.Size(525, 560);
+            this.Size = new System.Drawing.Size(475, 560);
             this.ResumeLayout(false);
 
         }

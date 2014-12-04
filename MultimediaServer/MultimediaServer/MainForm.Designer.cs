@@ -70,7 +70,7 @@
             this.panel1.Controls.Add(this.menuStrip1);
             this.panel1.Location = new System.Drawing.Point(12, 30);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(525, 560);
+            this.panel1.Size = new System.Drawing.Size(475, 560);
             this.panel1.TabIndex = 0;
             // 
             // PlaylistCollectionWindow
@@ -79,7 +79,7 @@
             this.PlaylistCollectionWindow.Location = new System.Drawing.Point(0, 24);
             this.PlaylistCollectionWindow.Name = "PlaylistCollectionWindow";
             this.PlaylistCollectionWindow.SelectedIndex = 0;
-            this.PlaylistCollectionWindow.Size = new System.Drawing.Size(525, 536);
+            this.PlaylistCollectionWindow.Size = new System.Drawing.Size(475, 536);
             this.PlaylistCollectionWindow.TabIndex = 12;
             // 
             // menuStrip1
@@ -90,7 +90,7 @@
             this.serverToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(525, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(475, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -194,7 +194,7 @@
             this.CloseButton.FlatAppearance.BorderSize = 0;
             this.CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CloseButton.Image = global::MediaServer.Properties.Resources._1416407871_ic_close_48px_24;
-            this.CloseButton.Location = new System.Drawing.Point(510, 4);
+            this.CloseButton.Location = new System.Drawing.Point(457, 4);
             this.CloseButton.Name = "CloseButton";
             this.CloseButton.Size = new System.Drawing.Size(30, 23);
             this.CloseButton.TabIndex = 18;
@@ -209,7 +209,7 @@
             this.MinimizeButton.FlatAppearance.BorderSize = 0;
             this.MinimizeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MinimizeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.MinimizeButton.Location = new System.Drawing.Point(471, 4);
+            this.MinimizeButton.Location = new System.Drawing.Point(418, 4);
             this.MinimizeButton.Name = "MinimizeButton";
             this.MinimizeButton.Size = new System.Drawing.Size(33, 23);
             this.MinimizeButton.TabIndex = 17;
@@ -234,7 +234,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(543, 599);
+            this.ClientSize = new System.Drawing.Size(490, 599);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.CloseButton);
             this.Controls.Add(this.MinimizeButton);

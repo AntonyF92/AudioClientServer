@@ -56,6 +56,14 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="PlaylistElement.resx">
+      <DependentUpon>PlaylistElement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlaylistPanel.resx">
+      <DependentUpon>PlaylistPanel.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

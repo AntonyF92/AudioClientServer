@@ -56,6 +56,8 @@ namespace SampleClient
         {
             if (player != null && player.PlaybackState == PlaybackState.Playing && PlaybackProgressChangeEvent != null)
                 PlaybackProgressChangeEvent(blockAlignedStream.CurrentTime, TimeSpan.FromSeconds(currentFile.length), blockAlignedStream.Position);
+            if (player != null && blockAlignedStream != null && currentFile != null && player.PlaybackState == PlaybackState.Playing && blockAlignedStream.CurrentTime.TotalSeconds >= currentFile.length)
+                player.Stop();
         }
 
         public void PlayFile(AudioFileInfo fi, Playlist pl)
