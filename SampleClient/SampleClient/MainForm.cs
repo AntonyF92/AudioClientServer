@@ -26,18 +26,11 @@ namespace SampleClient
     {
         AudioPlayer audioPlayer;
         HttpClient httpClient;
-        VolumeSlider volume;
 
         public MainForm()
         {
             InitializeComponent();
             ConfigManager.Init();
-            volume = new VolumeSlider();
-            volume.Parent = PlaybackControlsContainer;
-            volume.Location = new Point(260, 32);
-            volume.Size = new Size(149, 15);
-            //panel1.Controls.Add(volume);
-            volume.VolumeChanged += volume_VolumeChanged;
 
         }
 

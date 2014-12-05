@@ -49,7 +49,7 @@ namespace SampleClient
             playlistManager = new PlaylistManager();
             //triggerThread = new Thread(TriggerNextTrack);
             //triggerThread.Start();
-            serviceTimer = new Timer(TimerTick, null, 0, timerInterval);
+            serviceTimer = new Timer(TimerTick, null, Timeout.Infinite, timerInterval);
         }
 
         void TimerTick(object state)

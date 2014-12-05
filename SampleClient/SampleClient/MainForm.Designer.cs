@@ -56,6 +56,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.CloseButton = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.volume = new NAudio.Gui.VolumeSlider();
             this.panel1.SuspendLayout();
             this.SongInfoContainer.SuspendLayout();
             this.PlaylistsContainer.SuspendLayout();
@@ -212,6 +213,7 @@
             // 
             // PlaybackControlsContainer
             // 
+            this.PlaybackControlsContainer.Controls.Add(this.volume);
             this.PlaybackControlsContainer.Controls.Add(this.RandomOrderCheckBox);
             this.PlaybackControlsContainer.Controls.Add(this.PlaybackTime);
             this.PlaybackControlsContainer.Controls.Add(this.PlaybackProgress);
@@ -347,6 +349,14 @@
             // 
             this.toolTip1.AutomaticDelay = 200;
             // 
+            // volume
+            // 
+            this.volume.Location = new System.Drawing.Point(271, 34);
+            this.volume.Name = "volume";
+            this.volume.Size = new System.Drawing.Size(130, 15);
+            this.volume.TabIndex = 19;
+            this.volume.VolumeChanged += new System.EventHandler(this.volume_VolumeChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -406,6 +416,7 @@
         private System.Windows.Forms.Label SongTitle;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.CheckBox RandomOrderCheckBox;
+        private NAudio.Gui.VolumeSlider volume;
     }
 }
 
