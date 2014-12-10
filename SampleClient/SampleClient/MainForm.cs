@@ -127,7 +127,10 @@ namespace SampleClient
             {
                 PlaylistElement item = null;
                 if (lv.TryGetItem(fileInfo, out item))
+                {
                     lv.SetActive(item);
+                    lv.ScrollControlIntoView(item);
+                }
             }));
 
             SetCurrentInfo(fileInfo.song, fileInfo.album, fileInfo.singer, TimeSpan.FromSeconds(fileInfo.length).ToString(@"mm\:ss"));
