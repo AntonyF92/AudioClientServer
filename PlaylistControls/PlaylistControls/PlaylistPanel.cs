@@ -76,6 +76,14 @@ namespace PlaylistControls
             }
         }
 
+        public PlaylistElement ActiveItem
+        {
+            get
+            {
+                return PlaylistElement.activeElement;
+            }
+        }
+
         public void SetActive(PlaylistElement item)
         {
             if (items.Contains(item))
