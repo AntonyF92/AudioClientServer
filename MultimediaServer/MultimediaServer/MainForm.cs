@@ -174,8 +174,18 @@ namespace MediaServer
                     string name;
                     if (InputBox.ShowBox("Enter playlist name:", out name) == System.Windows.Forms.DialogResult.OK)
                     {
-                        ServerData.Instance.playlistManager.AddPlaylist(CreatePlaylist(OpenFilesDialog.FileNames, name));
-                        ServerData.Instance.SavePlaylists();
+                        Task.Run(() =>
+                        {
+                            try
+                            {
+                                ServerData.Instance.playlistManager.AddPlaylist(CreatePlaylist(OpenFilesDialog.FileNames, name));
+                                ServerData.Instance.SavePlaylists();
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.ToString(), "Error");
+                            }
+                        });
                     }
                 }
             }
@@ -241,8 +251,18 @@ namespace MediaServer
                         string name = "";
                         if (InputBox.ShowBox("Enter playlist name:", out name) == System.Windows.Forms.DialogResult.OK)
                         {
-                            ServerData.Instance.playlistManager.AddPlaylist(CreatePlaylist(files.ToArray(), name));
-                            ServerData.Instance.SavePlaylists();
+                            Task.Run(() =>
+                                {
+                                    try
+                                    {
+                                        ServerData.Instance.playlistManager.AddPlaylist(CreatePlaylist(files.ToArray(), name));
+                                        ServerData.Instance.SavePlaylists();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        MessageBox.Show(ex.ToString(), "Error");
+                                    }
+                                });
                         }
                     }
                     else

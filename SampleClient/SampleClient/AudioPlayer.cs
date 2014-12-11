@@ -128,7 +128,7 @@ namespace SampleClient
             try
             {
                 currentFileLength = 0;
-                Stream ms = new MemoryStream();
+                MemoryStream ms = new MemoryStream();
                 new Thread(delegate(object o)
                 {
                     try
