@@ -29,6 +29,8 @@ namespace SampleClient
         int bytesPerSecond = 0;
         int currentFileLength = 0;
 
+        bool repeat = false;
+
         bool randomOrder = false;
         Random rnd = new Random();
 
@@ -79,7 +81,8 @@ namespace SampleClient
                         player.Resume();
                     else
                     {
-                        StopPlayer();
+                        if (player != null && player.PlaybackState != PlaybackState.Stopped)
+                            StopPlayer();
                         client = new TcpClient();
                         client.Connect(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.audio_port);
                         var stream = client.GetStream();
@@ -149,7 +152,7 @@ namespace SampleClient
 
                 bytesPerSecond = (int)(currentFile.size / currentFile.length);
                 // Pre-buffering some data to allow NAudio to start playing
-                while (ms.Length < 65536 * 2)
+                while (ms.Length < 65536 * 4)
                     Thread.Sleep(100);
                 ms.Position = 0;
                 if (currentFile.exstension == "mp3")
@@ -172,6 +175,7 @@ namespace SampleClient
             }
             catch (Exception ex)
             {
+                NextTrack();
                 if (OnExceptionEvent != null)
                     OnExceptionEvent(ex);
             }
@@ -190,25 +194,33 @@ namespace SampleClient
 
         void player_PlaybackStopped(object sender, StoppedEventArgs e)
         {
-            serviceTimer.Change(Timeout.Infinite, timerInterval);
-            if (PlaybackStopEvent != null)
-                PlaybackStopEvent();
-            if (blockAlignedStream != null)
-                blockAlignedStream.Dispose();
-            blockAlignedStream = null;
-            if (mp3Reader != null)
-                mp3Reader.Close();
-            mp3Reader = null;
-            if (waveReader != null)
-                waveReader.Dispose();
-            waveReader = null;
-            
-            /*if (player != null)
-                player.Dispose();
-            player = null;*/
-            client.Close();
-            if (!manuallyStopped)
-                NextTrack();
+            if (repeat&&!manuallyStopped)
+            {
+                blockAlignedStream.CurrentTime = TimeSpan.FromSeconds(0);
+                player.Play();
+            }
+            else
+            {
+                serviceTimer.Change(Timeout.Infinite, timerInterval);
+                if (PlaybackStopEvent != null)
+                    PlaybackStopEvent();
+                if (blockAlignedStream != null)
+                    blockAlignedStream.Dispose();
+                blockAlignedStream = null;
+                if (mp3Reader != null)
+                    mp3Reader.Close();
+                mp3Reader = null;
+                if (waveReader != null)
+                    waveReader.Dispose();
+                waveReader = null;
+
+                /*if (player != null)
+                    player.Dispose();
+                player = null;*/
+                client.Close();
+                if (!manuallyStopped)
+                    NextTrack();
+            } 
         }
 
         private void Stop()
@@ -288,6 +300,11 @@ namespace SampleClient
         public void SetRandomOrder(bool value)
         {
             randomOrder = value;
+        }
+
+        public void SetRepeat(bool value)
+        {
+            repeat = value;
         }
 
         public void Dispose()

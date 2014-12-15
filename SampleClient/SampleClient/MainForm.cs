@@ -26,6 +26,7 @@ namespace SampleClient
     {
         AudioPlayer audioPlayer;
         HttpClient httpClient;
+        bool repeat = false;
 
         public MainForm()
         {
@@ -325,6 +326,13 @@ namespace SampleClient
         private void RandomOrderCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             audioPlayer.SetRandomOrder(RandomOrderCheckBox.Checked);
+        }
+
+        private void Repeat_Click(object sender, EventArgs e)
+        {
+            repeat = !repeat;
+            audioPlayer.SetRepeat(repeat);
+            Repeat.BackColor = repeat ? SystemColors.ButtonFace : SystemColors.ActiveCaption;
         }
 
     }

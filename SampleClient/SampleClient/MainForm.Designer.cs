@@ -57,6 +57,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.CloseButton = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.Repeat = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SongInfoContainer.SuspendLayout();
             this.PlaylistsContainer.SuspendLayout();
@@ -213,6 +214,7 @@
             // 
             // PlaybackControlsContainer
             // 
+            this.PlaybackControlsContainer.Controls.Add(this.Repeat);
             this.PlaybackControlsContainer.Controls.Add(this.volume);
             this.PlaybackControlsContainer.Controls.Add(this.RandomOrderCheckBox);
             this.PlaybackControlsContainer.Controls.Add(this.PlaybackTime);
@@ -357,6 +359,19 @@
             // 
             this.toolTip1.AutomaticDelay = 200;
             // 
+            // Repeat
+            // 
+            this.Repeat.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.Repeat.FlatAppearance.BorderSize = 0;
+            this.Repeat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Repeat.Image = global::SampleClient.Properties.Resources.Loop;
+            this.Repeat.Location = new System.Drawing.Point(146, 48);
+            this.Repeat.Name = "Repeat";
+            this.Repeat.Size = new System.Drawing.Size(25, 23);
+            this.Repeat.TabIndex = 20;
+            this.Repeat.UseVisualStyleBackColor = false;
+            this.Repeat.Click += new System.EventHandler(this.Repeat_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -417,6 +432,7 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.CheckBox RandomOrderCheckBox;
         private NAudio.Gui.VolumeSlider volume;
+        private System.Windows.Forms.Button Repeat;
     }
 }
 
