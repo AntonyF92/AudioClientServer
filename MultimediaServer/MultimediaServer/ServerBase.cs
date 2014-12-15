@@ -389,7 +389,7 @@ namespace MediaServer
                     {
                         if (File.Exists(request))
                         {
-                            fileStream = File.Open(request, FileMode.Open);
+                            fileStream = File.OpenRead(request);
                             clientStream.Write(new byte[] { Convert.ToByte(true) }, 0, 1);
                             while ((readCount = fileStream.Read(buffer, 0, bufferSize)) > 0)
                                 clientStream.Write(buffer, 0, readCount);

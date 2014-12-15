@@ -38,6 +38,8 @@ namespace SampleClient
         {
             try
             {
+                if (audioPlayer != null)
+                    audioPlayer.Dispose();
                 audioPlayer = new AudioPlayer();
                 audioPlayer.playlistManager.OnCollectionLoadEvent += playlistManager_OnCollectionLoadEvent;
                 audioPlayer.playlistManager.OnChangeTrackEvent += playlistManager_OnChangeTrackEvent;
