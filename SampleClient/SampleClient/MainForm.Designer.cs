@@ -44,6 +44,7 @@
             this.SongTitle = new System.Windows.Forms.Label();
             this.PlaylistsContainer = new System.Windows.Forms.GroupBox();
             this.PlaybackControlsContainer = new System.Windows.Forms.GroupBox();
+            this.volume = new NAudio.Gui.VolumeSlider();
             this.RandomOrderCheckBox = new System.Windows.Forms.CheckBox();
             this.PlaybackTime = new System.Windows.Forms.Label();
             this.PlaybackProgress = new System.Windows.Forms.ProgressBar();
@@ -56,7 +57,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.CloseButton = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.volume = new NAudio.Gui.VolumeSlider();
             this.panel1.SuspendLayout();
             this.SongInfoContainer.SuspendLayout();
             this.PlaylistsContainer.SuspendLayout();
@@ -229,6 +229,14 @@
             this.PlaybackControlsContainer.TabIndex = 15;
             this.PlaybackControlsContainer.TabStop = false;
             // 
+            // volume
+            // 
+            this.volume.Location = new System.Drawing.Point(256, 27);
+            this.volume.Name = "volume";
+            this.volume.Size = new System.Drawing.Size(130, 15);
+            this.volume.TabIndex = 19;
+            this.volume.VolumeChanged += new System.EventHandler(this.volume_VolumeChanged);
+            // 
             // RandomOrderCheckBox
             // 
             this.RandomOrderCheckBox.AutoSize = true;
@@ -262,7 +270,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Aharoni", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(312, 19);
+            this.label2.Location = new System.Drawing.Point(297, 12);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(49, 12);
             this.label2.TabIndex = 15;
@@ -348,14 +356,6 @@
             // toolTip1
             // 
             this.toolTip1.AutomaticDelay = 200;
-            // 
-            // volume
-            // 
-            this.volume.Location = new System.Drawing.Point(271, 34);
-            this.volume.Name = "volume";
-            this.volume.Size = new System.Drawing.Size(130, 15);
-            this.volume.TabIndex = 19;
-            this.volume.VolumeChanged += new System.EventHandler(this.volume_VolumeChanged);
             // 
             // MainForm
             // 

@@ -188,6 +188,12 @@ namespace SampleClient
                     }
                     //PlaylistBox.EndUpdate();
                 }
+                if (PlaylistCollectionWindow.TabPages.Count > 0)
+                {
+                    PlaylistPanel pp = PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"] as PlaylistPanel;
+                    if (pp != null && pp.Items.Count > 0)
+                        pp.SetActive(pp.Items.First());
+                }
             }));
         }
 
@@ -209,9 +215,9 @@ namespace SampleClient
             if (pl != null)
             {
                 PlaylistPanel panel = PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"] as PlaylistPanel;
-                if (panel.SelectedItem != null)
+                if (panel.ActiveItem != null)
                 {
-                    AudioFileInfo file = panel.SelectedItem.FileInfo;
+                    AudioFileInfo file = panel.ActiveItem.FileInfo;
                     audioPlayer.PlayFile(file, pl);
                 }
             }
