@@ -141,7 +141,10 @@ namespace SampleClient
                         serviceTimer.Change(0, timerInterval);
                     }
                     else
-                        NextTrack();                    
+                    {
+                        client.Close();
+                        NextTrack();
+                    }                 
                 }
                 else if (waveOut != null && currentFile == fi && currentPlaylist == pl&&playbackState == StreamingPlaybackState.Paused)
                 {
@@ -427,7 +430,11 @@ namespace SampleClient
                     }
                     int decompressed = decompressor.DecompressFrame(frame, buffer, 0);
                     //Debug.WriteLine(String.Format("Decompressed a frame {0}", decompressed));
-                    bufferedWaveProvider.AddSamples(buffer, 0, decompressed);
+                    try
+                    {
+                        bufferedWaveProvider.AddSamples(buffer, 0, decompressed);
+                    }
+                    catch { }
 
 
                 } while (playbackState != StreamingPlaybackState.Stopped);
