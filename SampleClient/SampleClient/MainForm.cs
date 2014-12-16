@@ -233,7 +233,7 @@ namespace SampleClient
 
         private void Stop_Click(object sender, EventArgs e)
         {
-            audioPlayer.StopPlayer();
+            audioPlayer.StopPlayback();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -261,7 +261,7 @@ namespace SampleClient
 
         private void Pause_Click(object sender, EventArgs e)
         {
-            audioPlayer.PausePlayer();
+            audioPlayer.Pause();
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
