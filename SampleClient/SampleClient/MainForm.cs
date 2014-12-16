@@ -19,6 +19,7 @@ using NAudio.Wave;
 using NAudio.Gui;
 using System.Diagnostics;
 using PlaylistControls;
+using NLog;
 
 namespace SampleClient
 {
@@ -28,11 +29,14 @@ namespace SampleClient
         HttpClient httpClient;
         bool repeat = false;
 
+        Logger log;
+
         public MainForm()
         {
             InitializeComponent();
             ConfigManager.Init();
-
+            GlobalDiagnosticsContext.Set("ApplicationName", "AudioStreamPlayer");
+            log = LogManager.GetCurrentClassLogger();
         }
 
         void Init()
@@ -118,7 +122,8 @@ namespace SampleClient
 
         void audioPlayer_OnExceptionEvnet(Exception e)
         {
-            MessageBox.Show(e.ToString(), "Error");
+            //MessageBox.Show(e.ToString(), "Error");
+            log.Error(e);
         }
 
         void playlistManager_OnChangeTrackEvent(Playlist pl, AudioFileInfo fileInfo)
