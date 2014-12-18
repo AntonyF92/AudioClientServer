@@ -382,9 +382,13 @@ namespace SampleClient
                     {
                         frame = Mp3Frame.LoadFromStream(readFullyStream);
                     }
-                    catch (Exception)
+                    catch (EndOfStreamException)
                     {
                         fullyDownloaded = true;
+                        break;
+                    }
+                    catch (Exception)
+                    {
                         // probably we have aborted download from the GUI thread
                         break;
                     }

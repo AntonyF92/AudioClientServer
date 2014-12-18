@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 
 namespace SampleClient
 {
@@ -10,6 +11,7 @@ namespace SampleClient
         private readonly byte[] readAheadBuffer;
         private int readAheadLength;
         private int readAheadOffset;
+        bool end = false;
 
         public ReadFullyStream(Stream sourceStream)
         {
@@ -57,6 +59,8 @@ namespace SampleClient
         public override int Read(byte[] buffer, int offset, int count)
         {
             int bytesRead = 0;
+            if (end)
+                throw new EndOfStreamException();
             while (bytesRead < count)
             {
                 int readAheadAvailableBytes = readAheadLength - readAheadOffset;
@@ -77,6 +81,18 @@ namespace SampleClient
                     {
                         break;
                     }
+                        try
+                        {
+                            string command = ASCIIEncoding.ASCII.GetString(readAheadBuffer, 0, readAheadLength);
+                            if (command.Contains("<EndOfFile>"))
+                            {
+                                readAheadLength -= 11;
+                                end = true;
+                                if (readAheadLength == 0)
+                                    throw new EndOfStreamException();
+                            }
+                        }
+                        catch { }
                 }
             }
             pos += bytesRead;

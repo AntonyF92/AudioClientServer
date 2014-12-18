@@ -393,7 +393,8 @@ namespace MediaServer
                             clientStream.Write(new byte[] { Convert.ToByte(true) }, 0, 1);
                             while ((readCount = fileStream.Read(buffer, 0, bufferSize)) > 0)
                                 clientStream.Write(buffer, 0, readCount);
-                            clientStream.Flush();
+                            byte[] data = ASCIIEncoding.ASCII.GetBytes("<EndOfFile>");
+                            clientStream.Write(data, 0, data.Length);
                             fileStream.Close();
                         }
                     }
