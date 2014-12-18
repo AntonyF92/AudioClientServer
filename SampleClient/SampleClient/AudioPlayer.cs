@@ -48,7 +48,7 @@ namespace SampleClient
 
         Timer serviceTimer;
         bool timerIsBusy = false;
-        DateTime playbackStarted = DateTime.Now;
+        double playbackDuration = 0;
 
         public delegate void ExceptionEventHandler(Exception e);
         public event ExceptionEventHandler OnExceptionEvent;
@@ -81,6 +81,12 @@ namespace SampleClient
                 {
                     if (playbackState != StreamingPlaybackState.Stopped)
                     {
+                        if (playbackState == StreamingPlaybackState.Playing)
+                        {
+                            playbackDuration += timerInterval;
+                            if (PlaybackProgressChangeEvent != null)
+                                PlaybackProgressChangeEvent(TimeSpan.FromMilliseconds(playbackDuration), TimeSpan.FromSeconds(currentFile.length), 0);
+                        }
                         if (waveOut == null && bufferedWaveProvider != null)
                         {
                             waveOut = new WaveOut();
@@ -88,7 +94,7 @@ namespace SampleClient
                             volumeProvider = new VolumeWaveProvider16(bufferedWaveProvider);
                             waveOut.Init(volumeProvider);
                             if (PlaybackStartEvent != null)
-                                PlaybackStartEvent(TimeSpan.FromSeconds(currentFile.length), (long)(currentFile.length * waveOut.OutputWaveFormat.AverageBytesPerSecond), currentFile);
+                                PlaybackStartEvent(TimeSpan.FromSeconds(currentFile.length), (long)currentFile.length*1000, currentFile);
                         }
                         else if (bufferedWaveProvider != null)
                         {
@@ -445,6 +451,7 @@ namespace SampleClient
                     waveOut.Dispose();
                     waveOut = null;
                 }
+                playbackDuration = 0;
                 serviceTimer.Change(Timeout.Infinite, timerInterval);
                 if (client != null && client.Connected)
                     client.Close();
