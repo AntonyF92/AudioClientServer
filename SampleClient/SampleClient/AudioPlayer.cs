@@ -47,6 +47,8 @@ namespace SampleClient
         private volatile bool fullyDownloaded;
 
         Timer serviceTimer;
+        bool timerIsBusy = false;
+        DateTime playbackStarted = DateTime.Now;
 
         public delegate void ExceptionEventHandler(Exception e);
         public event ExceptionEventHandler OnExceptionEvent;
@@ -72,39 +74,49 @@ namespace SampleClient
                 PlaybackProgressChangeEvent(, TimeSpan.FromSeconds(currentFile.length), blockAlignedStream.Position);
             if (waveOut != null && blockAlignedStream != null && currentFile != null && waveOut.PlaybackState == PlaybackState.Playing && blockAlignedStream.CurrentTime.TotalSeconds >= currentFile.length)
                 waveOut.Stop();*/
-
-
-            if (playbackState != StreamingPlaybackState.Stopped)
+            if (!timerIsBusy)
             {
-                if (waveOut == null && bufferedWaveProvider != null)
+                timerIsBusy = true;
+                try
                 {
-                    waveOut = new WaveOut();
-                    waveOut.PlaybackStopped += player_PlaybackStopped;
-                    volumeProvider = new VolumeWaveProvider16(bufferedWaveProvider);
-                    waveOut.Init(volumeProvider);
-                    if (PlaybackStartEvent != null)
-                        PlaybackStartEvent(TimeSpan.FromSeconds(currentFile.length), (long)(currentFile.length * waveOut.OutputWaveFormat.AverageBytesPerSecond), currentFile);
-                }
-                else if (bufferedWaveProvider != null)
-                {
-                    var bufferedSeconds = bufferedWaveProvider.BufferedDuration.TotalSeconds;
-                    
-                    //PlaybackProgressChangeEvent(bufferedWaveProvider.WaveFormat., TimeSpan.FromSeconds(currentFile.length), blockAlignedStream.Position);
-                    // make it stutter less if we buffer up a decent amount before playing
-                    if (bufferedSeconds < 0.5 && playbackState == StreamingPlaybackState.Playing && !fullyDownloaded)
+                    if (playbackState != StreamingPlaybackState.Stopped)
                     {
-                        Pause();
-                    }
-                    else if (bufferedSeconds > 4 && playbackState == StreamingPlaybackState.Buffering)
-                    {
-                        Play();
-                    }
-                    else if (fullyDownloaded && bufferedSeconds == 0)
-                    {
-                        StopPlayback();
-                    }
-                }
+                        if (waveOut == null && bufferedWaveProvider != null)
+                        {
+                            waveOut = new WaveOut();
+                            waveOut.PlaybackStopped += player_PlaybackStopped;
+                            volumeProvider = new VolumeWaveProvider16(bufferedWaveProvider);
+                            waveOut.Init(volumeProvider);
+                            if (PlaybackStartEvent != null)
+                                PlaybackStartEvent(TimeSpan.FromSeconds(currentFile.length), (long)(currentFile.length * waveOut.OutputWaveFormat.AverageBytesPerSecond), currentFile);
+                        }
+                        else if (bufferedWaveProvider != null)
+                        {
+                            var bufferedSeconds = bufferedWaveProvider.BufferedDuration.TotalSeconds;
+                            
+                            //PlaybackProgressChangeEvent(bufferedWaveProvider.WaveFormat., TimeSpan.FromSeconds(currentFile.length), blockAlignedStream.Position);
+                            // make it stutter less if we buffer up a decent amount before playing
+                            if (bufferedSeconds < 0.5 && playbackState == StreamingPlaybackState.Playing && !fullyDownloaded)
+                            {
+                                Pause();
+                            }
+                            else if (bufferedSeconds > 4 && playbackState == StreamingPlaybackState.Buffering)
+                            {
+                                Play();
+                            }
+                            else if (fullyDownloaded && bufferedSeconds == 0)
+                            {
+                                StopPlayback();
+                                NextTrack();
+                            }
+                        }
 
+                    }
+                }
+                catch
+                {
+                } 
+                timerIsBusy = false;
             }
 
         }
@@ -115,7 +127,7 @@ namespace SampleClient
                 history.Clear();
             history.Push(fi);
             currentPlaylist = pl;
-            if (playbackState == StreamingPlaybackState.Playing)
+            if (playbackState != StreamingPlaybackState.Stopped)
                 StopPlayback();
             Play(fi, pl);
 
@@ -125,8 +137,11 @@ namespace SampleClient
         {
             try
             {
-
-                if (playbackState == StreamingPlaybackState.Stopped)
+                if (waveOut != null && currentFile == fi && currentPlaylist == pl&&playbackState == StreamingPlaybackState.Paused)
+                {
+                    playbackState = StreamingPlaybackState.Buffering;
+                }
+                else if (playbackState == StreamingPlaybackState.Stopped)
                 {
                     playbackState = StreamingPlaybackState.Buffering;
                     bufferedWaveProvider = null;
@@ -146,12 +161,9 @@ namespace SampleClient
                     else
                     {
                         client.Close();
+                        playbackState = StreamingPlaybackState.Stopped;
                         NextTrack();
                     }                 
-                }
-                else if (waveOut != null && currentFile == fi && currentPlaylist == pl&&playbackState == StreamingPlaybackState.Paused)
-                {
-                    playbackState = StreamingPlaybackState.Buffering;
                 }
                 //else
                 //{
@@ -286,9 +298,10 @@ namespace SampleClient
                     else
                         index = 0;
                     file = currentPlaylist.FileList[index];
-                    if (history.Peek() != currentFile)
+                    if (history.Count>0 && history.Peek() != currentFile)
                         history.Push(currentFile);
                     playlistManager.ChangeTrack(currentPlaylist, file);
+                    StopPlayback();
                     Play(file, currentPlaylist);
                 }
             }
@@ -318,6 +331,7 @@ namespace SampleClient
                     else
                         file = currentPlaylist.FileList[currentPlaylist.FileList.Count - 1];
                     playlistManager.ChangeTrack(currentPlaylist, file);
+                    StopPlayback();
                     Play(file, currentPlaylist);
                 }
             }
@@ -368,14 +382,9 @@ namespace SampleClient
                     {
                         frame = Mp3Frame.LoadFromStream(readFullyStream);
                     }
-                    catch (EndOfStreamException)
-                    {
-                        fullyDownloaded = true;
-                        // reached the end of the MP3 file / stream
-                        break;
-                    }
                     catch (Exception)
                     {
+                        fullyDownloaded = true;
                         // probably we have aborted download from the GUI thread
                         break;
                     }
@@ -384,6 +393,7 @@ namespace SampleClient
                         // don't think these details matter too much - just help ACM select the right codec
                         // however, the buffered provider doesn't know what sample rate it is working at
                         // until we have a frame
+
                         decompressor = CreateFrameDecompressor(frame);
                         bufferedWaveProvider = new BufferedWaveProvider(decompressor.OutputFormat);
                         bufferedWaveProvider.BufferDuration = TimeSpan.FromSeconds(currentFile.length); // allow us to get well ahead of ourselves
@@ -397,13 +407,13 @@ namespace SampleClient
                     }
                     //catch { }
 
-
                 } while (playbackState != StreamingPlaybackState.Stopped);
                 // was doing this in a finally block, but for some reason
                 // we are hanging on response stream .Dispose so never get there
                 decompressor.Dispose();
 
             }
+            catch { fullyDownloaded = true; }
             finally
             {
                 if (decompressor != null)
