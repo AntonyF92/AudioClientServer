@@ -44,6 +44,7 @@
             this.SongTitle = new System.Windows.Forms.Label();
             this.PlaylistsContainer = new System.Windows.Forms.GroupBox();
             this.PlaybackControlsContainer = new System.Windows.Forms.GroupBox();
+            this.Repeat = new System.Windows.Forms.Button();
             this.volume = new NAudio.Gui.VolumeSlider();
             this.RandomOrderCheckBox = new System.Windows.Forms.CheckBox();
             this.PlaybackTime = new System.Windows.Forms.Label();
@@ -57,7 +58,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.CloseButton = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Repeat = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SongInfoContainer.SuspendLayout();
             this.PlaylistsContainer.SuspendLayout();
@@ -231,6 +231,19 @@
             this.PlaybackControlsContainer.TabIndex = 15;
             this.PlaybackControlsContainer.TabStop = false;
             // 
+            // Repeat
+            // 
+            this.Repeat.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.Repeat.FlatAppearance.BorderSize = 0;
+            this.Repeat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Repeat.Image = global::SampleClient.Properties.Resources.Loop;
+            this.Repeat.Location = new System.Drawing.Point(146, 48);
+            this.Repeat.Name = "Repeat";
+            this.Repeat.Size = new System.Drawing.Size(25, 23);
+            this.Repeat.TabIndex = 20;
+            this.Repeat.UseVisualStyleBackColor = false;
+            this.Repeat.Click += new System.EventHandler(this.Repeat_Click);
+            // 
             // volume
             // 
             this.volume.Location = new System.Drawing.Point(256, 27);
@@ -331,10 +344,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe Script", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Font = new System.Drawing.Font("Magneto", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(23, 1);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(163, 23);
+            this.label1.Size = new System.Drawing.Size(164, 19);
             this.label1.TabIndex = 17;
             this.label1.Text = "StreamPlayer v1.0";
             this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
@@ -358,19 +371,6 @@
             // toolTip1
             // 
             this.toolTip1.AutomaticDelay = 200;
-            // 
-            // Repeat
-            // 
-            this.Repeat.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.Repeat.FlatAppearance.BorderSize = 0;
-            this.Repeat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Repeat.Image = global::SampleClient.Properties.Resources.Loop;
-            this.Repeat.Location = new System.Drawing.Point(146, 48);
-            this.Repeat.Name = "Repeat";
-            this.Repeat.Size = new System.Drawing.Size(25, 23);
-            this.Repeat.TabIndex = 20;
-            this.Repeat.UseVisualStyleBackColor = false;
-            this.Repeat.Click += new System.EventHandler(this.Repeat_Click);
             // 
             // MainForm
             // 

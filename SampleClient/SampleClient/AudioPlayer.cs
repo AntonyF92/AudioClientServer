@@ -70,10 +70,6 @@ namespace SampleClient
 
         void TimerTick(object state)
         {
-            /*if (waveOut != null && waveOut.PlaybackState == PlaybackState.Playing && PlaybackProgressChangeEvent != null)
-                PlaybackProgressChangeEvent(, TimeSpan.FromSeconds(currentFile.length), blockAlignedStream.Position);
-            if (waveOut != null && blockAlignedStream != null && currentFile != null && waveOut.PlaybackState == PlaybackState.Playing && blockAlignedStream.CurrentTime.TotalSeconds >= currentFile.length)
-                waveOut.Stop();*/
             if (!timerIsBusy)
             {
                 timerIsBusy = true;
@@ -131,7 +127,7 @@ namespace SampleClient
         {
             if (currentPlaylist != null && currentPlaylist.Name != pl.Name)
                 history.Clear();
-            if (history.Count > 0 && history.Peek() != fi)
+            if (history.Count==0 || (history.Count > 0 && history.Peek() != fi))
                 history.Push(fi);
             currentPlaylist = pl;
             if (playbackState != StreamingPlaybackState.Stopped&&currentFile!=fi)
@@ -172,30 +168,6 @@ namespace SampleClient
                         NextTrack();
                     }                 
                 }
-                //else
-                //{
-                //    if (waveOut != null && waveOut.PlaybackState != PlaybackState.Stopped)
-                //        StopPlayer();
-                //    client = new TcpClient();
-                //    client.Connect(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.audio_port);
-                //    var stream = client.GetStream();
-                //    byte[] data = Encoding.UTF8.GetBytes(fi.path);
-                //    stream.Write(data, 0, data.Length);
-                //    //stream.Flush();
-                //    /*while (!stream.DataAvailable)
-                //    {
-                //        Thread.Sleep(10);
-                //    }*/
-
-                //    currentFile = fi;
-                //    byte[] res = new byte[1];
-                //    stream.Read(res, 0, 1);
-                //    if (Convert.ToBoolean(res[0]))
-                //        PlayMp3FromStream(stream);
-                //    else
-                //        NextTrack();
-                //    //client.Close();
-                //}
             }
             catch (Exception ex)
             {
@@ -215,61 +187,6 @@ namespace SampleClient
             }
             catch (Exception ex)
             {
-            }
-        }
-
-        private void PlayMp3FromStream(Stream stream)
-        {
-            try
-            {
-                currentFileLength = 0;
-                MemoryStream ms = new MemoryStream();
-                new Thread(delegate(object o)
-                {
-                    try
-                    {
-                        byte[] buffer = new byte[ConfigManager.Instance.config.audio_buffer_size]; // 64KB chunks
-                        int read;
-                        while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
-                        {
-                            currentFileLength += read;
-                            var pos = ms.Position;
-                            ms.Position = ms.Length;
-                            ms.Write(buffer, 0, read);
-                            ms.Position = pos;
-                        }
-                    }
-                    catch { }
-                }).Start();
-
-                bytesPerSecond = (int)(currentFile.size / currentFile.length);
-                // Pre-buffering some data to allow NAudio to start playing
-                while (ms.Length < 65536 * 4)
-                    Thread.Sleep(100);
-                ms.Position = 0;
-                if (currentFile.exstension == "mp3")
-                {
-                    mp3Reader = new Mp3FileReader(ms);
-                    blockAlignedStream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(mp3Reader));
-                }
-                else
-                {
-                    waveReader = new WaveFileReader(ms);
-                    blockAlignedStream = new BlockAlignReductionStream(new WaveChannel32(waveReader));
-                }
-                serviceTimer.Change(0, timerInterval);
-                waveOut = new WaveOut(WaveCallbackInfo.FunctionCallback());
-                waveOut.PlaybackStopped += player_PlaybackStopped;
-                waveOut.Init(blockAlignedStream);
-                waveOut.Play();
-                if (PlaybackStartEvent != null)
-                    PlaybackStartEvent(TimeSpan.FromSeconds(currentFile.length), (long)(currentFile.length * blockAlignedStream.WaveFormat.AverageBytesPerSecond), currentFile);
-            }
-            catch (Exception ex)
-            {
-                NextTrack();
-                if (OnExceptionEvent != null)
-                    OnExceptionEvent(ex);
             }
         }
 
