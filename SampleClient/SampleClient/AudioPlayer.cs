@@ -131,9 +131,10 @@ namespace SampleClient
         {
             if (currentPlaylist != null && currentPlaylist.Name != pl.Name)
                 history.Clear();
-            history.Push(fi);
+            if (history.Count > 0 && history.Peek() != fi)
+                history.Push(fi);
             currentPlaylist = pl;
-            if (playbackState != StreamingPlaybackState.Stopped)
+            if (playbackState != StreamingPlaybackState.Stopped&&currentFile!=fi)
                 StopPlayback();
             Play(fi, pl);
 
@@ -145,7 +146,7 @@ namespace SampleClient
             {
                 if (waveOut != null && currentFile == fi && currentPlaylist == pl&&playbackState == StreamingPlaybackState.Paused)
                 {
-                    playbackState = StreamingPlaybackState.Buffering;
+                    Resume();
                 }
                 else if (playbackState == StreamingPlaybackState.Stopped)
                 {
@@ -421,6 +422,8 @@ namespace SampleClient
                 // was doing this in a finally block, but for some reason
                 // we are hanging on response stream .Dispose so never get there
                 decompressor.Dispose();
+                if (client != null && client.Connected)
+                    client.Close();
 
             }
             catch { fullyDownloaded = true; }
@@ -451,11 +454,23 @@ namespace SampleClient
                     waveOut.Dispose();
                     waveOut = null;
                 }
+                if (bufferedWaveProvider != null)
+                {
+                    bufferedWaveProvider.ClearBuffer();
+                    bufferedWaveProvider = null;
+                }
+                volumeProvider = null;
                 playbackDuration = 0;
                 serviceTimer.Change(Timeout.Infinite, timerInterval);
                 if (client != null && client.Connected)
                     client.Close();
             }
+        }
+
+        private void Resume()
+        {
+            waveOut.Resume();
+            playbackState = StreamingPlaybackState.Playing;
         }
 
         private void Play()
