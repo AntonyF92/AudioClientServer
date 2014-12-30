@@ -38,7 +38,7 @@
             this.Performer.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Performer.Location = new System.Drawing.Point(3, 0);
             this.Performer.Name = "Performer";
-            this.Performer.Size = new System.Drawing.Size(353, 20);
+            this.Performer.Size = new System.Drawing.Size(370, 20);
             this.Performer.TabIndex = 0;
             this.Performer.Text = "label1";
             this.Performer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -47,9 +47,9 @@
             // Duration
             // 
             this.Duration.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Duration.Location = new System.Drawing.Point(362, 0);
+            this.Duration.Location = new System.Drawing.Point(379, 0);
             this.Duration.Name = "Duration";
-            this.Duration.Size = new System.Drawing.Size(85, 20);
+            this.Duration.Size = new System.Drawing.Size(68, 20);
             this.Duration.TabIndex = 2;
             this.Duration.Text = "label1";
             this.Duration.TextAlign = System.Drawing.ContentAlignment.MiddleRight;

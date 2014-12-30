@@ -110,6 +110,7 @@ namespace MediaServer
         private void Form1_Load(object sender, EventArgs e)
         {
             ServerData.Instance.LoadData();
+            ThreadPool.QueueUserWorkItem(o => server.Listen());
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -292,6 +293,57 @@ namespace MediaServer
             {
                 MessageBox.Show(ex.Message, "Remove playlist error");
             }
+        }
+
+        private void addFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (PlaylistCollectionWindow.SelectedTab != null)
+                    if (OpenFoldersDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        List<string> files = GetFilesInFolder(OpenFoldersDialog.SelectedPath);
+                        if (files.Count > 0)
+                        {
+                            Task.Run(() =>
+                                {
+                                    try
+                                    {
+                                        Playlist pl = ServerData.Instance.playlistManager[PlaylistCollectionWindow.SelectedTab.Name];
+                                        foreach (var f in files)
+                                            pl.FileList.Add(GetFileInfo(f));
+                                        UpdatePlaylistPage(PlaylistCollectionWindow.SelectedTab, pl);
+                                        ServerData.Instance.SavePlaylists();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        MessageBox.Show(ex.ToString(), "Error");
+                                    }
+                                });
+                        }
+                        else
+                            MessageBox.Show("There is no files in that folder", "Add folder");
+                    }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error in add folder to playlist");
+            }
+        }
+
+        void UpdatePlaylistPage(TabPage page, Playlist pl)
+        {
+            PlaylistPanel panel = null;
+            page.Invoke(new Action(()=>
+            {
+                panel = page.Controls["PlaylistBox"] as PlaylistPanel;
+            }));
+            panel.Invoke(new Action(() =>
+            {
+                panel.Controls.Clear();
+                panel.Items.Clear();
+                LoadPlaylistIntoListView(panel, pl);
+            }));
         }
     }
 }

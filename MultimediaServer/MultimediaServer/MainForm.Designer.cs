@@ -147,6 +147,7 @@
             this.addFolderToolStripMenuItem.Name = "addFolderToolStripMenuItem";
             this.addFolderToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.addFolderToolStripMenuItem.Text = "Add folder";
+            this.addFolderToolStripMenuItem.Click += new System.EventHandler(this.addFolderToolStripMenuItem_Click);
             // 
             // removePlaylistToolStripMenuItem
             // 
