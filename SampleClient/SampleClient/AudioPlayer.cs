@@ -49,6 +49,14 @@ namespace SampleClient
         Timer serviceTimer;
         bool timerIsBusy = false;
         double playbackDuration = 0;
+        DateTime lastTime = default(DateTime);
+        TimeSpan deltaTime
+        {
+            get
+            {
+                return DateTime.Now - lastTime;
+            }
+        }
 
         public delegate void ExceptionEventHandler(Exception e);
         public event ExceptionEventHandler OnExceptionEvent;
@@ -79,7 +87,7 @@ namespace SampleClient
                     {
                         if (playbackState == StreamingPlaybackState.Playing)
                         {
-                            playbackDuration += timerInterval;
+                            playbackDuration += deltaTime.TotalMilliseconds;
                             if (PlaybackProgressChangeEvent != null)
                                 PlaybackProgressChangeEvent(TimeSpan.FromMilliseconds(playbackDuration), TimeSpan.FromSeconds(currentFile.length), 0);
                         }
@@ -117,7 +125,8 @@ namespace SampleClient
                 }
                 catch
                 {
-                } 
+                }
+                lastTime = DateTime.Now;
                 timerIsBusy = false;
             }
 
