@@ -48,13 +48,17 @@ namespace SampleClient
 
         Timer serviceTimer;
         bool timerIsBusy = false;
+        bool wasProcessed = false;
         double playbackDuration = 0;
         DateTime lastTime = default(DateTime);
         TimeSpan deltaTime
         {
             get
             {
-                return DateTime.Now - lastTime;
+                DateTime now = DateTime.Now;
+                TimeSpan result = now - lastTime;
+                lastTime = now;
+                return result;
             }
         }
 
@@ -88,9 +92,13 @@ namespace SampleClient
                         if (playbackState == StreamingPlaybackState.Playing)
                         {
                             playbackDuration += deltaTime.TotalMilliseconds;
+                            wasProcessed = true;
                             if (PlaybackProgressChangeEvent != null)
                                 PlaybackProgressChangeEvent(TimeSpan.FromMilliseconds(playbackDuration), TimeSpan.FromSeconds(currentFile.length), 0);
                         }
+                    }
+                    if (playbackState != StreamingPlaybackState.Stopped)
+                    {
                         if (waveOut == null && bufferedWaveProvider != null)
                         {
                             waveOut = new WaveOut();
@@ -98,12 +106,12 @@ namespace SampleClient
                             volumeProvider = new VolumeWaveProvider16(bufferedWaveProvider);
                             waveOut.Init(volumeProvider);
                             if (PlaybackStartEvent != null)
-                                PlaybackStartEvent(TimeSpan.FromSeconds(currentFile.length), (long)currentFile.length*1000, currentFile);
+                                PlaybackStartEvent(TimeSpan.FromSeconds(currentFile.length), (long)currentFile.length * 1000, currentFile);
                         }
                         else if (bufferedWaveProvider != null)
                         {
                             var bufferedSeconds = bufferedWaveProvider.BufferedDuration.TotalSeconds;
-                            
+
                             //PlaybackProgressChangeEvent(bufferedWaveProvider.WaveFormat., TimeSpan.FromSeconds(currentFile.length), blockAlignedStream.Position);
                             // make it stutter less if we buffer up a decent amount before playing
                             if (bufferedSeconds < 0.5 && playbackState == StreamingPlaybackState.Playing && !fullyDownloaded)
@@ -126,10 +134,11 @@ namespace SampleClient
                 catch
                 {
                 }
-                lastTime = DateTime.Now;
+                if (!wasProcessed)
+                    lastTime = DateTime.Now;
+                wasProcessed = false;
                 timerIsBusy = false;
             }
-
         }
 
         public void PlayFile(AudioFileInfo fi, Playlist pl)
