@@ -77,7 +77,7 @@
             // 
             this.Stop.BackColor = System.Drawing.SystemColors.Window;
             this.Stop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.Stop.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.Stop.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.Stop.FlatAppearance.BorderSize = 0;
             this.Stop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Stop.Image = ((System.Drawing.Image)(resources.GetObject("Stop.Image")));
@@ -91,7 +91,7 @@
             // Pause
             // 
             this.Pause.BackColor = System.Drawing.SystemColors.Window;
-            this.Pause.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.Pause.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.Pause.FlatAppearance.BorderSize = 0;
             this.Pause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Pause.Image = ((System.Drawing.Image)(resources.GetObject("Pause.Image")));
@@ -105,7 +105,7 @@
             // PrevTrack
             // 
             this.PrevTrack.BackColor = System.Drawing.SystemColors.Window;
-            this.PrevTrack.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.PrevTrack.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.PrevTrack.FlatAppearance.BorderSize = 0;
             this.PrevTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PrevTrack.Image = ((System.Drawing.Image)(resources.GetObject("PrevTrack.Image")));
@@ -119,7 +119,7 @@
             // NextTrack
             // 
             this.NextTrack.BackColor = System.Drawing.SystemColors.Window;
-            this.NextTrack.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.NextTrack.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.NextTrack.FlatAppearance.BorderSize = 0;
             this.NextTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.NextTrack.Image = ((System.Drawing.Image)(resources.GetObject("NextTrack.Image")));
@@ -134,7 +134,7 @@
             // 
             this.Play.BackColor = System.Drawing.SystemColors.Window;
             this.Play.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.Play.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.Play.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.Play.FlatAppearance.BorderSize = 0;
             this.Play.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Play.Image = ((System.Drawing.Image)(resources.GetObject("Play.Image")));
@@ -234,6 +234,7 @@
             // Repeat
             // 
             this.Repeat.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.Repeat.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveCaption;
             this.Repeat.FlatAppearance.BorderSize = 0;
             this.Repeat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Repeat.Image = global::SampleClient.Properties.Resources.Loop;
@@ -255,6 +256,7 @@
             // RandomOrderCheckBox
             // 
             this.RandomOrderCheckBox.AutoSize = true;
+            this.RandomOrderCheckBox.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveCaption;
             this.RandomOrderCheckBox.Location = new System.Drawing.Point(8, 54);
             this.RandomOrderCheckBox.Name = "RandomOrderCheckBox";
             this.RandomOrderCheckBox.Size = new System.Drawing.Size(139, 17);
@@ -329,7 +331,7 @@
             // 
             this.MinimizeButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.MinimizeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.MinimizeButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.MinimizeButton.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveCaption;
             this.MinimizeButton.FlatAppearance.BorderSize = 0;
             this.MinimizeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MinimizeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -357,7 +359,7 @@
             // 
             this.CloseButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.CloseButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.CloseButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.CloseButton.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveCaption;
             this.CloseButton.FlatAppearance.BorderSize = 0;
             this.CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CloseButton.Image = global::SampleClient.Properties.Resources._1416407871_ic_close_48px_24;
