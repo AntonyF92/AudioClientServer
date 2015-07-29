@@ -13,7 +13,7 @@ namespace MediaServer {
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "12.0.0.0")]
-    internal sealed partial class ServerSettings : global::System.Configuration.ApplicationSettingsBase {
+    public sealed partial class ServerSettings : global::System.Configuration.ApplicationSettingsBase {
         
         private static ServerSettings defaultInstance = ((ServerSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new ServerSettings())));
         
@@ -53,6 +53,42 @@ namespace MediaServer {
             }
             set {
                 this["data_port"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("F:\\Музыка")]
+        public string server_folder {
+            get {
+                return ((string)(this["server_folder"]));
+            }
+            set {
+                this["server_folder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("asfalot-owncloud.publicvm.com")]
+        public string server_dns {
+            get {
+                return ((string)(this["server_dns"]));
+            }
+            set {
+                this["server_dns"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12000")]
+        public int server_port {
+            get {
+                return ((int)(this["server_port"]));
+            }
+            set {
+                this["server_port"] = value;
             }
         }
     }

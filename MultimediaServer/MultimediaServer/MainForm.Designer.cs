@@ -50,6 +50,7 @@
             this.MinimizeButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.OpenFoldersDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -159,6 +160,7 @@
             // serverToolStripMenuItem
             // 
             this.serverToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.settingsToolStripMenuItem,
             this.startServerToolStripMenuItem,
             this.stopServerToolStripMenuItem,
             this.exitToolStripMenuItem});
@@ -169,21 +171,21 @@
             // startServerToolStripMenuItem
             // 
             this.startServerToolStripMenuItem.Name = "startServerToolStripMenuItem";
-            this.startServerToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.startServerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.startServerToolStripMenuItem.Text = "Start server";
             this.startServerToolStripMenuItem.Click += new System.EventHandler(this.startServerToolStripMenuItem_Click);
             // 
             // stopServerToolStripMenuItem
             // 
             this.stopServerToolStripMenuItem.Name = "stopServerToolStripMenuItem";
-            this.stopServerToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.stopServerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.stopServerToolStripMenuItem.Text = "Stop server";
             this.stopServerToolStripMenuItem.Click += new System.EventHandler(this.stopServerToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -229,6 +231,12 @@
             this.label1.Text = "Audio server";
             this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.label1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // MainForm
             // 
@@ -281,6 +289,7 @@
         private System.Windows.Forms.ToolStripMenuItem addFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removePlaylistToolStripMenuItem;
         private System.Windows.Forms.FolderBrowserDialog OpenFoldersDialog;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
     }
 }
 

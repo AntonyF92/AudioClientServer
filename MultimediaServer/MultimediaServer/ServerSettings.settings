@@ -11,5 +11,14 @@
     <Setting Name="data_port" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10000</Value>
     </Setting>
+    <Setting Name="server_folder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">F:\Музыка</Value>
+    </Setting>
+    <Setting Name="server_dns" Type="System.String" Scope="User">
+      <Value Profile="(Default)">asfalot-owncloud.publicvm.com</Value>
+    </Setting>
+    <Setting Name="server_port" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">12000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
