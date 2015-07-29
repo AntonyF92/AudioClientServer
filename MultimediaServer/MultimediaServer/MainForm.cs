@@ -217,7 +217,7 @@ namespace MediaServer
             }
             catch { }
             info.name = Path.GetFileNameWithoutExtension(file);
-            info.path = file.Replace(ServerSettings.Default.server_folder, "http://" + ServerSettings.Default.server_dns + ":" + ServerSettings.Default.server_port);
+            info.path = file.Replace(ServerSettings.Default.server_folder, "http://" + ServerSettings.Default.server_dns + ":" + ServerSettings.Default.server_port).Replace("\\", "/");
             info.exstension = Path.GetExtension(file).Replace(".", "");
             if (f != null)
             {
