@@ -58,13 +58,11 @@
             this.label1 = new System.Windows.Forms.Label();
             this.CloseButton = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.wmp = new AxWMPLib.AxWindowsMediaPlayer();
             this.panel1.SuspendLayout();
             this.SongInfoContainer.SuspendLayout();
             this.PlaylistsContainer.SuspendLayout();
             this.PlaybackControlsContainer.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.wmp)).BeginInit();
             this.SuspendLayout();
             // 
             // PlaylistCollectionWindow
@@ -376,22 +374,12 @@
             // 
             this.toolTip1.AutomaticDelay = 200;
             // 
-            // wmp
-            // 
-            this.wmp.Enabled = true;
-            this.wmp.Location = new System.Drawing.Point(745, 212);
-            this.wmp.Name = "wmp";
-            this.wmp.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("wmp.OcxState")));
-            this.wmp.Size = new System.Drawing.Size(325, 255);
-            this.wmp.TabIndex = 4;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(1158, 700);
-            this.Controls.Add(this.wmp);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.CloseButton);
             this.Controls.Add(this.panel1);
@@ -412,7 +400,6 @@
             this.PlaybackControlsContainer.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.wmp)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -448,7 +435,6 @@
         private System.Windows.Forms.CheckBox RandomOrderCheckBox;
         private NAudio.Gui.VolumeSlider volume;
         private System.Windows.Forms.Button Repeat;
-        private AxWMPLib.AxWindowsMediaPlayer wmp;
     }
 }
 

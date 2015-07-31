@@ -208,8 +208,6 @@ namespace SampleClient
             //PlaylistElement item = sender as PlaylistElement;
             PlaylistPanel pl = PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"] as PlaylistPanel;
             //audioPlayer.PlayFile(pl.SelectedItem.FileInfo, (Playlist)pl.Tag);
-            wmp.URL = pl.SelectedItem.FileInfo.path;
-            wmp.Ctlcontrols.play();
         }
 
         void volume_VolumeChanged(object sender, EventArgs e)
