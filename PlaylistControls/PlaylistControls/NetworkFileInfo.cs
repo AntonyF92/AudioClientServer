@@ -23,7 +23,10 @@ namespace PlaylistControls
 
         public override string ToString()
         {
-            return name;
+            if (!string.IsNullOrEmpty(singer) && !string.IsNullOrEmpty(song))
+                return singer + " - " + song;
+            else
+                return name;
         }
 
         public override bool Equals(object obj)

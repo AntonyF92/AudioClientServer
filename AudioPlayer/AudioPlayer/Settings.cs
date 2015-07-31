@@ -47,10 +47,13 @@ namespace AudioPlayer
                     throw new ArgumentNullException("TCP port");
                 if (string.IsNullOrEmpty(BufferSize.Text))
                     throw new ArgumentNullException("Buffer size");
+                if (string.IsNullOrEmpty(AudioPort.Text))
+                    throw new ArgumentNullException("Audio port");
                 ConfigManager.Instance.SetHost(ServerList.Text);
                 ConfigManager.Instance.SetIntOption(ConfigFields.http_port, HttpPort.Text);
-                ConfigManager.Instance.SetIntOption(ConfigFields.audio_port, TcpPort.Text);
+                ConfigManager.Instance.SetIntOption(ConfigFields.tcp_port, TcpPort.Text);
                 ConfigManager.Instance.SetIntOption(ConfigFields.audio_buffer_size, BufferSize.Text);
+                ConfigManager.Instance.SetIntOption(ConfigFields.audio_port, AudioPort.Text);
                 ConfigManager.Instance.SaveConfig();
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
             }

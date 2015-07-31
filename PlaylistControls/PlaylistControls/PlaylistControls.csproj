@@ -54,6 +54,12 @@
     <Compile Include="PlaylistPanel.Designer.cs">
       <DependentUpon>PlaylistPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlaylistView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PlaylistView.Designer.cs">
+      <DependentUpon>PlaylistView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +68,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PlaylistPanel.resx">
       <DependentUpon>PlaylistPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlaylistView.resx">
+      <DependentUpon>PlaylistView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

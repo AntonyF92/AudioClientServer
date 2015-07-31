@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 
-namespace SampleClient
+namespace AudioPlayer
 {
     public class HttpClient
     {

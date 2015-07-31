@@ -12,7 +12,8 @@ namespace AudioPlayer
     {
         http_port,
         audio_port,
-        audio_buffer_size
+        audio_buffer_size,
+        tcp_port
     }
 
     public class ConfigManager
@@ -92,8 +93,9 @@ namespace AudioPlayer
             switch (field)
             {
                 case ConfigFields.audio_buffer_size: config.audio_buffer_size = v; break;
-                case ConfigFields.audio_port: config.tcp_port = v; break;
+                case ConfigFields.audio_port: config.audio_port = v; break;
                 case ConfigFields.http_port: config.http_port = v; break;
+                case ConfigFields.tcp_port: config.tcp_port = v; break;
             }
         }
     }
