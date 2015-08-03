@@ -5,10 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace PlaylistControls
 {
+
     public class PlaylistView : ListView
     {
+
+
         public List<AudioFileInfo> PlaylistItems { get; private set; }
         public AudioFileInfo currentFile { get; private set; }
 
@@ -56,8 +60,9 @@ namespace PlaylistControls
             // 
             // duration
             // 
-            this.duration.Text = "Duration";
-            this.duration.Width = 60;
+            this.duration.Text = "Length";
+            this.duration.Width = 50;
+            this.duration.TextAlign = HorizontalAlignment.Right;
             int width = this.Size.Width - (state.Width + duration.Width);
             // 
             // performer
@@ -74,6 +79,13 @@ namespace PlaylistControls
             this.SmallImageList.Images.Add(Properties.Resources.Play);
         }
 
+        void AddGroup(string name)
+        {
+            
+            ListViewGroup group = new ListViewGroup(name, name);
+            this.Groups.Add(group);
+        }
+
         public void AddItem(AudioFileInfo file)
         {
             PlaylistItems.Add(file);
@@ -81,8 +93,11 @@ namespace PlaylistControls
             item.Tag = file;
             item.SubItems.Add(file.singer);
             item.SubItems.Add(string.IsNullOrEmpty(file.song)? file.name : file.song);
-            item.SubItems.Add(TimeSpan.FromSeconds(file.length).ToString(@"hh\:mm\:ss"));
+            item.SubItems.Add(TimeSpan.FromSeconds(file.length).ToString(@"mm\:ss"));
             file.playlistViewItem = item;
+            if (!this.Groups.ContainsGroup(el => el == file.folder))
+                AddGroup(file.folder);
+            item.Group = this.Groups[file.folder];
             this.Items.Add(item);
         }
 
@@ -107,12 +122,10 @@ namespace PlaylistControls
 
         public void UpdateAfterInit()
         {
-            this.state.Width = 20;
-            this.duration.Width = 60;
             int width = this.Size.Width - (state.Width + duration.Width + 21);
             this.performer.Width = width / 5 * 2;
             song.Width = width - performer.Width;
         }
-        
+
     }
 }

@@ -56,16 +56,12 @@ namespace MediaServer
         {
             PlaylistBox.Invoke(new Action(() =>
             {
+                PlaylistBox.BeginUpdate();
                 foreach (var item in pl.FileList)
                 {
                     PlaylistBox.AddItem(item);
-                    /*plItem.Name = item.name;
-                    plItem.Tag = item;
-                    plItem.Checked = true;
-                    while (PlaylistBox.Bounds.Width - plItem.Bounds.Width > 25)
-                        plItem.Text += " ";*/
-                    Application.DoEvents();
                 }
+                PlaylistBox.EndUpdate();
             }));
         }
 
@@ -204,6 +200,8 @@ namespace MediaServer
                 f = TagLib.File.Create(file);
             }
             catch { }
+            string folder = Path.GetDirectoryName(file);
+            info.folder = folder.Substring(folder.LastIndexOf('\\') + 1);
             info.name = Path.GetFileNameWithoutExtension(file);
             info.path = file.Replace(ServerSettings.Default.server_folder, "http://" + ServerSettings.Default.server_dns + ":" + ServerSettings.Default.server_port).Replace("\\", "/");
             info.exstension = Path.GetExtension(file).Replace(".", "");
