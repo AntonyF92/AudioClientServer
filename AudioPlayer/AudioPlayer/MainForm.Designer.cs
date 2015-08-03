@@ -53,6 +53,8 @@
             this.PlaybackTime = new System.Windows.Forms.Label();
             this.RandomButton = new System.Windows.Forms.RadioButton();
             this.PlaybackProgress = new PlaylistControls.SmoothProgressBar();
+            this.TotalTime = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SongInfoContainer.SuspendLayout();
             this.PlaylistsContainer.SuspendLayout();
@@ -147,6 +149,7 @@
             // 
             // PlaybackControlsContainer
             // 
+            this.PlaybackControlsContainer.Controls.Add(this.TotalTime);
             this.PlaybackControlsContainer.Controls.Add(this.RandomButton);
             this.PlaybackControlsContainer.Controls.Add(this.PlaybackProgress);
             this.PlaybackControlsContainer.Controls.Add(this.PlaybackTime);
@@ -155,6 +158,7 @@
             this.PlaybackControlsContainer.Controls.Add(this.NextTrack);
             this.PlaybackControlsContainer.Controls.Add(this.Play);
             this.PlaybackControlsContainer.Controls.Add(this.Pause);
+            this.PlaybackControlsContainer.Controls.Add(this.label2);
             this.PlaybackControlsContainer.Location = new System.Drawing.Point(15, 27);
             this.PlaybackControlsContainer.Name = "PlaybackControlsContainer";
             this.PlaybackControlsContainer.Size = new System.Drawing.Size(635, 100);
@@ -244,6 +248,8 @@
             this.Stop.TabIndex = 19;
             this.Stop.UseVisualStyleBackColor = true;
             this.Stop.Click += new System.EventHandler(this.Stop_Click);
+            this.Stop.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
+            this.Stop.MouseLeave += new System.EventHandler(this.Play_MouseLeave);
             // 
             // PrevTrack
             // 
@@ -258,6 +264,8 @@
             this.PrevTrack.TabIndex = 17;
             this.PrevTrack.UseVisualStyleBackColor = true;
             this.PrevTrack.Click += new System.EventHandler(this.PrevTrack_Click);
+            this.PrevTrack.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
+            this.PrevTrack.MouseLeave += new System.EventHandler(this.Play_MouseLeave);
             // 
             // NextTrack
             // 
@@ -272,6 +280,8 @@
             this.NextTrack.TabIndex = 16;
             this.NextTrack.UseVisualStyleBackColor = true;
             this.NextTrack.Click += new System.EventHandler(this.NextTrack_Click);
+            this.NextTrack.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
+            this.NextTrack.MouseLeave += new System.EventHandler(this.Play_MouseLeave);
             // 
             // Play
             // 
@@ -286,6 +296,9 @@
             this.Play.Size = new System.Drawing.Size(40, 23);
             this.Play.TabIndex = 15;
             this.Play.UseVisualStyleBackColor = true;
+            this.Play.Click += new System.EventHandler(this.Play_Click);
+            this.Play.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
+            this.Play.MouseLeave += new System.EventHandler(this.Play_MouseLeave);
             // 
             // Pause
             // 
@@ -300,14 +313,17 @@
             this.Pause.TabIndex = 18;
             this.Pause.UseVisualStyleBackColor = true;
             this.Pause.Click += new System.EventHandler(this.Pause_Click);
+            this.Pause.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
+            this.Pause.MouseLeave += new System.EventHandler(this.Play_MouseLeave);
             // 
             // PlaybackTime
             // 
-            this.PlaybackTime.Location = new System.Drawing.Point(529, 58);
+            this.PlaybackTime.BackColor = System.Drawing.Color.Transparent;
+            this.PlaybackTime.Location = new System.Drawing.Point(550, 58);
             this.PlaybackTime.Name = "PlaybackTime";
-            this.PlaybackTime.Size = new System.Drawing.Size(100, 23);
+            this.PlaybackTime.Size = new System.Drawing.Size(35, 23);
             this.PlaybackTime.TabIndex = 20;
-            this.PlaybackTime.Text = "00:00/00:00";
+            this.PlaybackTime.Text = "00:00";
             this.PlaybackTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // RandomButton
@@ -325,6 +341,7 @@
             // 
             // PlaybackProgress
             // 
+            this.PlaybackProgress.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.PlaybackProgress.Location = new System.Drawing.Point(10, 19);
             this.PlaybackProgress.Maximum = 100;
             this.PlaybackProgress.Minimum = 0;
@@ -333,6 +350,25 @@
             this.PlaybackProgress.Size = new System.Drawing.Size(619, 19);
             this.PlaybackProgress.TabIndex = 21;
             this.PlaybackProgress.Value = 0;
+            this.PlaybackProgress.Click += new System.EventHandler(this.PlaybackProgress_Click);
+            // 
+            // TotalTime
+            // 
+            this.TotalTime.Location = new System.Drawing.Point(595, 58);
+            this.TotalTime.Name = "TotalTime";
+            this.TotalTime.Size = new System.Drawing.Size(34, 23);
+            this.TotalTime.TabIndex = 23;
+            this.TotalTime.Text = "00:00";
+            this.TotalTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(573, 58);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 23);
+            this.label2.TabIndex = 24;
+            this.label2.Text = "/";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
@@ -389,6 +425,8 @@
         private PlaylistControls.SmoothProgressBar PlaybackProgress;
         private System.Windows.Forms.Label PlaybackTime;
         private System.Windows.Forms.RadioButton RandomButton;
+        private System.Windows.Forms.Label TotalTime;
+        private System.Windows.Forms.Label label2;
     }
 }
 

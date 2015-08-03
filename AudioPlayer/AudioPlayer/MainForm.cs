@@ -55,12 +55,16 @@ namespace AudioPlayer
 
         private void AudioPlayer_OnPlaybackStop(AudioFileInfo file)
         {
-            
+            PlaybackProgress.Value = 0;
+            PlaybackTime.Invoke(new Action(() =>
+            PlaybackTime.Text = "00:00"));
         }
 
         private void AudioPlayer_PlaybackProgressChanged(double position)
         {
             PlaybackProgress.Value = (int)position;
+            PlaybackTime.Invoke(new Action(() =>
+            PlaybackTime.Text = TimeSpan.FromSeconds(position).ToString(@"mm\:ss")));
         }
 
         private void AudioPlayer_OnPlaybackStart(AudioFileInfo file)
@@ -71,6 +75,8 @@ namespace AudioPlayer
             SongDuration.Text = TimeSpan.FromSeconds(file.length).ToString(@"mm\:ss");
             PlaybackProgress.Maximum = (int)file.length;
             PlaybackProgress.Value = 0;
+            TotalTime.Text = SongDuration.Text;
+            CurrentPlaylist?.SetCurrentFile(file.path);
         }
 
         void audioPlayer_PlaybackStopEvent()
@@ -130,6 +136,8 @@ namespace AudioPlayer
                     PlaylistBox.EndUpdate();
                     PlaylistBox.MouseDoubleClick += PlaylistBox_MouseDoubleClick1;
                 }
+                if (CurrentPlaylist?.Items.Count > 0)
+                    CurrentPlaylist.Items[0].Selected = true;
             }));
         }
 
@@ -142,7 +150,7 @@ namespace AudioPlayer
                 if (hit.Item != null)
                 {
                     AudioFileInfo info = hit.Item.Tag as AudioFileInfo;
-                    audioPlayer.Play(info, pl.Tag as Playlist);
+                    audioPlayer.Play(info, pl.Tag as Playlist, true);
                 }
             }
             catch (Exception ex)
@@ -151,12 +159,14 @@ namespace AudioPlayer
             }
         }
 
-        void PlaylistBox_MouseDoubleClick(object sender, MouseEventArgs e)
+        PlaylistView CurrentPlaylist
         {
-            //PlaylistElement item = sender as PlaylistElement;
-            PlaylistView pl = PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"] as PlaylistView;
-            //audioPlayer.PlayFile(pl.SelectedItem.FileInfo, (Playlist)pl.Tag);
+            get
+            {
+                return PlaylistCollectionWindow.SelectedTab?.Controls["PlaylistView"] as PlaylistView;
+            }
         }
+
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -222,19 +232,6 @@ namespace AudioPlayer
                 Init();
         }
 
-        private void PlaybackProgress_MouseClick(object sender, MouseEventArgs e)
-        {
-            //// Get mouse position(x) minus the width of the progressbar (so beginning of the progressbar is mousepos = 0 //
-            //float absoluteMouse = (PointToClient(MousePosition).X - PlaybackProgress.Bounds.X - PlaybackControlsContainer.Bounds.X - panel1.Bounds.X);
-            //// Calculate the factor for converting the position (progbarWidth/100) //
-            //float calcFactor = PlaybackProgress.Width / (float)PlaybackProgress.Maximum;
-            //// In the end convert the absolute mouse value to a relative mouse value by dividing the absolute mouse by the calcfactor //
-            //float relativeMouse = absoluteMouse / calcFactor;
-
-            //// Set the calculated relative value to the progressbar //
-            //audioPlayer.SetPosition((long)relativeMouse);
-        }
-
         private void SongTitle_MouseHover(object sender, EventArgs e)
         {
         }
@@ -270,6 +267,36 @@ namespace AudioPlayer
         private void Pause_Click(object sender, EventArgs e)
         {
             audioPlayer.Pause();
+        }
+
+        private void Play_Click(object sender, EventArgs e)
+        {
+            audioPlayer.Play(CurrentPlaylist?.SelectedItems[0]?.Tag as AudioFileInfo, CurrentPlaylist?.Tag as Playlist);
+        }
+
+        private void Play_MouseEnter(object sender, EventArgs e)
+        {
+            Button bt = sender as Button;
+            bt.BackColor = Color.LightSkyBlue;
+        }
+
+        private void Play_MouseLeave(object sender, EventArgs e)
+        {
+            Button bt = sender as Button;
+            bt.BackColor = Color.Transparent;
+        }
+
+        private void PlaybackProgress_Click(object sender, EventArgs e)
+        {
+            // Get mouse position(x) minus the width of the progressbar (so beginning of the progressbar is mousepos = 0 //
+            float absoluteMouse = (PointToClient(MousePosition).X - PlaybackProgress.Bounds.X - PlaybackControlsContainer.Bounds.X - panel1.Bounds.X);
+            // Calculate the factor for converting the position (progbarWidth/100) //
+            float calcFactor = PlaybackProgress.Width / (float)PlaybackProgress.Maximum;
+            // In the end convert the absolute mouse value to a relative mouse value by dividing the absolute mouse by the calcfactor //
+            float relativeMouse = absoluteMouse / calcFactor;
+
+            // Set the calculated relative value to the progressbar //
+            audioPlayer.SetProgress(relativeMouse);
         }
 
         private void SongAlbum_Click(object sender, EventArgs e)

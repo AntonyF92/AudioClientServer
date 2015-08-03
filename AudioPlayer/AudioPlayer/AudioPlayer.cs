@@ -124,16 +124,24 @@ namespace AudioPlayer
             wmp.pause();
         }
 
-        public void Play(AudioFileInfo file, Playlist pl)
+        public void Play(AudioFileInfo file, Playlist pl, bool forced = false)
         {
-            StopAndClear();
-            wmp.URL = file.path;
-            currentState = PlaybackState.playing;
-            wmp.play();
-            currentFile = file;
-            currentPlaylist = pl;
-            if (OnPlaybackStart != null)
-                OnPlaybackStart(currentFile);
+            if (currentState == PlaybackState.paused)
+            {
+                wmp.play();
+                currentState = PlaybackState.playing;
+            }
+            else if (currentState == PlaybackState.stopped || forced)
+            {
+                StopAndClear();
+                wmp.URL = file.path;
+                currentState = PlaybackState.playing;
+                wmp.play();
+                currentFile = file;
+                currentPlaylist = pl;
+                if (OnPlaybackStart != null)
+                    OnPlaybackStart(currentFile);
+            }
         }
 
         int GetRandomIndex(int currentIndex)
@@ -192,6 +200,7 @@ namespace AudioPlayer
 
         public void SetProgress(double value)
         {
+            //double res = value / 100 * currentFile.length;
             wmp.currentPosition = value;
         }
     }

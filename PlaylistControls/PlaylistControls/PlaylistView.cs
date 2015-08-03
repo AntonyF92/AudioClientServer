@@ -32,6 +32,9 @@ namespace PlaylistControls
             this.Parent = parent;
             this.AllowColumnReorder = false;
             this.MultiSelect = false;
+            this.ColumnWidthChanging += PlaylistView_ColumnWidthChanging;
+            this.ColumnWidthChanged += PlaylistView_ColumnWidthChanged;
+            this.DoubleBuffered = true;
             if (fill)
                 this.Dock = DockStyle.Fill;
             this.state = new System.Windows.Forms.ColumnHeader();
@@ -79,6 +82,16 @@ namespace PlaylistControls
             this.SmallImageList.Images.Add(Properties.Resources.Play);
         }
 
+        private void PlaylistView_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+        {
+            
+        }
+
+        private void PlaylistView_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            e.Cancel = true;
+        }
+
         void AddGroup(string name)
         {
             
@@ -115,7 +128,9 @@ namespace PlaylistControls
                 {
                     currentFile = v;
                     currentFile.playlistViewItem.ImageIndex = 0;
-                    currentFile.playlistViewItem.BackColor = System.Drawing.SystemColors.Control;
+                    currentFile.playlistViewItem.BackColor = System.Drawing.SystemColors.ActiveCaption;
+                    currentFile.playlistViewItem.EnsureVisible();
+                    break;
                 }
             }
         }
