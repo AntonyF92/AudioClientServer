@@ -39,18 +39,24 @@
             this.PlaylistsContainer = new System.Windows.Forms.GroupBox();
             this.PlaylistCollectionWindow = new System.Windows.Forms.TabControl();
             this.PlaybackControlsContainer = new System.Windows.Forms.GroupBox();
-            this.player = new AxWMPLib.AxWindowsMediaPlayer();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.applicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MinimizeButton = new System.Windows.Forms.Button();
             this.CloseButton = new System.Windows.Forms.Button();
+            this.Stop = new System.Windows.Forms.Button();
+            this.PrevTrack = new System.Windows.Forms.Button();
+            this.NextTrack = new System.Windows.Forms.Button();
+            this.Play = new System.Windows.Forms.Button();
+            this.Pause = new System.Windows.Forms.Button();
+            this.PlaybackTime = new System.Windows.Forms.Label();
+            this.smoothProgressBar1 = new PlaylistControls.SmoothProgressBar();
+            this.RandomButton = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             this.SongInfoContainer.SuspendLayout();
             this.PlaylistsContainer.SuspendLayout();
             this.PlaybackControlsContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.player)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,9 +66,11 @@
             this.label1.Font = new System.Drawing.Font("Magneto", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(23, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(164, 19);
+            this.label1.Size = new System.Drawing.Size(132, 19);
             this.label1.TabIndex = 21;
-            this.label1.Text = "StreamPlayer v1.0";
+            this.label1.Text = "NetPlayer v1.0";
+            this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
+            this.label1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             // 
             // panel1
             // 
@@ -130,29 +138,28 @@
             // 
             // PlaylistCollectionWindow
             // 
-            this.PlaylistCollectionWindow.Location = new System.Drawing.Point(6, 10);
+            this.PlaylistCollectionWindow.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PlaylistCollectionWindow.Location = new System.Drawing.Point(3, 16);
             this.PlaylistCollectionWindow.Name = "PlaylistCollectionWindow";
             this.PlaylistCollectionWindow.SelectedIndex = 0;
-            this.PlaylistCollectionWindow.Size = new System.Drawing.Size(475, 497);
+            this.PlaylistCollectionWindow.Size = new System.Drawing.Size(481, 496);
             this.PlaylistCollectionWindow.TabIndex = 11;
             // 
             // PlaybackControlsContainer
             // 
-            this.PlaybackControlsContainer.Controls.Add(this.player);
+            this.PlaybackControlsContainer.Controls.Add(this.RandomButton);
+            this.PlaybackControlsContainer.Controls.Add(this.smoothProgressBar1);
+            this.PlaybackControlsContainer.Controls.Add(this.PlaybackTime);
+            this.PlaybackControlsContainer.Controls.Add(this.Stop);
+            this.PlaybackControlsContainer.Controls.Add(this.PrevTrack);
+            this.PlaybackControlsContainer.Controls.Add(this.NextTrack);
+            this.PlaybackControlsContainer.Controls.Add(this.Play);
+            this.PlaybackControlsContainer.Controls.Add(this.Pause);
             this.PlaybackControlsContainer.Location = new System.Drawing.Point(15, 27);
             this.PlaybackControlsContainer.Name = "PlaybackControlsContainer";
             this.PlaybackControlsContainer.Size = new System.Drawing.Size(635, 100);
             this.PlaybackControlsContainer.TabIndex = 15;
             this.PlaybackControlsContainer.TabStop = false;
-            // 
-            // player
-            // 
-            this.player.Enabled = true;
-            this.player.Location = new System.Drawing.Point(6, 19);
-            this.player.Name = "player";
-            this.player.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("player.OcxState")));
-            this.player.Size = new System.Drawing.Size(623, 45);
-            this.player.TabIndex = 0;
             // 
             // menuStrip1
             // 
@@ -177,14 +184,16 @@
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // MinimizeButton
             // 
@@ -200,6 +209,7 @@
             this.MinimizeButton.TabIndex = 19;
             this.MinimizeButton.Text = "__";
             this.MinimizeButton.UseVisualStyleBackColor = false;
+            this.MinimizeButton.Click += new System.EventHandler(this.MinimizeButton_Click);
             // 
             // CloseButton
             // 
@@ -208,12 +218,118 @@
             this.CloseButton.FlatAppearance.BorderColor = System.Drawing.Color.Red;
             this.CloseButton.FlatAppearance.BorderSize = 0;
             this.CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CloseButton.Image = global::AudioPlayer.Properties.Resources._1416407871_ic_close_48px_24;
-            this.CloseButton.Location = new System.Drawing.Point(636, 0);
+            this.CloseButton.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.CloseButton.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.CloseButton.Location = new System.Drawing.Point(627, 0);
             this.CloseButton.Name = "CloseButton";
-            this.CloseButton.Size = new System.Drawing.Size(30, 23);
+            this.CloseButton.Size = new System.Drawing.Size(45, 23);
             this.CloseButton.TabIndex = 20;
+            this.CloseButton.Text = "X";
             this.CloseButton.UseVisualStyleBackColor = false;
+            this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
+            this.CloseButton.MouseEnter += new System.EventHandler(this.CloseButton_MouseHover);
+            this.CloseButton.MouseLeave += new System.EventHandler(this.CloseButton_MouseLeave);
+            // 
+            // Stop
+            // 
+            this.Stop.BackColor = System.Drawing.SystemColors.Window;
+            this.Stop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.Stop.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.Stop.FlatAppearance.BorderSize = 0;
+            this.Stop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Stop.Image = ((System.Drawing.Image)(resources.GetObject("Stop.Image")));
+            this.Stop.Location = new System.Drawing.Point(56, 58);
+            this.Stop.Name = "Stop";
+            this.Stop.Size = new System.Drawing.Size(40, 23);
+            this.Stop.TabIndex = 19;
+            this.Stop.UseVisualStyleBackColor = true;
+            // 
+            // PrevTrack
+            // 
+            this.PrevTrack.BackColor = System.Drawing.SystemColors.Window;
+            this.PrevTrack.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.PrevTrack.FlatAppearance.BorderSize = 0;
+            this.PrevTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PrevTrack.Image = ((System.Drawing.Image)(resources.GetObject("PrevTrack.Image")));
+            this.PrevTrack.Location = new System.Drawing.Point(148, 58);
+            this.PrevTrack.Name = "PrevTrack";
+            this.PrevTrack.Size = new System.Drawing.Size(40, 23);
+            this.PrevTrack.TabIndex = 17;
+            this.PrevTrack.UseVisualStyleBackColor = true;
+            // 
+            // NextTrack
+            // 
+            this.NextTrack.BackColor = System.Drawing.SystemColors.Window;
+            this.NextTrack.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.NextTrack.FlatAppearance.BorderSize = 0;
+            this.NextTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.NextTrack.Image = ((System.Drawing.Image)(resources.GetObject("NextTrack.Image")));
+            this.NextTrack.Location = new System.Drawing.Point(194, 58);
+            this.NextTrack.Name = "NextTrack";
+            this.NextTrack.Size = new System.Drawing.Size(40, 23);
+            this.NextTrack.TabIndex = 16;
+            this.NextTrack.UseVisualStyleBackColor = true;
+            // 
+            // Play
+            // 
+            this.Play.BackColor = System.Drawing.SystemColors.Window;
+            this.Play.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.Play.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.Play.FlatAppearance.BorderSize = 0;
+            this.Play.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Play.Image = ((System.Drawing.Image)(resources.GetObject("Play.Image")));
+            this.Play.Location = new System.Drawing.Point(10, 58);
+            this.Play.Name = "Play";
+            this.Play.Size = new System.Drawing.Size(40, 23);
+            this.Play.TabIndex = 15;
+            this.Play.UseVisualStyleBackColor = true;
+            // 
+            // Pause
+            // 
+            this.Pause.BackColor = System.Drawing.SystemColors.Window;
+            this.Pause.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.Pause.FlatAppearance.BorderSize = 0;
+            this.Pause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Pause.Image = ((System.Drawing.Image)(resources.GetObject("Pause.Image")));
+            this.Pause.Location = new System.Drawing.Point(102, 58);
+            this.Pause.Name = "Pause";
+            this.Pause.Size = new System.Drawing.Size(40, 23);
+            this.Pause.TabIndex = 18;
+            this.Pause.UseVisualStyleBackColor = true;
+            // 
+            // PlaybackTime
+            // 
+            this.PlaybackTime.Location = new System.Drawing.Point(529, 58);
+            this.PlaybackTime.Name = "PlaybackTime";
+            this.PlaybackTime.Size = new System.Drawing.Size(100, 23);
+            this.PlaybackTime.TabIndex = 20;
+            this.PlaybackTime.Text = "00:00/00:00";
+            this.PlaybackTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // smoothProgressBar1
+            // 
+            this.smoothProgressBar1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.smoothProgressBar1.Location = new System.Drawing.Point(10, 19);
+            this.smoothProgressBar1.Maximum = 100;
+            this.smoothProgressBar1.Minimum = 0;
+            this.smoothProgressBar1.Name = "smoothProgressBar1";
+            this.smoothProgressBar1.ProgressBarColor = System.Drawing.Color.CornflowerBlue;
+            this.smoothProgressBar1.Size = new System.Drawing.Size(619, 19);
+            this.smoothProgressBar1.TabIndex = 21;
+            this.smoothProgressBar1.Value = 0;
+            // 
+            // RandomButton
+            // 
+            this.RandomButton.AutoCheck = false;
+            this.RandomButton.AutoSize = true;
+            this.RandomButton.Location = new System.Drawing.Point(240, 61);
+            this.RandomButton.Name = "RandomButton";
+            this.RandomButton.Size = new System.Drawing.Size(103, 17);
+            this.RandomButton.TabIndex = 22;
+            this.RandomButton.TabStop = true;
+            this.RandomButton.Text = "Random (on/off)";
+            this.RandomButton.UseVisualStyleBackColor = true;
+            this.RandomButton.Click += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // MainForm
             // 
@@ -228,12 +344,15 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MainForm";
             this.Text = "MainForm";
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.SongInfoContainer.ResumeLayout(false);
             this.PlaylistsContainer.ResumeLayout(false);
             this.PlaybackControlsContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.player)).EndInit();
+            this.PlaybackControlsContainer.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -259,7 +378,14 @@
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.Button MinimizeButton;
-        private AxWMPLib.AxWindowsMediaPlayer player;
+        private System.Windows.Forms.Button Stop;
+        private System.Windows.Forms.Button PrevTrack;
+        private System.Windows.Forms.Button NextTrack;
+        private System.Windows.Forms.Button Play;
+        private System.Windows.Forms.Button Pause;
+        private PlaylistControls.SmoothProgressBar smoothProgressBar1;
+        private System.Windows.Forms.Label PlaybackTime;
+        private System.Windows.Forms.RadioButton RandomButton;
     }
 }
 

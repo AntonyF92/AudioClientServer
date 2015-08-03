@@ -51,11 +51,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SmoothProgressBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SmoothProgressBar.Designer.cs">
+      <DependentUpon>SmoothProgressBar.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SmoothProgressBar.resx">
+      <DependentUpon>SmoothProgressBar.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
