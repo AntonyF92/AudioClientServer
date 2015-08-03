@@ -36,11 +36,10 @@ namespace AudioPlayer
                     audioPlayer.Dispose();
                 audioPlayer = new AudioPlayer();
                 audioPlayer.playlistManager.OnCollectionLoadEvent += playlistManager_OnCollectionLoadEvent;
-                //audioPlayer.playlistManager.OnChangeTrackEvent += playlistManager_OnChangeTrackEvent;
-                //audioPlayer.OnExceptionEvent += audioPlayer_OnExceptionEvnet;
-                //audioPlayer.PlaybackStartEvent += audioPlayer_PlaybackStartEvent;
-                //audioPlayer.PlaybackProgressChangeEvent += audioPlayer_PlaybackProgressChangeEvent;
-                //audioPlayer.PlaybackStopEvent += audioPlayer_PlaybackStopEvent;
+                audioPlayer.OnException += audioPlayer_OnExceptionEvnet;
+                audioPlayer.OnPlaybackStart += AudioPlayer_OnPlaybackStart;
+                audioPlayer.PlaybackProgressChanged += AudioPlayer_PlaybackProgressChanged;
+                audioPlayer.OnPlaybackStop += AudioPlayer_OnPlaybackStop;
                 httpClient = new HttpClient(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.http_port);
                 httpClient.ExecGETquery("method_name=get_playlists", (response) =>
                 {
@@ -52,6 +51,26 @@ namespace AudioPlayer
             {
                 MessageBox.Show(ex.Message, "Initialization error");
             }
+        }
+
+        private void AudioPlayer_OnPlaybackStop(AudioFileInfo file)
+        {
+            
+        }
+
+        private void AudioPlayer_PlaybackProgressChanged(double position)
+        {
+            PlaybackProgress.Value = (int)position;
+        }
+
+        private void AudioPlayer_OnPlaybackStart(AudioFileInfo file)
+        {
+            SongAlbum.Text = file.album;
+            SongPerformer.Text = file.singer;
+            SongTitle.Text = file.song;
+            SongDuration.Text = TimeSpan.FromSeconds(file.length).ToString(@"mm\:ss");
+            PlaybackProgress.Maximum = (int)file.length;
+            PlaybackProgress.Value = 0;
         }
 
         void audioPlayer_PlaybackStopEvent()
@@ -109,8 +128,27 @@ namespace AudioPlayer
                         PlaylistBox.AddItem(item);
                     }
                     PlaylistBox.EndUpdate();
+                    PlaylistBox.MouseDoubleClick += PlaylistBox_MouseDoubleClick1;
                 }
             }));
+        }
+
+        private void PlaylistBox_MouseDoubleClick1(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                PlaylistView pl = sender as PlaylistView;
+                ListViewHitTestInfo hit = pl.HitTest(e.Location);
+                if (hit.Item != null)
+                {
+                    AudioFileInfo info = hit.Item.Tag as AudioFileInfo;
+                    audioPlayer.Play(info, pl.Tag as Playlist);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         void PlaylistBox_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -118,22 +156,6 @@ namespace AudioPlayer
             //PlaylistElement item = sender as PlaylistElement;
             PlaylistView pl = PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"] as PlaylistView;
             //audioPlayer.PlayFile(pl.SelectedItem.FileInfo, (Playlist)pl.Tag);
-        }
-
-        void volume_VolumeChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void Play_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
-
-        private void Stop_Click(object sender, EventArgs e)
-        {
-            audioPlayer.Stop();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -238,6 +260,16 @@ namespace AudioPlayer
         {
             RandomButton.Checked = !RandomButton.Checked;
             audioPlayer.SetRandomOrder(RandomButton.Checked);
+        }
+
+        private void Stop_Click(object sender, EventArgs e)
+        {
+            audioPlayer.Stop();
+        }
+
+        private void Pause_Click(object sender, EventArgs e)
+        {
+            audioPlayer.Pause();
         }
 
         private void SongAlbum_Click(object sender, EventArgs e)

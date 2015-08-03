@@ -31,7 +31,7 @@ namespace PlaylistControls
         {
             this.Parent = parent;
             this.AllowColumnReorder = false;
-            
+            this.MultiSelect = false;
             if (fill)
                 this.Dock = DockStyle.Fill;
             this.state = new System.Windows.Forms.ColumnHeader();

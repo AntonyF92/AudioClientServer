@@ -51,8 +51,8 @@
             this.Play = new System.Windows.Forms.Button();
             this.Pause = new System.Windows.Forms.Button();
             this.PlaybackTime = new System.Windows.Forms.Label();
-            this.smoothProgressBar1 = new PlaylistControls.SmoothProgressBar();
             this.RandomButton = new System.Windows.Forms.RadioButton();
+            this.PlaybackProgress = new PlaylistControls.SmoothProgressBar();
             this.panel1.SuspendLayout();
             this.SongInfoContainer.SuspendLayout();
             this.PlaylistsContainer.SuspendLayout();
@@ -148,7 +148,7 @@
             // PlaybackControlsContainer
             // 
             this.PlaybackControlsContainer.Controls.Add(this.RandomButton);
-            this.PlaybackControlsContainer.Controls.Add(this.smoothProgressBar1);
+            this.PlaybackControlsContainer.Controls.Add(this.PlaybackProgress);
             this.PlaybackControlsContainer.Controls.Add(this.PlaybackTime);
             this.PlaybackControlsContainer.Controls.Add(this.Stop);
             this.PlaybackControlsContainer.Controls.Add(this.PrevTrack);
@@ -184,14 +184,14 @@
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -243,6 +243,7 @@
             this.Stop.Size = new System.Drawing.Size(40, 23);
             this.Stop.TabIndex = 19;
             this.Stop.UseVisualStyleBackColor = true;
+            this.Stop.Click += new System.EventHandler(this.Stop_Click);
             // 
             // PrevTrack
             // 
@@ -256,6 +257,7 @@
             this.PrevTrack.Size = new System.Drawing.Size(40, 23);
             this.PrevTrack.TabIndex = 17;
             this.PrevTrack.UseVisualStyleBackColor = true;
+            this.PrevTrack.Click += new System.EventHandler(this.PrevTrack_Click);
             // 
             // NextTrack
             // 
@@ -269,6 +271,7 @@
             this.NextTrack.Size = new System.Drawing.Size(40, 23);
             this.NextTrack.TabIndex = 16;
             this.NextTrack.UseVisualStyleBackColor = true;
+            this.NextTrack.Click += new System.EventHandler(this.NextTrack_Click);
             // 
             // Play
             // 
@@ -296,6 +299,7 @@
             this.Pause.Size = new System.Drawing.Size(40, 23);
             this.Pause.TabIndex = 18;
             this.Pause.UseVisualStyleBackColor = true;
+            this.Pause.Click += new System.EventHandler(this.Pause_Click);
             // 
             // PlaybackTime
             // 
@@ -305,18 +309,6 @@
             this.PlaybackTime.TabIndex = 20;
             this.PlaybackTime.Text = "00:00/00:00";
             this.PlaybackTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // smoothProgressBar1
-            // 
-            this.smoothProgressBar1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.smoothProgressBar1.Location = new System.Drawing.Point(10, 19);
-            this.smoothProgressBar1.Maximum = 100;
-            this.smoothProgressBar1.Minimum = 0;
-            this.smoothProgressBar1.Name = "smoothProgressBar1";
-            this.smoothProgressBar1.ProgressBarColor = System.Drawing.Color.CornflowerBlue;
-            this.smoothProgressBar1.Size = new System.Drawing.Size(619, 19);
-            this.smoothProgressBar1.TabIndex = 21;
-            this.smoothProgressBar1.Value = 0;
             // 
             // RandomButton
             // 
@@ -330,6 +322,17 @@
             this.RandomButton.Text = "Random (on/off)";
             this.RandomButton.UseVisualStyleBackColor = true;
             this.RandomButton.Click += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // PlaybackProgress
+            // 
+            this.PlaybackProgress.Location = new System.Drawing.Point(10, 19);
+            this.PlaybackProgress.Maximum = 100;
+            this.PlaybackProgress.Minimum = 0;
+            this.PlaybackProgress.Name = "PlaybackProgress";
+            this.PlaybackProgress.ProgressBarColor = System.Drawing.Color.CornflowerBlue;
+            this.PlaybackProgress.Size = new System.Drawing.Size(619, 19);
+            this.PlaybackProgress.TabIndex = 21;
+            this.PlaybackProgress.Value = 0;
             // 
             // MainForm
             // 
@@ -383,7 +386,7 @@
         private System.Windows.Forms.Button NextTrack;
         private System.Windows.Forms.Button Play;
         private System.Windows.Forms.Button Pause;
-        private PlaylistControls.SmoothProgressBar smoothProgressBar1;
+        private PlaylistControls.SmoothProgressBar PlaybackProgress;
         private System.Windows.Forms.Label PlaybackTime;
         private System.Windows.Forms.RadioButton RandomButton;
     }

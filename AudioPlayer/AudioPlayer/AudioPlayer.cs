@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using AxWMPLib;
+using WMPLib;
 using PlaylistControls;
 
 namespace AudioPlayer
@@ -18,7 +18,7 @@ namespace AudioPlayer
             paused
         }
 
-        AxWindowsMediaPlayer wmp = null;
+        WindowsMediaPlayerClass wmp = null;
         public PlaylistManager playlistManager;
         private Playlist currentPlaylist = null;
         private AudioFileInfo currentFile = null;
@@ -43,15 +43,16 @@ namespace AudioPlayer
 
         public AudioPlayer()
         {
-            this.wmp = new AxWindowsMediaPlayer();
+            this.wmp = new WindowsMediaPlayerClass();
             playlistManager = new PlaylistManager();
             serviceTimer = new Timer(timerTick, null, 0, 100);
-            wmp.PlayStateChange += Wmp_PlayStateChange;
+            wmp.PlayStateChange += Wmp_PlayStateChange1;
+            wmp.volume = 100;
         }
 
-        private void Wmp_PlayStateChange(object sender, _WMPOCXEvents_PlayStateChangeEvent e)
+        private void Wmp_PlayStateChange1(int NewState)
         {
-            if (e.newState == (int)WMPLib.WMPPlayState.wmppsStopped && currentState == PlaybackState.playing)
+            if (NewState == (int)WMPLib.WMPPlayState.wmppsMediaEnded)
                 NextTrack();
         }
 
@@ -65,7 +66,7 @@ namespace AudioPlayer
                 if (currentState == PlaybackState.playing)
                 {
                     if (PlaybackProgressChanged != null)
-                        PlaybackProgressChanged(wmp.Ctlcontrols.currentPosition);
+                        PlaybackProgressChanged(wmp.currentPosition);
                 }
             }
             catch (Exception ex)
@@ -102,7 +103,7 @@ namespace AudioPlayer
         void StopAndClear()
         {
             currentState = PlaybackState.stopped;
-            wmp.Ctlcontrols.stop();
+            wmp.stop();
             currentPlaylist = null;
             if (OnStopAndClear != null)
                 OnStopAndClear(currentFile);
@@ -112,7 +113,7 @@ namespace AudioPlayer
         public void Stop()
         {
             currentState = PlaybackState.stopped;
-            wmp.Ctlcontrols.stop();
+            wmp.stop();
             if (OnPlaybackStop != null)
                 OnPlaybackStop(currentFile);
         }
@@ -120,7 +121,7 @@ namespace AudioPlayer
         public void Pause()
         {
             currentState = PlaybackState.paused;
-            wmp.Ctlcontrols.pause();
+            wmp.pause();
         }
 
         public void Play(AudioFileInfo file, Playlist pl)
@@ -128,7 +129,7 @@ namespace AudioPlayer
             StopAndClear();
             wmp.URL = file.path;
             currentState = PlaybackState.playing;
-            wmp.Ctlcontrols.play();
+            wmp.play();
             currentFile = file;
             currentPlaylist = pl;
             if (OnPlaybackStart != null)
@@ -191,7 +192,7 @@ namespace AudioPlayer
 
         public void SetProgress(double value)
         {
-            wmp.Ctlcontrols.currentPosition = value;
+            wmp.currentPosition = value;
         }
     }
 }
