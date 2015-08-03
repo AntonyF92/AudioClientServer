@@ -40,37 +40,25 @@ namespace MediaServer
             page.Name = pl.Name;
             page.Text = pl.Name;
             //ListView PlaylistBox = new ListView();
-            PlaylistPanel PlaylistBox = new PlaylistPanel();
-            page.Controls.Add(PlaylistBox);
-            PlaylistBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            //PlaylistBox.CheckBoxes = false;
-            PlaylistBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            //PlaylistBox.HideSelection = false;
-            //PlaylistBox.LabelWrap = false;
-            PlaylistBox.Location = new System.Drawing.Point(3, 3);
-            //PlaylistBox.MultiSelect = false;
-            PlaylistBox.Name = "PlaylistBox";
-            //PlaylistBox.ShowGroups = false;
-            PlaylistBox.Size = new System.Drawing.Size(232, 305);
-            PlaylistBox.TabIndex = 9;
-            //PlaylistBox.UseCompatibleStateImageBehavior = false;
-            //PlaylistBox.View = System.Windows.Forms.View.SmallIcon;
+            PlaylistView PlaylistBox = new PlaylistView();
+            PlaylistBox.Init(page, true);
             PlaylistBox.Tag = pl;
             PlaylistCollectionWindow.TabPages.Add(page);
             PlaylistCollectionWindow.SelectedTab = page;
+            PlaylistBox.UpdateAfterInit();
             Application.DoEvents();
             //PlaylistBox.BeginUpdate();
             LoadPlaylistIntoListView(PlaylistBox, pl);
             //PlaylistBox.EndUpdate();
         }
 
-        void LoadPlaylistIntoListView(PlaylistPanel PlaylistBox, Playlist pl)
+        void LoadPlaylistIntoListView(PlaylistView PlaylistBox, Playlist pl)
         {
             PlaylistBox.Invoke(new Action(() =>
             {
                 foreach (var item in pl.FileList)
                 {
-                    PlaylistBox.Items.Add(item);
+                    PlaylistBox.AddItem(item);
                     /*plItem.Name = item.name;
                     plItem.Tag = item;
                     plItem.Checked = true;
@@ -227,6 +215,7 @@ namespace MediaServer
                     info.singer = string.Join("|", f.Tag.Performers);
                     info.song = f.Tag.Title;
                     info.year = f.Tag.Year.ToString();
+                    
                 }
                 if (f.Properties != null)
                 {
@@ -283,7 +272,7 @@ namespace MediaServer
                 PlaylistCollectionWindow.Invoke(new Action(() =>
                     {
                         Playlist plForRemove = null;
-                        PlaylistPanel playlistBox = PlaylistCollectionWindow.SelectedTab.Controls["PlaylistBox"] as PlaylistPanel;
+                        PlaylistView playlistBox = PlaylistCollectionWindow.SelectedTab.Controls["PlaylistView"] as PlaylistView;
                         plForRemove = playlistBox.Tag as Playlist;
                         ServerData.Instance.playlistManager.RemovePlaylist(plForRemove);
                         PlaylistCollectionWindow.TabPages.RemoveByKey(plForRemove.Name);
@@ -333,10 +322,10 @@ namespace MediaServer
 
         void UpdatePlaylistPage(TabPage page, Playlist pl)
         {
-            PlaylistPanel panel = null;
+            PlaylistView panel = null;
             page.Invoke(new Action(()=>
             {
-                panel = page.Controls["PlaylistBox"] as PlaylistPanel;
+                panel = page.Controls["PlaylistView"] as PlaylistView;
             }));
             panel.Invoke(new Action(() =>
             {

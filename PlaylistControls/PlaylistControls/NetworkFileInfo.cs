@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace PlaylistControls
 {
@@ -20,6 +22,8 @@ namespace PlaylistControls
         public float size;
         public float size_mb;
         public string exstension;
+        [XmlIgnore]
+        public ListViewItem playlistViewItem = null;
 
         public override string ToString()
         {

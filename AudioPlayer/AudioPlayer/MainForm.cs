@@ -311,6 +311,11 @@ namespace AudioPlayer
             toolTip1.SetToolTip(SongTitle, SongTitle.Text);
         }
 
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void SongAlbum_Click(object sender, EventArgs e)
         {
 
