@@ -105,6 +105,7 @@
             // SongDuration
             // 
             this.SongDuration.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SongDuration.ForeColor = System.Drawing.SystemColors.Window;
             this.SongDuration.Location = new System.Drawing.Point(6, 103);
             this.SongDuration.Name = "SongDuration";
             this.SongDuration.Size = new System.Drawing.Size(130, 33);
@@ -113,6 +114,7 @@
             // SongAlbum
             // 
             this.SongAlbum.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SongAlbum.ForeColor = System.Drawing.SystemColors.Window;
             this.SongAlbum.Location = new System.Drawing.Point(6, 80);
             this.SongAlbum.Name = "SongAlbum";
             this.SongAlbum.Size = new System.Drawing.Size(130, 23);
@@ -121,6 +123,7 @@
             // SongPerformer
             // 
             this.SongPerformer.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SongPerformer.ForeColor = System.Drawing.SystemColors.Window;
             this.SongPerformer.Location = new System.Drawing.Point(6, 59);
             this.SongPerformer.Name = "SongPerformer";
             this.SongPerformer.Size = new System.Drawing.Size(130, 21);
@@ -129,6 +132,7 @@
             // SongTitle
             // 
             this.SongTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SongTitle.ForeColor = System.Drawing.SystemColors.Window;
             this.SongTitle.Location = new System.Drawing.Point(6, 26);
             this.SongTitle.Name = "SongTitle";
             this.SongTitle.Size = new System.Drawing.Size(130, 33);
@@ -177,6 +181,7 @@
             // 
             this.RepeatButton.AutoCheck = false;
             this.RepeatButton.AutoSize = true;
+            this.RepeatButton.ForeColor = System.Drawing.SystemColors.Window;
             this.RepeatButton.Location = new System.Drawing.Point(349, 47);
             this.RepeatButton.Name = "RepeatButton";
             this.RepeatButton.Size = new System.Drawing.Size(81, 17);
@@ -190,6 +195,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.SystemColors.Window;
             this.label3.Location = new System.Drawing.Point(15, 73);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(42, 13);
@@ -212,6 +218,7 @@
             // 
             // TotalTime
             // 
+            this.TotalTime.ForeColor = System.Drawing.SystemColors.Window;
             this.TotalTime.Location = new System.Drawing.Point(595, 44);
             this.TotalTime.Name = "TotalTime";
             this.TotalTime.Size = new System.Drawing.Size(34, 23);
@@ -223,6 +230,7 @@
             // 
             this.RandomButton.AutoCheck = false;
             this.RandomButton.AutoSize = true;
+            this.RandomButton.ForeColor = System.Drawing.SystemColors.Window;
             this.RandomButton.Location = new System.Drawing.Point(240, 47);
             this.RandomButton.Name = "RandomButton";
             this.RandomButton.Size = new System.Drawing.Size(103, 17);
@@ -249,6 +257,7 @@
             // PlaybackTime
             // 
             this.PlaybackTime.BackColor = System.Drawing.Color.Transparent;
+            this.PlaybackTime.ForeColor = System.Drawing.SystemColors.Window;
             this.PlaybackTime.Location = new System.Drawing.Point(550, 44);
             this.PlaybackTime.Name = "PlaybackTime";
             this.PlaybackTime.Size = new System.Drawing.Size(35, 23);
@@ -258,7 +267,7 @@
             // 
             // Stop
             // 
-            this.Stop.BackColor = System.Drawing.SystemColors.Window;
+            this.Stop.BackColor = System.Drawing.Color.Transparent;
             this.Stop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.Stop.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.Stop.FlatAppearance.BorderSize = 0;
@@ -268,14 +277,14 @@
             this.Stop.Name = "Stop";
             this.Stop.Size = new System.Drawing.Size(40, 23);
             this.Stop.TabIndex = 19;
-            this.Stop.UseVisualStyleBackColor = true;
+            this.Stop.UseVisualStyleBackColor = false;
             this.Stop.Click += new System.EventHandler(this.Stop_Click);
             this.Stop.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
             this.Stop.MouseLeave += new System.EventHandler(this.Play_MouseLeave);
             // 
             // PrevTrack
             // 
-            this.PrevTrack.BackColor = System.Drawing.SystemColors.Window;
+            this.PrevTrack.BackColor = System.Drawing.Color.Transparent;
             this.PrevTrack.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.PrevTrack.FlatAppearance.BorderSize = 0;
             this.PrevTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -284,14 +293,14 @@
             this.PrevTrack.Name = "PrevTrack";
             this.PrevTrack.Size = new System.Drawing.Size(40, 23);
             this.PrevTrack.TabIndex = 17;
-            this.PrevTrack.UseVisualStyleBackColor = true;
+            this.PrevTrack.UseVisualStyleBackColor = false;
             this.PrevTrack.Click += new System.EventHandler(this.PrevTrack_Click);
             this.PrevTrack.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
             this.PrevTrack.MouseLeave += new System.EventHandler(this.Play_MouseLeave);
             // 
             // NextTrack
             // 
-            this.NextTrack.BackColor = System.Drawing.SystemColors.Window;
+            this.NextTrack.BackColor = System.Drawing.Color.Transparent;
             this.NextTrack.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.NextTrack.FlatAppearance.BorderSize = 0;
             this.NextTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -300,14 +309,14 @@
             this.NextTrack.Name = "NextTrack";
             this.NextTrack.Size = new System.Drawing.Size(40, 23);
             this.NextTrack.TabIndex = 16;
-            this.NextTrack.UseVisualStyleBackColor = true;
+            this.NextTrack.UseVisualStyleBackColor = false;
             this.NextTrack.Click += new System.EventHandler(this.NextTrack_Click);
             this.NextTrack.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
             this.NextTrack.MouseLeave += new System.EventHandler(this.Play_MouseLeave);
             // 
             // Play
             // 
-            this.Play.BackColor = System.Drawing.SystemColors.Window;
+            this.Play.BackColor = System.Drawing.Color.Transparent;
             this.Play.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.Play.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.Play.FlatAppearance.BorderSize = 0;
@@ -317,14 +326,14 @@
             this.Play.Name = "Play";
             this.Play.Size = new System.Drawing.Size(40, 23);
             this.Play.TabIndex = 15;
-            this.Play.UseVisualStyleBackColor = true;
+            this.Play.UseVisualStyleBackColor = false;
             this.Play.Click += new System.EventHandler(this.Play_Click);
             this.Play.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
             this.Play.MouseLeave += new System.EventHandler(this.Play_MouseLeave);
             // 
             // Pause
             // 
-            this.Pause.BackColor = System.Drawing.SystemColors.Window;
+            this.Pause.BackColor = System.Drawing.Color.Transparent;
             this.Pause.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.Pause.FlatAppearance.BorderSize = 0;
             this.Pause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -333,13 +342,14 @@
             this.Pause.Name = "Pause";
             this.Pause.Size = new System.Drawing.Size(40, 23);
             this.Pause.TabIndex = 18;
-            this.Pause.UseVisualStyleBackColor = true;
+            this.Pause.UseVisualStyleBackColor = false;
             this.Pause.Click += new System.EventHandler(this.Pause_Click);
             this.Pause.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
             this.Pause.MouseLeave += new System.EventHandler(this.Play_MouseLeave);
             // 
             // label2
             // 
+            this.label2.ForeColor = System.Drawing.SystemColors.Window;
             this.label2.Location = new System.Drawing.Point(573, 44);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 23);
@@ -430,7 +440,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Window;
+            this.BackColor = System.Drawing.Color.SteelBlue;
             this.ClientSize = new System.Drawing.Size(669, 694);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label1);
