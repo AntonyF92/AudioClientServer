@@ -39,34 +39,38 @@
             this.PlaylistsContainer = new System.Windows.Forms.GroupBox();
             this.PlaylistCollectionWindow = new System.Windows.Forms.TabControl();
             this.PlaybackControlsContainer = new System.Windows.Forms.GroupBox();
+            this.TotalTime = new System.Windows.Forms.Label();
+            this.RandomButton = new System.Windows.Forms.RadioButton();
+            this.PlaybackTime = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.applicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MinimizeButton = new System.Windows.Forms.Button();
             this.CloseButton = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.VolumeBar = new PlaylistControls.SmoothProgressBar();
+            this.PlaybackProgress = new PlaylistControls.SmoothProgressBar();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.Stop = new System.Windows.Forms.Button();
             this.PrevTrack = new System.Windows.Forms.Button();
             this.NextTrack = new System.Windows.Forms.Button();
             this.Play = new System.Windows.Forms.Button();
             this.Pause = new System.Windows.Forms.Button();
-            this.PlaybackTime = new System.Windows.Forms.Label();
-            this.RandomButton = new System.Windows.Forms.RadioButton();
-            this.PlaybackProgress = new PlaylistControls.SmoothProgressBar();
-            this.TotalTime = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SongInfoContainer.SuspendLayout();
             this.PlaylistsContainer.SuspendLayout();
             this.PlaybackControlsContainer.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Magneto", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(23, 0);
+            this.label1.Location = new System.Drawing.Point(23, 4);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(132, 19);
             this.label1.TabIndex = 21;
@@ -149,6 +153,8 @@
             // 
             // PlaybackControlsContainer
             // 
+            this.PlaybackControlsContainer.Controls.Add(this.label3);
+            this.PlaybackControlsContainer.Controls.Add(this.VolumeBar);
             this.PlaybackControlsContainer.Controls.Add(this.TotalTime);
             this.PlaybackControlsContainer.Controls.Add(this.RandomButton);
             this.PlaybackControlsContainer.Controls.Add(this.PlaybackProgress);
@@ -164,6 +170,47 @@
             this.PlaybackControlsContainer.Size = new System.Drawing.Size(635, 100);
             this.PlaybackControlsContainer.TabIndex = 15;
             this.PlaybackControlsContainer.TabStop = false;
+            // 
+            // TotalTime
+            // 
+            this.TotalTime.Location = new System.Drawing.Point(595, 44);
+            this.TotalTime.Name = "TotalTime";
+            this.TotalTime.Size = new System.Drawing.Size(34, 23);
+            this.TotalTime.TabIndex = 23;
+            this.TotalTime.Text = "00:00";
+            this.TotalTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // RandomButton
+            // 
+            this.RandomButton.AutoCheck = false;
+            this.RandomButton.AutoSize = true;
+            this.RandomButton.Location = new System.Drawing.Point(240, 47);
+            this.RandomButton.Name = "RandomButton";
+            this.RandomButton.Size = new System.Drawing.Size(103, 17);
+            this.RandomButton.TabIndex = 22;
+            this.RandomButton.TabStop = true;
+            this.RandomButton.Text = "Random (on/off)";
+            this.RandomButton.UseVisualStyleBackColor = true;
+            this.RandomButton.Click += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // PlaybackTime
+            // 
+            this.PlaybackTime.BackColor = System.Drawing.Color.Transparent;
+            this.PlaybackTime.Location = new System.Drawing.Point(550, 44);
+            this.PlaybackTime.Name = "PlaybackTime";
+            this.PlaybackTime.Size = new System.Drawing.Size(35, 23);
+            this.PlaybackTime.TabIndex = 20;
+            this.PlaybackTime.Text = "00:00";
+            this.PlaybackTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(573, 44);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 23);
+            this.label2.TabIndex = 24;
+            this.label2.Text = "/";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // menuStrip1
             // 
@@ -234,6 +281,52 @@
             this.CloseButton.MouseEnter += new System.EventHandler(this.CloseButton_MouseHover);
             this.CloseButton.MouseLeave += new System.EventHandler(this.CloseButton_MouseLeave);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(15, 73);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(42, 13);
+            this.label3.TabIndex = 26;
+            this.label3.Text = "Volume";
+            // 
+            // VolumeBar
+            // 
+            this.VolumeBar.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.VolumeBar.Location = new System.Drawing.Point(63, 73);
+            this.VolumeBar.Maximum = 100;
+            this.VolumeBar.Minimum = 0;
+            this.VolumeBar.Name = "VolumeBar";
+            this.VolumeBar.ProgressBarColor = System.Drawing.Color.CornflowerBlue;
+            this.VolumeBar.Size = new System.Drawing.Size(97, 15);
+            this.VolumeBar.TabIndex = 25;
+            this.VolumeBar.Value = 0;
+            this.VolumeBar.Load += new System.EventHandler(this.VolumeBar_Load);
+            this.VolumeBar.Click += new System.EventHandler(this.VolumeBar_Click);
+            // 
+            // PlaybackProgress
+            // 
+            this.PlaybackProgress.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.PlaybackProgress.Location = new System.Drawing.Point(10, 19);
+            this.PlaybackProgress.Maximum = 100;
+            this.PlaybackProgress.Minimum = 0;
+            this.PlaybackProgress.Name = "PlaybackProgress";
+            this.PlaybackProgress.ProgressBarColor = System.Drawing.Color.CornflowerBlue;
+            this.PlaybackProgress.Size = new System.Drawing.Size(619, 19);
+            this.PlaybackProgress.TabIndex = 21;
+            this.PlaybackProgress.Value = 0;
+            this.PlaybackProgress.Click += new System.EventHandler(this.PlaybackProgress_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::AudioPlayer.Properties.Resources.play;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(25, 26);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 22;
+            this.pictureBox1.TabStop = false;
+            // 
             // Stop
             // 
             this.Stop.BackColor = System.Drawing.SystemColors.Window;
@@ -242,7 +335,7 @@
             this.Stop.FlatAppearance.BorderSize = 0;
             this.Stop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Stop.Image = ((System.Drawing.Image)(resources.GetObject("Stop.Image")));
-            this.Stop.Location = new System.Drawing.Point(56, 58);
+            this.Stop.Location = new System.Drawing.Point(56, 44);
             this.Stop.Name = "Stop";
             this.Stop.Size = new System.Drawing.Size(40, 23);
             this.Stop.TabIndex = 19;
@@ -258,7 +351,7 @@
             this.PrevTrack.FlatAppearance.BorderSize = 0;
             this.PrevTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PrevTrack.Image = ((System.Drawing.Image)(resources.GetObject("PrevTrack.Image")));
-            this.PrevTrack.Location = new System.Drawing.Point(148, 58);
+            this.PrevTrack.Location = new System.Drawing.Point(148, 44);
             this.PrevTrack.Name = "PrevTrack";
             this.PrevTrack.Size = new System.Drawing.Size(40, 23);
             this.PrevTrack.TabIndex = 17;
@@ -274,7 +367,7 @@
             this.NextTrack.FlatAppearance.BorderSize = 0;
             this.NextTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.NextTrack.Image = ((System.Drawing.Image)(resources.GetObject("NextTrack.Image")));
-            this.NextTrack.Location = new System.Drawing.Point(194, 58);
+            this.NextTrack.Location = new System.Drawing.Point(194, 44);
             this.NextTrack.Name = "NextTrack";
             this.NextTrack.Size = new System.Drawing.Size(40, 23);
             this.NextTrack.TabIndex = 16;
@@ -291,7 +384,7 @@
             this.Play.FlatAppearance.BorderSize = 0;
             this.Play.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Play.Image = ((System.Drawing.Image)(resources.GetObject("Play.Image")));
-            this.Play.Location = new System.Drawing.Point(10, 58);
+            this.Play.Location = new System.Drawing.Point(10, 44);
             this.Play.Name = "Play";
             this.Play.Size = new System.Drawing.Size(40, 23);
             this.Play.TabIndex = 15;
@@ -307,7 +400,7 @@
             this.Pause.FlatAppearance.BorderSize = 0;
             this.Pause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Pause.Image = ((System.Drawing.Image)(resources.GetObject("Pause.Image")));
-            this.Pause.Location = new System.Drawing.Point(102, 58);
+            this.Pause.Location = new System.Drawing.Point(102, 44);
             this.Pause.Name = "Pause";
             this.Pause.Size = new System.Drawing.Size(40, 23);
             this.Pause.TabIndex = 18;
@@ -316,73 +409,21 @@
             this.Pause.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
             this.Pause.MouseLeave += new System.EventHandler(this.Play_MouseLeave);
             // 
-            // PlaybackTime
-            // 
-            this.PlaybackTime.BackColor = System.Drawing.Color.Transparent;
-            this.PlaybackTime.Location = new System.Drawing.Point(550, 58);
-            this.PlaybackTime.Name = "PlaybackTime";
-            this.PlaybackTime.Size = new System.Drawing.Size(35, 23);
-            this.PlaybackTime.TabIndex = 20;
-            this.PlaybackTime.Text = "00:00";
-            this.PlaybackTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // RandomButton
-            // 
-            this.RandomButton.AutoCheck = false;
-            this.RandomButton.AutoSize = true;
-            this.RandomButton.Location = new System.Drawing.Point(240, 61);
-            this.RandomButton.Name = "RandomButton";
-            this.RandomButton.Size = new System.Drawing.Size(103, 17);
-            this.RandomButton.TabIndex = 22;
-            this.RandomButton.TabStop = true;
-            this.RandomButton.Text = "Random (on/off)";
-            this.RandomButton.UseVisualStyleBackColor = true;
-            this.RandomButton.Click += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
-            // PlaybackProgress
-            // 
-            this.PlaybackProgress.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.PlaybackProgress.Location = new System.Drawing.Point(10, 19);
-            this.PlaybackProgress.Maximum = 100;
-            this.PlaybackProgress.Minimum = 0;
-            this.PlaybackProgress.Name = "PlaybackProgress";
-            this.PlaybackProgress.ProgressBarColor = System.Drawing.Color.CornflowerBlue;
-            this.PlaybackProgress.Size = new System.Drawing.Size(619, 19);
-            this.PlaybackProgress.TabIndex = 21;
-            this.PlaybackProgress.Value = 0;
-            this.PlaybackProgress.Click += new System.EventHandler(this.PlaybackProgress_Click);
-            // 
-            // TotalTime
-            // 
-            this.TotalTime.Location = new System.Drawing.Point(595, 58);
-            this.TotalTime.Name = "TotalTime";
-            this.TotalTime.Size = new System.Drawing.Size(34, 23);
-            this.TotalTime.TabIndex = 23;
-            this.TotalTime.Text = "00:00";
-            this.TotalTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label2
-            // 
-            this.label2.Location = new System.Drawing.Point(573, 58);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 23);
-            this.label2.TabIndex = 24;
-            this.label2.Text = "/";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(669, 694);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.CloseButton);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.MinimizeButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
-            this.Text = "MainForm";
+            this.Text = "NetPlayer";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
@@ -394,6 +435,7 @@
             this.PlaybackControlsContainer.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -427,6 +469,9 @@
         private System.Windows.Forms.RadioButton RandomButton;
         private System.Windows.Forms.Label TotalTime;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private PlaylistControls.SmoothProgressBar VolumeBar;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

@@ -52,8 +52,8 @@ namespace AudioPlayer
 
         private void Wmp_PlayStateChange1(int NewState)
         {
-            if (NewState == (int)WMPLib.WMPPlayState.wmppsMediaEnded)
-                NextTrack();
+            //if (NewState == (int)WMPLib.WMPPlayState.wmppsMediaEnded)
+            //    NextTrack();
         }
 
         void timerTick(object state)
@@ -67,6 +67,8 @@ namespace AudioPlayer
                 {
                     if (PlaybackProgressChanged != null)
                         PlaybackProgressChanged(wmp.currentPosition);
+                    if (wmp.playState == WMPPlayState.wmppsStopped)
+                        NextTrack();
                 }
             }
             catch (Exception ex)
@@ -91,7 +93,7 @@ namespace AudioPlayer
                     else
                         index = 0;
                     file = currentPlaylist.FileList[index];
-                    if (history.Count > 0 && history.Peek() != currentFile)
+                    if (history.Count > 0 && history.Peek() != currentFile || history.Count == 0)
                         history.Push(currentFile);
                     playlistManager.ChangeTrack(currentPlaylist, file);
                     Stop();

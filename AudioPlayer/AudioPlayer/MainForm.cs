@@ -40,6 +40,7 @@ namespace AudioPlayer
                 audioPlayer.OnPlaybackStart += AudioPlayer_OnPlaybackStart;
                 audioPlayer.PlaybackProgressChanged += AudioPlayer_PlaybackProgressChanged;
                 audioPlayer.OnPlaybackStop += AudioPlayer_OnPlaybackStop;
+                audioPlayer.SetVolume(VolumeBar.Value);
                 httpClient = new HttpClient(ConfigManager.Instance.config.audio_server_dns, ConfigManager.Instance.config.http_port);
                 httpClient.ExecGETquery("method_name=get_playlists", (response) =>
                 {
@@ -69,14 +70,23 @@ namespace AudioPlayer
 
         private void AudioPlayer_OnPlaybackStart(AudioFileInfo file)
         {
-            SongAlbum.Text = file.album;
-            SongPerformer.Text = file.singer;
-            SongTitle.Text = file.song;
-            SongDuration.Text = TimeSpan.FromSeconds(file.length).ToString(@"mm\:ss");
-            PlaybackProgress.Maximum = (int)file.length;
-            PlaybackProgress.Value = 0;
-            TotalTime.Text = SongDuration.Text;
-            CurrentPlaylist?.SetCurrentFile(file.path);
+            SongAlbum.Invoke(new Action(() =>
+            SongAlbum.Text = file.album));
+            SongPerformer.Invoke(new Action(() =>
+            SongPerformer.Text = file.singer));
+            SongTitle.Invoke(new Action(() =>
+            SongTitle.Text = file.song));
+            SongDuration.Invoke(new Action(() =>
+            SongDuration.Text = TimeSpan.FromSeconds(file.length).ToString(@"mm\:ss")));
+            PlaybackProgress.Invoke(new Action(() =>
+            {
+                PlaybackProgress.Maximum = (int)file.length;
+                PlaybackProgress.Value = 0;
+            }));
+            TotalTime.Invoke(new Action(()=>
+            TotalTime.Text = TimeSpan.FromSeconds(file.length).ToString(@"mm\:ss")));
+            CurrentPlaylist?.Invoke(new Action(() =>
+            CurrentPlaylist.SetCurrentFile(file.path)));
         }
 
         void audioPlayer_PlaybackStopEvent()
@@ -163,7 +173,10 @@ namespace AudioPlayer
         {
             get
             {
-                return PlaylistCollectionWindow.SelectedTab?.Controls["PlaylistView"] as PlaylistView;
+                PlaylistView v = null;
+                PlaylistCollectionWindow.Invoke(new Action(() =>
+                v = PlaylistCollectionWindow.SelectedTab?.Controls["PlaylistView"] as PlaylistView));
+                return v;
             }
         }
 
@@ -177,6 +190,7 @@ namespace AudioPlayer
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Show();
+            VolumeBar.Value = 100;
             Application.DoEvents();
             Init();
         }
@@ -294,9 +308,28 @@ namespace AudioPlayer
             float calcFactor = PlaybackProgress.Width / (float)PlaybackProgress.Maximum;
             // In the end convert the absolute mouse value to a relative mouse value by dividing the absolute mouse by the calcfactor //
             float relativeMouse = absoluteMouse / calcFactor;
-
             // Set the calculated relative value to the progressbar //
             audioPlayer.SetProgress(relativeMouse);
+        }
+
+        private void VolumeBar_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void VolumeBar_Click(object sender, EventArgs e)
+        {
+            // Get mouse position(x) minus the width of the progressbar (so beginning of the progressbar is mousepos = 0 //
+            float absoluteMouse = (PointToClient(MousePosition).X - VolumeBar.Bounds.X - PlaybackControlsContainer.Bounds.X - panel1.Bounds.X);
+            // Calculate the factor for converting the position (progbarWidth/100) //
+            float calcFactor = VolumeBar.Width / (float)VolumeBar.Maximum;
+            // In the end convert the absolute mouse value to a relative mouse value by dividing the absolute mouse by the calcfactor //
+            float relativeMouse = absoluteMouse / calcFactor;
+
+            // Set the calculated relative value to the progressbar //
+            int res = (int)Math.Round(relativeMouse);
+            audioPlayer.SetVolume(res);
+            VolumeBar.Value = res;
         }
 
         private void SongAlbum_Click(object sender, EventArgs e)

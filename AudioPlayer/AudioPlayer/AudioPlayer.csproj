@@ -121,6 +121,7 @@
     <Content Include="Resources\Open.png" />
     <Content Include="Resources\Pause.png" />
     <Content Include="Resources\Play.png" />
+    <None Include="Resources\play1.png" />
     <Content Include="Resources\Rewind.png" />
     <Content Include="Resources\Shuffle.png" />
     <Content Include="Resources\Stop.png" />

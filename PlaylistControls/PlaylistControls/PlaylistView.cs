@@ -116,23 +116,26 @@ namespace PlaylistControls
 
         public void SetCurrentFile(string file)
         {
-            if (currentFile != null)
+            this.Invoke(new Action(() =>
             {
-                currentFile.playlistViewItem.ImageIndex = -1;
-                currentFile.playlistViewItem.BackColor = System.Drawing.Color.Transparent;
-                currentFile = null;
-            }
-            foreach (var v in PlaylistItems)
-            {
-                if (v.path == file)
+                if (currentFile != null)
                 {
-                    currentFile = v;
-                    currentFile.playlistViewItem.ImageIndex = 0;
-                    currentFile.playlistViewItem.BackColor = System.Drawing.SystemColors.ActiveCaption;
-                    currentFile.playlistViewItem.EnsureVisible();
-                    break;
+                    currentFile.playlistViewItem.ImageIndex = -1;
+                    currentFile.playlistViewItem.BackColor = System.Drawing.Color.Transparent;
+                    currentFile = null;
                 }
-            }
+                foreach (var v in PlaylistItems)
+                {
+                    if (v.path == file)
+                    {
+                        currentFile = v;
+                        currentFile.playlistViewItem.ImageIndex = 0;
+                        currentFile.playlistViewItem.BackColor = System.Drawing.SystemColors.ActiveCaption;
+                        currentFile.playlistViewItem.EnsureVisible();
+                        break;
+                    }
+                }
+            }));
         }
 
         public void UpdateAfterInit()
