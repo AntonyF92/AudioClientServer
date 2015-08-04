@@ -39,9 +39,18 @@
             this.PlaylistsContainer = new System.Windows.Forms.GroupBox();
             this.PlaylistCollectionWindow = new System.Windows.Forms.TabControl();
             this.PlaybackControlsContainer = new System.Windows.Forms.GroupBox();
+            this.RepeatButton = new System.Windows.Forms.RadioButton();
+            this.label3 = new System.Windows.Forms.Label();
+            this.VolumeBar = new PlaylistControls.SmoothProgressBar();
             this.TotalTime = new System.Windows.Forms.Label();
             this.RandomButton = new System.Windows.Forms.RadioButton();
+            this.PlaybackProgress = new PlaylistControls.SmoothProgressBar();
             this.PlaybackTime = new System.Windows.Forms.Label();
+            this.Stop = new System.Windows.Forms.Button();
+            this.PrevTrack = new System.Windows.Forms.Button();
+            this.NextTrack = new System.Windows.Forms.Button();
+            this.Play = new System.Windows.Forms.Button();
+            this.Pause = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.applicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,15 +58,7 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MinimizeButton = new System.Windows.Forms.Button();
             this.CloseButton = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.VolumeBar = new PlaylistControls.SmoothProgressBar();
-            this.PlaybackProgress = new PlaylistControls.SmoothProgressBar();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.Stop = new System.Windows.Forms.Button();
-            this.PrevTrack = new System.Windows.Forms.Button();
-            this.NextTrack = new System.Windows.Forms.Button();
-            this.Play = new System.Windows.Forms.Button();
-            this.Pause = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SongInfoContainer.SuspendLayout();
             this.PlaylistsContainer.SuspendLayout();
@@ -153,6 +154,7 @@
             // 
             // PlaybackControlsContainer
             // 
+            this.PlaybackControlsContainer.Controls.Add(this.RepeatButton);
             this.PlaybackControlsContainer.Controls.Add(this.label3);
             this.PlaybackControlsContainer.Controls.Add(this.VolumeBar);
             this.PlaybackControlsContainer.Controls.Add(this.TotalTime);
@@ -170,6 +172,43 @@
             this.PlaybackControlsContainer.Size = new System.Drawing.Size(635, 100);
             this.PlaybackControlsContainer.TabIndex = 15;
             this.PlaybackControlsContainer.TabStop = false;
+            // 
+            // RepeatButton
+            // 
+            this.RepeatButton.AutoCheck = false;
+            this.RepeatButton.AutoSize = true;
+            this.RepeatButton.Location = new System.Drawing.Point(349, 47);
+            this.RepeatButton.Name = "RepeatButton";
+            this.RepeatButton.Size = new System.Drawing.Size(81, 17);
+            this.RepeatButton.TabIndex = 27;
+            this.RepeatButton.TabStop = true;
+            this.RepeatButton.Text = "Repeat one";
+            this.RepeatButton.UseVisualStyleBackColor = true;
+            this.RepeatButton.CheckedChanged += new System.EventHandler(this.RepeatButton_CheckedChanged);
+            this.RepeatButton.Click += new System.EventHandler(this.RepeatButton_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(15, 73);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(42, 13);
+            this.label3.TabIndex = 26;
+            this.label3.Text = "Volume";
+            // 
+            // VolumeBar
+            // 
+            this.VolumeBar.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.VolumeBar.Location = new System.Drawing.Point(63, 73);
+            this.VolumeBar.Maximum = 100;
+            this.VolumeBar.Minimum = 0;
+            this.VolumeBar.Name = "VolumeBar";
+            this.VolumeBar.ProgressBarColor = System.Drawing.Color.CornflowerBlue;
+            this.VolumeBar.Size = new System.Drawing.Size(97, 15);
+            this.VolumeBar.TabIndex = 25;
+            this.VolumeBar.Value = 100;
+            this.VolumeBar.Load += new System.EventHandler(this.VolumeBar_Load);
+            this.VolumeBar.Click += new System.EventHandler(this.VolumeBar_Click);
             // 
             // TotalTime
             // 
@@ -191,118 +230,8 @@
             this.RandomButton.TabStop = true;
             this.RandomButton.Text = "Random (on/off)";
             this.RandomButton.UseVisualStyleBackColor = true;
+            this.RandomButton.CheckedChanged += new System.EventHandler(this.RandomButton_CheckedChanged);
             this.RandomButton.Click += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
-            // PlaybackTime
-            // 
-            this.PlaybackTime.BackColor = System.Drawing.Color.Transparent;
-            this.PlaybackTime.Location = new System.Drawing.Point(550, 44);
-            this.PlaybackTime.Name = "PlaybackTime";
-            this.PlaybackTime.Size = new System.Drawing.Size(35, 23);
-            this.PlaybackTime.TabIndex = 20;
-            this.PlaybackTime.Text = "00:00";
-            this.PlaybackTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label2
-            // 
-            this.label2.Location = new System.Drawing.Point(573, 44);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 23);
-            this.label2.TabIndex = 24;
-            this.label2.Text = "/";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.BackColor = System.Drawing.SystemColors.Window;
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.applicationToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(663, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // applicationToolStripMenuItem
-            // 
-            this.applicationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.settingsToolStripMenuItem,
-            this.exitToolStripMenuItem});
-            this.applicationToolStripMenuItem.Name = "applicationToolStripMenuItem";
-            this.applicationToolStripMenuItem.Size = new System.Drawing.Size(80, 20);
-            this.applicationToolStripMenuItem.Text = "Application";
-            // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // MinimizeButton
-            // 
-            this.MinimizeButton.BackColor = System.Drawing.SystemColors.Window;
-            this.MinimizeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.MinimizeButton.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control;
-            this.MinimizeButton.FlatAppearance.BorderSize = 0;
-            this.MinimizeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.MinimizeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.MinimizeButton.Location = new System.Drawing.Point(597, 0);
-            this.MinimizeButton.Name = "MinimizeButton";
-            this.MinimizeButton.Size = new System.Drawing.Size(33, 23);
-            this.MinimizeButton.TabIndex = 19;
-            this.MinimizeButton.Text = "__";
-            this.MinimizeButton.UseVisualStyleBackColor = false;
-            this.MinimizeButton.Click += new System.EventHandler(this.MinimizeButton_Click);
-            // 
-            // CloseButton
-            // 
-            this.CloseButton.BackColor = System.Drawing.SystemColors.Window;
-            this.CloseButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.CloseButton.FlatAppearance.BorderColor = System.Drawing.Color.Red;
-            this.CloseButton.FlatAppearance.BorderSize = 0;
-            this.CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CloseButton.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.CloseButton.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.CloseButton.Location = new System.Drawing.Point(627, 0);
-            this.CloseButton.Name = "CloseButton";
-            this.CloseButton.Size = new System.Drawing.Size(45, 23);
-            this.CloseButton.TabIndex = 20;
-            this.CloseButton.Text = "X";
-            this.CloseButton.UseVisualStyleBackColor = false;
-            this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
-            this.CloseButton.MouseEnter += new System.EventHandler(this.CloseButton_MouseHover);
-            this.CloseButton.MouseLeave += new System.EventHandler(this.CloseButton_MouseLeave);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 73);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(42, 13);
-            this.label3.TabIndex = 26;
-            this.label3.Text = "Volume";
-            // 
-            // VolumeBar
-            // 
-            this.VolumeBar.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.VolumeBar.Location = new System.Drawing.Point(63, 73);
-            this.VolumeBar.Maximum = 100;
-            this.VolumeBar.Minimum = 0;
-            this.VolumeBar.Name = "VolumeBar";
-            this.VolumeBar.ProgressBarColor = System.Drawing.Color.CornflowerBlue;
-            this.VolumeBar.Size = new System.Drawing.Size(97, 15);
-            this.VolumeBar.TabIndex = 25;
-            this.VolumeBar.Value = 0;
-            this.VolumeBar.Load += new System.EventHandler(this.VolumeBar_Load);
-            this.VolumeBar.Click += new System.EventHandler(this.VolumeBar_Click);
             // 
             // PlaybackProgress
             // 
@@ -317,15 +246,15 @@
             this.PlaybackProgress.Value = 0;
             this.PlaybackProgress.Click += new System.EventHandler(this.PlaybackProgress_Click);
             // 
-            // pictureBox1
+            // PlaybackTime
             // 
-            this.pictureBox1.Image = global::AudioPlayer.Properties.Resources.play;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(25, 26);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 22;
-            this.pictureBox1.TabStop = false;
+            this.PlaybackTime.BackColor = System.Drawing.Color.Transparent;
+            this.PlaybackTime.Location = new System.Drawing.Point(550, 44);
+            this.PlaybackTime.Name = "PlaybackTime";
+            this.PlaybackTime.Size = new System.Drawing.Size(35, 23);
+            this.PlaybackTime.TabIndex = 20;
+            this.PlaybackTime.Text = "00:00";
+            this.PlaybackTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Stop
             // 
@@ -409,6 +338,94 @@
             this.Pause.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
             this.Pause.MouseLeave += new System.EventHandler(this.Play_MouseLeave);
             // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(573, 44);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 23);
+            this.label2.TabIndex = 24;
+            this.label2.Text = "/";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.BackColor = System.Drawing.SystemColors.Window;
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.applicationToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(663, 24);
+            this.menuStrip1.TabIndex = 0;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // applicationToolStripMenuItem
+            // 
+            this.applicationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.settingsToolStripMenuItem,
+            this.exitToolStripMenuItem});
+            this.applicationToolStripMenuItem.Name = "applicationToolStripMenuItem";
+            this.applicationToolStripMenuItem.Size = new System.Drawing.Size(80, 20);
+            this.applicationToolStripMenuItem.Text = "Application";
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // MinimizeButton
+            // 
+            this.MinimizeButton.BackColor = System.Drawing.SystemColors.Window;
+            this.MinimizeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.MinimizeButton.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control;
+            this.MinimizeButton.FlatAppearance.BorderSize = 0;
+            this.MinimizeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.MinimizeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.MinimizeButton.Location = new System.Drawing.Point(597, 0);
+            this.MinimizeButton.Name = "MinimizeButton";
+            this.MinimizeButton.Size = new System.Drawing.Size(33, 23);
+            this.MinimizeButton.TabIndex = 19;
+            this.MinimizeButton.Text = "__";
+            this.MinimizeButton.UseVisualStyleBackColor = false;
+            this.MinimizeButton.Click += new System.EventHandler(this.MinimizeButton_Click);
+            // 
+            // CloseButton
+            // 
+            this.CloseButton.BackColor = System.Drawing.SystemColors.Window;
+            this.CloseButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.CloseButton.FlatAppearance.BorderColor = System.Drawing.Color.Red;
+            this.CloseButton.FlatAppearance.BorderSize = 0;
+            this.CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CloseButton.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.CloseButton.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.CloseButton.Location = new System.Drawing.Point(627, 0);
+            this.CloseButton.Name = "CloseButton";
+            this.CloseButton.Size = new System.Drawing.Size(45, 23);
+            this.CloseButton.TabIndex = 20;
+            this.CloseButton.Text = "X";
+            this.CloseButton.UseVisualStyleBackColor = false;
+            this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
+            this.CloseButton.MouseEnter += new System.EventHandler(this.CloseButton_MouseHover);
+            this.CloseButton.MouseLeave += new System.EventHandler(this.CloseButton_MouseLeave);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::AudioPlayer.Properties.Resources.play;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(25, 26);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 22;
+            this.pictureBox1.TabStop = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -424,6 +441,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "NetPlayer";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
@@ -472,6 +490,7 @@
         private System.Windows.Forms.Label label3;
         private PlaylistControls.SmoothProgressBar VolumeBar;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.RadioButton RepeatButton;
     }
 }
 

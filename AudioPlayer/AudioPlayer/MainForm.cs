@@ -16,7 +16,6 @@ namespace AudioPlayer
     {
         AudioPlayer audioPlayer;
         HttpClient httpClient;
-        bool repeat = false;
 
         Logger log;
 
@@ -46,12 +45,27 @@ namespace AudioPlayer
                 {
                     audioPlayer.playlistManager.LoadCollection(response.GetResponseStream());
                 });
-
+                LoadFromConfig();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Initialization error");
             }
+        }
+
+        void LoadFromConfig()
+        {
+            RandomButton.Checked = PlayerConfig.Default.Random;
+            RepeatButton.Checked = PlayerConfig.Default.Repeat_one;
+            VolumeBar.Value = PlayerConfig.Default.Volume;
+        }
+
+        void SaveConfig()
+        {
+            PlayerConfig.Default.Random = RandomButton.Checked;
+            PlayerConfig.Default.Repeat_one = RepeatButton.Checked;
+            PlayerConfig.Default.Volume = VolumeBar.Value;
+            PlayerConfig.Default.Save();
         }
 
         private void AudioPlayer_OnPlaybackStop(AudioFileInfo file)
@@ -190,9 +204,14 @@ namespace AudioPlayer
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Show();
-            VolumeBar.Value = 100;
+            VolumeBar.ValueChanged += VolumeBar_ValueChanged;
             Application.DoEvents();
             Init();
+        }
+
+        private void VolumeBar_ValueChanged()
+        {
+            audioPlayer?.SetVolume(VolumeBar.Value);
         }
 
         private void NextTrack_Click(object sender, EventArgs e)
@@ -270,7 +289,6 @@ namespace AudioPlayer
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             RandomButton.Checked = !RandomButton.Checked;
-            audioPlayer.SetRandomOrder(RandomButton.Checked);
         }
 
         private void Stop_Click(object sender, EventArgs e)
@@ -317,6 +335,28 @@ namespace AudioPlayer
 
         }
 
+        private void RepeatButton_CheckedChanged(object sender, EventArgs e)
+        {
+            audioPlayer.SetRepeat(RepeatButton.Checked);
+
+        }
+
+        private void RandomButton_CheckedChanged(object sender, EventArgs e)
+        {
+            audioPlayer.SetRandomOrder(RandomButton.Checked);
+
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                SaveConfig();
+            }
+            catch
+            { }
+        }
+
         private void VolumeBar_Click(object sender, EventArgs e)
         {
             // Get mouse position(x) minus the width of the progressbar (so beginning of the progressbar is mousepos = 0 //
@@ -328,8 +368,12 @@ namespace AudioPlayer
 
             // Set the calculated relative value to the progressbar //
             int res = (int)Math.Round(relativeMouse);
-            audioPlayer.SetVolume(res);
             VolumeBar.Value = res;
+        }
+
+        private void RepeatButton_Click(object sender, EventArgs e)
+        {
+            RepeatButton.Checked = !RepeatButton.Checked;
         }
 
         private void SongAlbum_Click(object sender, EventArgs e)
@@ -337,13 +381,6 @@ namespace AudioPlayer
 
         }
 
-        private void RandomOrderCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            //.SetRandomOrder(RandomOrderCheckBox.Checked);
-        }
 
-        private void Repeat_Click(object sender, EventArgs e)
-        {
-        }
     }
 }

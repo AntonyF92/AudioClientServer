@@ -68,7 +68,12 @@ namespace AudioPlayer
                     if (PlaybackProgressChanged != null)
                         PlaybackProgressChanged(wmp.currentPosition);
                     if (wmp.playState == WMPPlayState.wmppsStopped)
-                        NextTrack();
+                    {
+                        if (!repeat)
+                            NextTrack();
+                        else
+                            Play(currentFile, currentPlaylist, true);
+                    }
                 }
             }
             catch (Exception ex)

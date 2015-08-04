@@ -17,6 +17,9 @@ namespace PlaylistControls
             InitializeComponent();
         }
 
+        public delegate void ValueChangedHandler();
+        public event ValueChangedHandler ValueChanged = null;
+
         int min = 0;    // Minimum value for progress range
         int max = 100;  // Maximum value for progress range
         int val = 0;        // Current progress
@@ -167,6 +170,8 @@ namespace PlaylistControls
 
                 // Invalidate the intersection region only.
                 this.Invalidate(updateRect);
+                if (ValueChanged != null)
+                    ValueChanged();
             }
         }
 
