@@ -269,7 +269,7 @@
             // 
             this.Stop.BackColor = System.Drawing.Color.Transparent;
             this.Stop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.Stop.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.Stop.FlatAppearance.BorderColor = System.Drawing.Color.SteelBlue;
             this.Stop.FlatAppearance.BorderSize = 0;
             this.Stop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Stop.Image = ((System.Drawing.Image)(resources.GetObject("Stop.Image")));
@@ -285,7 +285,7 @@
             // PrevTrack
             // 
             this.PrevTrack.BackColor = System.Drawing.Color.Transparent;
-            this.PrevTrack.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.PrevTrack.FlatAppearance.BorderColor = System.Drawing.Color.SteelBlue;
             this.PrevTrack.FlatAppearance.BorderSize = 0;
             this.PrevTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PrevTrack.Image = ((System.Drawing.Image)(resources.GetObject("PrevTrack.Image")));
@@ -301,7 +301,7 @@
             // NextTrack
             // 
             this.NextTrack.BackColor = System.Drawing.Color.Transparent;
-            this.NextTrack.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.NextTrack.FlatAppearance.BorderColor = System.Drawing.Color.SteelBlue;
             this.NextTrack.FlatAppearance.BorderSize = 0;
             this.NextTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.NextTrack.Image = ((System.Drawing.Image)(resources.GetObject("NextTrack.Image")));
@@ -318,7 +318,7 @@
             // 
             this.Play.BackColor = System.Drawing.Color.Transparent;
             this.Play.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.Play.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.Play.FlatAppearance.BorderColor = System.Drawing.Color.SteelBlue;
             this.Play.FlatAppearance.BorderSize = 0;
             this.Play.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Play.Image = ((System.Drawing.Image)(resources.GetObject("Play.Image")));
@@ -334,7 +334,7 @@
             // Pause
             // 
             this.Pause.BackColor = System.Drawing.Color.Transparent;
-            this.Pause.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.Pause.FlatAppearance.BorderColor = System.Drawing.Color.SteelBlue;
             this.Pause.FlatAppearance.BorderSize = 0;
             this.Pause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Pause.Image = ((System.Drawing.Image)(resources.GetObject("Pause.Image")));
