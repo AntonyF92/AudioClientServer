@@ -27,6 +27,7 @@ namespace AudioPlayer
             TcpPort.Text = ConfigManager.Instance.config.tcp_port.ToString();
             HttpPort.Text = ConfigManager.Instance.config.http_port.ToString();
             BufferSize.Text = ConfigManager.Instance.config.audio_buffer_size.ToString();
+            AudioPort.Text = ConfigManager.Instance.config.audio_port.ToString();
         }
 
         private void TcpPort_KeyPress(object sender, KeyPressEventArgs e)

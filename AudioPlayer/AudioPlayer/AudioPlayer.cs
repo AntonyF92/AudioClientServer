@@ -140,6 +140,8 @@ namespace AudioPlayer
             }
             else if (currentState == PlaybackState.stopped || forced)
             {
+                if (history.Count > 0 && history.Peek() != currentFile || history.Count == 0 && currentFile != null)
+                    history.Push(currentFile);
                 StopAndClear();
                 wmp.URL = file.path;
                 currentState = PlaybackState.playing;
