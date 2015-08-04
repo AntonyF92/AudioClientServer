@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>play.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog">
       <HintPath>..\..\MultimediaServer\MultimediaServer\NLog.dll</HintPath>
@@ -117,6 +120,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="play.ico" />
     <Content Include="Resources\1416407809_ic_close_48px-128.png" />
     <Content Include="Resources\1416407846_ic_close_48px-32.png" />
     <None Include="Resources\1416407871_ic_close_48px-241.png" />
