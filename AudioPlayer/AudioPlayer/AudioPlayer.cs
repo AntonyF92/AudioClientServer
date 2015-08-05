@@ -143,7 +143,7 @@ namespace AudioPlayer
                 if (history.Count > 0 && history.Peek() != currentFile || history.Count == 0 && currentFile != null)
                     history.Push(currentFile);
                 StopAndClear();
-                wmp.URL = file.path;
+                wmp.URL = file.GetURL();
                 currentState = PlaybackState.playing;
                 wmp.play();
                 currentFile = file;

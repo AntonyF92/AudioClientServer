@@ -203,7 +203,7 @@ namespace MediaServer
             string folder = Path.GetDirectoryName(file);
             info.folder = folder.Substring(folder.LastIndexOf('\\') + 1);
             info.name = Path.GetFileNameWithoutExtension(file);
-            info.path = file.Replace(ServerSettings.Default.server_folder, "http://" + ServerSettings.Default.server_dns + ":" + ServerSettings.Default.server_port).Replace("\\", "/");
+            info.path = file.Replace(ServerSettings.Default.server_folder, "").Replace("\\", "/");
             //info.path = file;
             info.exstension = Path.GetExtension(file).Replace(".", "");
             if (f != null)
