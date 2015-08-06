@@ -210,7 +210,7 @@
             this.VolumeBar.Minimum = 0;
             this.VolumeBar.Name = "VolumeBar";
             this.VolumeBar.ProgressBarColor = System.Drawing.Color.CornflowerBlue;
-            this.VolumeBar.Size = new System.Drawing.Size(97, 15);
+            this.VolumeBar.Size = new System.Drawing.Size(97, 13);
             this.VolumeBar.TabIndex = 25;
             this.VolumeBar.Value = 100;
             this.VolumeBar.Load += new System.EventHandler(this.VolumeBar_Load);
@@ -249,7 +249,7 @@
             this.PlaybackProgress.Minimum = 0;
             this.PlaybackProgress.Name = "PlaybackProgress";
             this.PlaybackProgress.ProgressBarColor = System.Drawing.Color.CornflowerBlue;
-            this.PlaybackProgress.Size = new System.Drawing.Size(619, 19);
+            this.PlaybackProgress.Size = new System.Drawing.Size(619, 10);
             this.PlaybackProgress.TabIndex = 21;
             this.PlaybackProgress.Value = 0;
             this.PlaybackProgress.Click += new System.EventHandler(this.PlaybackProgress_Click);
@@ -277,6 +277,7 @@
             this.Stop.Name = "Stop";
             this.Stop.Size = new System.Drawing.Size(40, 23);
             this.Stop.TabIndex = 19;
+            this.Stop.TabStop = false;
             this.Stop.UseVisualStyleBackColor = false;
             this.Stop.Click += new System.EventHandler(this.Stop_Click);
             this.Stop.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
@@ -293,6 +294,7 @@
             this.PrevTrack.Name = "PrevTrack";
             this.PrevTrack.Size = new System.Drawing.Size(40, 23);
             this.PrevTrack.TabIndex = 17;
+            this.PrevTrack.TabStop = false;
             this.PrevTrack.UseVisualStyleBackColor = false;
             this.PrevTrack.Click += new System.EventHandler(this.PrevTrack_Click);
             this.PrevTrack.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
@@ -309,6 +311,7 @@
             this.NextTrack.Name = "NextTrack";
             this.NextTrack.Size = new System.Drawing.Size(40, 23);
             this.NextTrack.TabIndex = 16;
+            this.NextTrack.TabStop = false;
             this.NextTrack.UseVisualStyleBackColor = false;
             this.NextTrack.Click += new System.EventHandler(this.NextTrack_Click);
             this.NextTrack.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
@@ -326,6 +329,7 @@
             this.Play.Name = "Play";
             this.Play.Size = new System.Drawing.Size(40, 23);
             this.Play.TabIndex = 15;
+            this.Play.TabStop = false;
             this.Play.UseVisualStyleBackColor = false;
             this.Play.Click += new System.EventHandler(this.Play_Click);
             this.Play.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
@@ -342,6 +346,7 @@
             this.Pause.Name = "Pause";
             this.Pause.Size = new System.Drawing.Size(40, 23);
             this.Pause.TabIndex = 18;
+            this.Pause.TabStop = false;
             this.Pause.UseVisualStyleBackColor = false;
             this.Pause.Click += new System.EventHandler(this.Pause_Click);
             this.Pause.MouseEnter += new System.EventHandler(this.Play_MouseEnter);
@@ -404,6 +409,7 @@
             this.MinimizeButton.Name = "MinimizeButton";
             this.MinimizeButton.Size = new System.Drawing.Size(33, 23);
             this.MinimizeButton.TabIndex = 19;
+            this.MinimizeButton.TabStop = false;
             this.MinimizeButton.Text = "__";
             this.MinimizeButton.UseVisualStyleBackColor = false;
             this.MinimizeButton.Click += new System.EventHandler(this.MinimizeButton_Click);
@@ -421,6 +427,7 @@
             this.CloseButton.Name = "CloseButton";
             this.CloseButton.Size = new System.Drawing.Size(45, 23);
             this.CloseButton.TabIndex = 20;
+            this.CloseButton.TabStop = false;
             this.CloseButton.Text = "X";
             this.CloseButton.UseVisualStyleBackColor = false;
             this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
