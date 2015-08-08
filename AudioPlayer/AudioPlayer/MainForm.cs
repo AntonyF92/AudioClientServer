@@ -364,7 +364,9 @@ namespace AudioPlayer
 
         private void SongTitle_MouseHover_1(object sender, EventArgs e)
         {
-            toolTip1.SetToolTip(SongTitle, SongTitle.Text);
+            Label l = sender as Label;
+            if (l != null)
+                toolTip1.SetToolTip(l, l.Text);
         }
 
         private void VolumeBar_Click(object sender, EventArgs e)

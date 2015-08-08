@@ -121,6 +121,7 @@
             this.SongAlbum.Name = "SongAlbum";
             this.SongAlbum.Size = new System.Drawing.Size(130, 23);
             this.SongAlbum.TabIndex = 2;
+            this.SongAlbum.MouseHover += new System.EventHandler(this.SongTitle_MouseHover_1);
             // 
             // SongPerformer
             // 
@@ -130,6 +131,7 @@
             this.SongPerformer.Name = "SongPerformer";
             this.SongPerformer.Size = new System.Drawing.Size(130, 21);
             this.SongPerformer.TabIndex = 1;
+            this.SongPerformer.MouseHover += new System.EventHandler(this.SongTitle_MouseHover_1);
             // 
             // SongTitle
             // 
