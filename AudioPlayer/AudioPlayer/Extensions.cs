@@ -11,7 +11,7 @@ namespace AudioPlayer
     {
         public static string GetURL(this AudioFileInfo info)
         {
-            return "http://" + ConfigManager.Instance.config.audio_server_dns + ":" + ConfigManager.Instance.config.audio_port + info.path;
+            return $"http://{ConfigManager.Instance.config.audio_server_dns}:{ConfigManager.Instance.config.audio_port}/?{info.path}";
         }
 
     }

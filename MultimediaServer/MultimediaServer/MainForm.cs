@@ -18,12 +18,14 @@ namespace MediaServer
     public partial class MainForm : Form
     {
         MediaServer server = new MediaServer(ServerSettings.Default.http_port);
+        HttpFileServer fileServer;
 
         public MainForm()
         {
             GlobalDiagnosticsContext.Set("ApplicationName", "MediaServer");
             ServerData.Init();
             FileServer.Init(ServerSettings.Default.data_port);
+            fileServer = new HttpFileServer(ServerSettings.Default.server_dns, ServerSettings.Default.server_port);
             ServerData.Instance.playlistManager.OnCollectionLoadEvent += playlistManager_OnCollectionLoadEvent;
             ServerData.Instance.playlistManager.OnPlaylistAddEvent += playlistManager_OnPlaylistAddEvent;
             InitializeComponent();
@@ -100,6 +102,7 @@ namespace MediaServer
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             FileServer.Instance.StopListening();
+            fileServer.Dispose();
         }
 
         int iFormX, iFormY, iMouseX, iMouseY;
@@ -203,8 +206,8 @@ namespace MediaServer
             string folder = Path.GetDirectoryName(file);
             info.folder = folder.Substring(folder.LastIndexOf('\\') + 1);
             info.name = Path.GetFileNameWithoutExtension(file);
-            info.path = file.Replace(ServerSettings.Default.server_folder, "").Replace("\\", "/");
-            //info.path = file;
+            //info.path = file.Replace(ServerSettings.Default.server_folder, "").Replace("\\", "/");
+            info.path = file;
             info.exstension = Path.GetExtension(file).Replace(".", "");
             if (f != null)
             {
