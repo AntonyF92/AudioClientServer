@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -59,6 +60,7 @@
             this.MinimizeButton = new System.Windows.Forms.Button();
             this.CloseButton = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel1.SuspendLayout();
             this.SongInfoContainer.SuspendLayout();
             this.PlaylistsContainer.SuspendLayout();
@@ -137,6 +139,7 @@
             this.SongTitle.Name = "SongTitle";
             this.SongTitle.Size = new System.Drawing.Size(130, 33);
             this.SongTitle.TabIndex = 0;
+            this.SongTitle.MouseHover += new System.EventHandler(this.SongTitle_MouseHover_1);
             // 
             // PlaylistsContainer
             // 
@@ -444,6 +447,12 @@
             this.pictureBox1.TabIndex = 22;
             this.pictureBox1.TabStop = false;
             // 
+            // toolTip1
+            // 
+            this.toolTip1.AutoPopDelay = 5000;
+            this.toolTip1.InitialDelay = 200;
+            this.toolTip1.ReshowDelay = 100;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -509,6 +518,7 @@
         private PlaylistControls.SmoothProgressBar VolumeBar;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.RadioButton RepeatButton;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 

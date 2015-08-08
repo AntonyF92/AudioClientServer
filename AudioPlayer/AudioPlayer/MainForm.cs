@@ -89,7 +89,7 @@ namespace AudioPlayer
             SongPerformer.Invoke(new Action(() =>
             SongPerformer.Text = file.singer));
             SongTitle.Invoke(new Action(() =>
-            SongTitle.Text = file.song));
+            SongTitle.Text = string.IsNullOrEmpty(file.song) ? file.name : file.song));
             SongDuration.Invoke(new Action(() =>
             SongDuration.Text = TimeSpan.FromSeconds(file.length).ToString(@"mm\:ss")));
             PlaybackProgress.Invoke(new Action(() =>
@@ -355,6 +355,16 @@ namespace AudioPlayer
             }
             catch
             { }
+        }
+
+        private void toolTip1_Popup(object sender, PopupEventArgs e)
+        {
+
+        }
+
+        private void SongTitle_MouseHover_1(object sender, EventArgs e)
+        {
+            toolTip1.SetToolTip(SongTitle, SongTitle.Text);
         }
 
         private void VolumeBar_Click(object sender, EventArgs e)
