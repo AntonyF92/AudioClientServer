@@ -131,7 +131,7 @@ namespace AudioPlayer
             wmp.pause();
         }
 
-        public void Play(AudioFileInfo file, Playlist pl, bool forced = false)
+        public void Play(AudioFileInfo file, Playlist pl, bool forced = false, bool previous = false)
         {
             if (currentState == PlaybackState.paused)
             {
@@ -140,7 +140,8 @@ namespace AudioPlayer
             }
             else if (currentState == PlaybackState.stopped || forced)
             {
-                AddToHistory(file);
+                if (!previous)
+                    AddToHistory(file);
                 StopAndClear();
                 wmp.URL = file.GetURL();
                 currentState = PlaybackState.playing;
@@ -192,7 +193,7 @@ namespace AudioPlayer
                         file = currentPlaylist.FileList[currentPlaylist.FileList.Count - 1];
                     playlistManager.ChangeTrack(currentPlaylist, file);
                     Stop();
-                    Play(file, currentPlaylist);
+                    Play(file, currentPlaylist, previous:true);
                 }
             }
         }
