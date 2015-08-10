@@ -25,6 +25,8 @@ namespace PlaylistControls
         public string folder;
         [XmlIgnore]
         public ListViewItem playlistViewItem = null;
+        [XmlIgnore]
+        public bool first_pass = true;
 
         public override string ToString()
         {

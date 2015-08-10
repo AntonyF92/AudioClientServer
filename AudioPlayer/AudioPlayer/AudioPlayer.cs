@@ -140,23 +140,37 @@ namespace AudioPlayer
             }
             else if (currentState == PlaybackState.stopped || forced)
             {
-                if (history.Count > 0 && history.Peek() != currentFile || history.Count == 0 && currentFile != null)
-                    history.Push(currentFile);
+                AddToHistory(file);
                 StopAndClear();
                 wmp.URL = file.GetURL();
                 currentState = PlaybackState.playing;
                 wmp.play();
                 currentFile = file;
                 currentPlaylist = pl;
+                currentFile.first_pass = false;
                 if (OnPlaybackStart != null)
                     OnPlaybackStart(currentFile);
+                Task.Run(() =>
+                {
+                    foreach (var v in currentPlaylist.FileList)
+                        if (v.first_pass)
+                            return;
+                    foreach (var v in currentPlaylist.FileList)
+                        v.first_pass = true;
+                });
             }
+        }
+
+        void AddToHistory(AudioFileInfo file)
+        {
+            if (history.Count > 0 && history.Peek() != currentFile || history.Count == 0 && currentFile != null)
+                history.Push(currentFile);
         }
 
         int GetRandomIndex(int currentIndex)
         {
             int res;
-            while ((res = rnd.Next(currentPlaylist.FileList.Count)) == currentIndex)
+            while (!currentPlaylist.FileList[(res = rnd.Next(currentPlaylist.FileList.Count))].first_pass)
             {
             }
             return res;
@@ -170,7 +184,7 @@ namespace AudioPlayer
                 int index = currentPlaylist.FileList.IndexOf(currentFile);
                 if (index != -1)
                 {
-                    if (history.Count > 0)
+                    if (history.Count > 0 && randomOrder)
                         file = history.Pop();
                     else if (index > 0)
                         file = currentPlaylist.FileList[index - 1];
