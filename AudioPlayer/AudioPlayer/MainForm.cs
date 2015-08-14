@@ -207,7 +207,7 @@ namespace AudioPlayer
             SongYear.Invoke(new Action(() =>
             SongYear.Text = file.year));
             SongParameters.Invoke(new Action(() =>
-            SongParameters.Text = $"{file.exstension}: {file.size_mb} MB, {file.frequency} Hz"));
+            SongParameters.Text = $"{file.exstension.ToUpper()}: {file.size_mb} MB, {file.frequency} Hz"));
             PlaybackProgress.Invoke(new Action(() =>
             {
                 PlaybackProgress.Maximum = (int)file.length;
