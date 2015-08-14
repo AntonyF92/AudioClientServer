@@ -11,7 +11,7 @@ namespace AudioPlayer
 {
     class AudioPlayer
     {
-        enum PlaybackState
+        public enum PlaybackState
         {
             stopped,
             playing,
@@ -27,7 +27,10 @@ namespace AudioPlayer
         private Random rnd = new Random();
         private bool repeat = false;
         private Timer serviceTimer;
-        private PlaybackState currentState = PlaybackState.stopped;
+        public PlaybackState currentState
+        {
+            get; private set;
+        } = PlaybackState.stopped;
         private bool isBusy = false;
 
         public delegate void StopAndClearHandler(AudioFileInfo file);
@@ -193,6 +196,7 @@ namespace AudioPlayer
                         file = currentPlaylist.FileList[currentPlaylist.FileList.Count - 1];
                     playlistManager.ChangeTrack(currentPlaylist, file);
                     Stop();
+                    currentFile.first_pass = true;
                     Play(file, currentPlaylist, previous:true);
                 }
             }

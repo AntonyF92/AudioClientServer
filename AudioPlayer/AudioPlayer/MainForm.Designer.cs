@@ -61,6 +61,8 @@
             this.CloseButton = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.SongYear = new System.Windows.Forms.Label();
+            this.SongParameters = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SongInfoContainer.SuspendLayout();
             this.PlaylistsContainer.SuspendLayout();
@@ -94,6 +96,8 @@
             // 
             // SongInfoContainer
             // 
+            this.SongInfoContainer.Controls.Add(this.SongParameters);
+            this.SongInfoContainer.Controls.Add(this.SongYear);
             this.SongInfoContainer.Controls.Add(this.SongDuration);
             this.SongInfoContainer.Controls.Add(this.SongAlbum);
             this.SongInfoContainer.Controls.Add(this.SongPerformer);
@@ -108,9 +112,9 @@
             // 
             this.SongDuration.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.SongDuration.ForeColor = System.Drawing.SystemColors.Window;
-            this.SongDuration.Location = new System.Drawing.Point(6, 103);
+            this.SongDuration.Location = new System.Drawing.Point(6, 126);
             this.SongDuration.Name = "SongDuration";
-            this.SongDuration.Size = new System.Drawing.Size(130, 33);
+            this.SongDuration.Size = new System.Drawing.Size(130, 23);
             this.SongDuration.TabIndex = 3;
             // 
             // SongAlbum
@@ -455,6 +459,24 @@
             this.toolTip1.InitialDelay = 200;
             this.toolTip1.ReshowDelay = 100;
             // 
+            // SongYear
+            // 
+            this.SongYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SongYear.ForeColor = System.Drawing.SystemColors.Window;
+            this.SongYear.Location = new System.Drawing.Point(6, 103);
+            this.SongYear.Name = "SongYear";
+            this.SongYear.Size = new System.Drawing.Size(130, 23);
+            this.SongYear.TabIndex = 4;
+            // 
+            // SongParameters
+            // 
+            this.SongParameters.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SongParameters.ForeColor = System.Drawing.SystemColors.Window;
+            this.SongParameters.Location = new System.Drawing.Point(6, 149);
+            this.SongParameters.Name = "SongParameters";
+            this.SongParameters.Size = new System.Drawing.Size(130, 34);
+            this.SongParameters.TabIndex = 5;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -521,6 +543,8 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.RadioButton RepeatButton;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Label SongParameters;
+        private System.Windows.Forms.Label SongYear;
     }
 }
 

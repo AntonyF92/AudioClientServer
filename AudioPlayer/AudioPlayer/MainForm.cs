@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using NLog;
 using PlaylistControls;
+using System.Runtime.InteropServices;
 
 namespace AudioPlayer
 {
@@ -18,6 +19,117 @@ namespace AudioPlayer
         HttpClient httpClient;
 
         Logger log;
+
+
+        #region KeyboardInterop
+        private const int WH_KEYBOARD_LL = 13;
+
+
+        private LowLevelKeyboardProcDelegate m_callback;
+        private IntPtr m_hHook;
+
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern IntPtr SetWindowsHookEx(
+            int idHook,
+            LowLevelKeyboardProcDelegate lpfn,
+            IntPtr hMod, int dwThreadId);
+
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool UnhookWindowsHookEx(IntPtr hhk);
+
+
+        [DllImport("Kernel32.dll", SetLastError = true)]
+        private static extern IntPtr GetModuleHandle(IntPtr lpModuleName);
+
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern IntPtr CallNextHookEx(
+            IntPtr hhk,
+            int nCode, IntPtr wParam, IntPtr lParam);
+
+
+        private IntPtr LowLevelKeyboardHookProc(
+            int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            if (nCode < 0)
+            {
+                return CallNextHookEx(m_hHook, nCode, wParam, lParam);
+            }
+            else
+            {
+                var khs = (KeyboardHookStruct)
+                          Marshal.PtrToStructure(lParam,
+                          typeof(KeyboardHookStruct));
+                switch (khs.VirtualKeyCode)
+                {
+                    case 176:
+                        {
+                            audioPlayer?.NextTrack();
+                            return new IntPtr(1);
+                        }
+                    case 177:
+                        {
+                            audioPlayer?.PreviousTrack();
+                            return new IntPtr(1);
+                        }
+                    case 178:
+                        {
+                            audioPlayer?.Stop();
+                            return new IntPtr(1);
+                        }
+                    case 179:
+                        {
+                            if (audioPlayer.currentState == AudioPlayer.PlaybackState.playing)
+                                audioPlayer.Pause();
+                            else
+                            {
+                                if (CurrentPlaylist !=null)
+                                {
+                                    audioPlayer.Play(CurrentPlaylist.SelectedItems[0]?.Tag as AudioFileInfo, CurrentPlaylist.Tag as Playlist);
+                                }
+                            }
+                            return new IntPtr(1);
+                        }
+                    default:
+                        //return CallNextHookEx(m_hHook, nCode, wParam, lParam);
+                        return IntPtr.Zero;
+                }
+            }
+        }
+
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct KeyboardHookStruct
+        {
+            public readonly int VirtualKeyCode;
+            public readonly int ScanCode;
+            public readonly int Flags;
+            public readonly int Time;
+            public readonly IntPtr ExtraInfo;
+        }
+
+
+        private delegate IntPtr LowLevelKeyboardProcDelegate(
+            int nCode, IntPtr wParam, IntPtr lParam);
+
+
+        public void SetHook()
+        {
+            m_callback = LowLevelKeyboardHookProc;
+            m_hHook = SetWindowsHookEx(WH_KEYBOARD_LL,
+                m_callback,
+                GetModuleHandle(IntPtr.Zero), 0);
+        }
+
+
+        public void Unhook()
+        {
+            UnhookWindowsHookEx(m_hHook);
+        }
+
+        #endregion
 
         public MainForm()
         {
@@ -92,6 +204,10 @@ namespace AudioPlayer
             SongTitle.Text = string.IsNullOrEmpty(file.song) ? file.name : file.song));
             SongDuration.Invoke(new Action(() =>
             SongDuration.Text = TimeSpan.FromSeconds(file.length).ToString(@"mm\:ss")));
+            SongYear.Invoke(new Action(() =>
+            SongYear.Text = file.year));
+            SongParameters.Invoke(new Action(() =>
+            SongParameters.Text = $"{file.exstension}: {file.size_mb} MB, {file.frequency} Hz"));
             PlaybackProgress.Invoke(new Action(() =>
             {
                 PlaybackProgress.Maximum = (int)file.length;
