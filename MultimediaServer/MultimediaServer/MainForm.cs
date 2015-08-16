@@ -215,7 +215,14 @@ namespace MediaServer
                 if (f.Tag != null)
                 {
                     info.album = f.Tag.Album.toUtf8();
-                    info.singer = f.Tag.Performers.Count() > 0 ? f.Tag.Performers[0].toUtf8() : "";
+                    int i = 0;
+                    foreach (string p in f.Tag.Performers)
+                    {
+                        if (i > 0)
+                            info.singer += " / ";
+                        info.singer += p.toUtf8();
+                        i++;
+                    }
                     info.song = f.Tag.Title.toUtf8();
                     info.year = f.Tag.Year.ToString();
                     
