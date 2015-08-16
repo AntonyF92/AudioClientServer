@@ -205,6 +205,7 @@ namespace MediaServer
             catch { }
             string folder = Path.GetDirectoryName(file);
             info.folder = folder.Substring(folder.LastIndexOf('\\') + 1);
+            info.folder_key = folder.GetHashCode().ToString();
             info.name = Path.GetFileNameWithoutExtension(file);
             //info.path = file.Replace(ServerSettings.Default.server_folder, "").Replace("\\", "/");
             info.path = file;
@@ -213,9 +214,9 @@ namespace MediaServer
             {
                 if (f.Tag != null)
                 {
-                    info.album = f.Tag.Album;
-                    info.singer = string.Join("|", f.Tag.Performers);
-                    info.song = f.Tag.Title;
+                    info.album = f.Tag.Album.toUtf8();
+                    info.singer = f.Tag.Performers.Count() > 0 ? f.Tag.Performers[0].toUtf8() : "";
+                    info.song = f.Tag.Title.toUtf8();
                     info.year = f.Tag.Year.ToString();
                     
                 }

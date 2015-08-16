@@ -92,10 +92,10 @@ namespace PlaylistControls
             e.Cancel = true;
         }
 
-        void AddGroup(string name)
+        void AddGroup(string key, string name)
         {
             
-            ListViewGroup group = new ListViewGroup(name, name);
+            ListViewGroup group = new ListViewGroup(key, name);
             this.Groups.Add(group);
         }
 
@@ -108,9 +108,9 @@ namespace PlaylistControls
             item.SubItems.Add(string.IsNullOrEmpty(file.song)? file.name : file.song);
             item.SubItems.Add(TimeSpan.FromSeconds(file.length).ToString(@"mm\:ss"));
             file.playlistViewItem = item;
-            if (!this.Groups.ContainsGroup(el => el == file.folder))
-                AddGroup(file.folder);
-            item.Group = this.Groups[file.folder];
+            if (!this.Groups.ContainsGroup(el => el == file.folder_key))
+                AddGroup(file.folder_key, file.folder);
+            item.Group = this.Groups[file.folder_key];
             this.Items.Add(item);
         }
 

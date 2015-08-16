@@ -23,6 +23,7 @@ namespace PlaylistControls
         public float size_mb;
         public string exstension;
         public string folder;
+        public string folder_key;
         [XmlIgnore]
         public ListViewItem playlistViewItem = null;
         [XmlIgnore]

@@ -72,6 +72,7 @@
     <Compile Include="..\..\SampleClient\SampleClient\PlaylistManager.cs">
       <Link>PlaylistManager.cs</Link>
     </Compile>
+    <Compile Include="Extensions.cs" />
     <Compile Include="InputBox.cs">
       <SubType>Form</SubType>
     </Compile>
